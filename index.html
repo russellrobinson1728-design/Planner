@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="Russ's Pokémon League OS - a 90s RPG life tracker">
+<link rel="manifest" href="manifest.json">
+<title>Russ's Pokémon League OS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+:root{--bg:#080b10;--panel:#111a29;--panel2:#172337;--line:#536985;--hi:#f5f7fb;--muted:#8da0b9;--blue:#4ca3ff;--cyan:#59d8ff;--green:#49df79;--yellow:#ffd34d;--red:#ff5b5b;--pink:#d98cff;--shadow:#030507}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#18243a 0,#080b10 46%);color:var(--hi);font-family:VT323,monospace;font-size:20px}body{image-rendering:pixelated}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1280px;margin:auto;padding:12px}.crt{border:3px ridge #6d7f98;box-shadow:0 0 0 3px #090d13,8px 8px 0 #030507;background:linear-gradient(180deg,#172236,#0d1420);position:relative}.crt:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.018) 4px);mix-blend-mode:screen}
+.topbar{display:flex;align-items:center;gap:12px;padding:9px 12px;margin-bottom:10px;background:#0c111a;border:2px outset #51627a}.brand{font-family:'Press Start 2P';font-size:14px;line-height:1.35;letter-spacing:.5px}.brand small{display:block;color:#80c7ff;font-family:VT323;font-size:18px;margin-top:3px}.status{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:17px}.dot{width:11px;height:11px;border-radius:50%;background:#777;box-shadow:0 0 8px #777}.dot.online{background:#32e56c;box-shadow:0 0 10px #32e56c}.dot.sync{background:#ffd34d;box-shadow:0 0 10px #ffd34d}
+.taskbar{position:fixed;left:10px;top:10px;bottom:10px;width:188px;z-index:100;display:flex;flex-direction:column;padding:7px;background:linear-gradient(180deg,#171f33,#0b101a);transition:width .18s ease;overflow:hidden}.task-toggle{align-self:flex-end;width:30px;height:28px;border:2px outset #71849e;background:#202d43;color:#fff;font-family:'Press Start 2P';font-size:10px}.task-brand{display:flex;align-items:center;gap:7px;padding:8px 4px 10px;border-bottom:2px ridge #536985;color:#d9e7ff;font-family:'Press Start 2P';font-size:11px;white-space:nowrap}.task-pokeball{font-size:20px;color:#ff4f4f;text-shadow:1px 1px #fff}.taskbar .nav{display:flex;flex-direction:column;gap:4px;padding:8px 0;background:transparent;border:0;margin:0;overflow:auto}.taskbar .nav button{width:100%;text-align:left;border:2px outset #61748e;background:#182337;color:#f5f7fb;padding:8px 9px;white-space:nowrap}.taskbar .nav button.active{background:#356ea9;border-color:#8cc9ff}.task-bottom{margin-top:auto;display:flex;align-items:center;gap:7px;padding:8px 4px;border-top:2px ridge #536985;color:#66ef93;font-size:16px;white-space:nowrap}.taskbar.collapsed{width:54px}.taskbar.collapsed .task-brand-text,.taskbar.collapsed .nav button{font-size:0}.taskbar.collapsed .nav button:before{content:'◆';font-size:14px;color:#9ecfff}.taskbar.collapsed .task-bottom span:last-child{display:none}.taskbar.collapsed .task-toggle{align-self:center}.app{max-width:1280px;margin-left:208px;margin-right:10px}.taskbar.collapsed + .app{margin-left:72px}@media(max-width:900px){.taskbar{left:5px;top:5px;bottom:5px;width:54px}.taskbar .task-brand-text,.taskbar .nav button{font-size:0}.taskbar .nav button:before{content:'◆';font-size:14px;color:#9ecfff}.taskbar .task-bottom span:last-child{display:none}.task-toggle{align-self:center}.app{margin-left:70px;margin-right:5px}}
+.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:10px}.panel{padding:12px;border:3px ridge #667a95;background:linear-gradient(180deg,#152137,#0e1725);box-shadow:4px 4px 0 #04070b;margin-bottom:10px}.title{font-family:'Press Start 2P';font-size:14px;color:#fff;margin-bottom:10px}.subtitle{color:#9cc9ff}.tiny{font-size:16px;color:var(--muted)}
+.hero{display:grid;grid-template-columns:300px 1fr;gap:12px}.trainer-card{min-height:330px;background:#06080b;border:3px ridge #768aa5;display:flex;align-items:center;justify-content:center;overflow:hidden}.trainer-card img{width:100%;height:100%;object-fit:cover;object-position:28% 8%;image-rendering:auto}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.stat{border:2px inset #52657c;background:#0a1019;padding:8px}.bar{height:12px;background:#05080c;border:1px solid #71849e;margin-top:5px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f87ff,#5de0ff)}.numbers{display:flex;justify-content:space-between}.rival{display:grid;grid-template-columns:150px 1fr;gap:10px}.rival img{width:100%;height:190px;object-fit:cover;object-position:28% 8%;background:#05070a;border:3px ridge #687c98}.rival .lead{color:#ff7777}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}.tabs button{background:#111c2d;color:#dbe9ff;border:2px outset #566b86;padding:6px 10px}.tabs button.active{background:#345f91}.list{display:flex;flex-direction:column;gap:7px;max-height:430px;overflow:auto;padding-right:3px}.row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px;border:2px inset #52657c;background:#0a111c}.row strong{display:block}.actions{display:flex;gap:5px;flex-wrap:wrap}.actions button,.btn{border:2px outset #70839e;background:#1c2a3e;color:white;padding:5px 9px}.btn.primary{background:#2867a7}.btn.green{background:#236d45}.btn.danger{background:#762c35}.input,textarea,select{width:100%;padding:7px;border:2px inset #536983;background:#070d15;color:#fff;outline:none}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.formgrid .full{grid-column:1/-1}
+.poke-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.poke{border:3px ridge #6d829d;background:#0a1019;padding:7px;position:relative}.poke img{display:block;width:100%;height:115px;object-fit:contain;image-rendering:auto;background:radial-gradient(circle,#273b58,#0a1019);border:2px inset #51657f}.poke h3{font-size:22px;margin:5px 0 0}.evo{font-size:16px;color:#8fc7ff}.lvl{position:absolute;right:10px;top:9px;background:#07101a;border:1px solid #7990ab;padding:2px 5px}.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.badge{border:3px ridge #70849e;background:#0b121d;padding:9px;text-align:center;min-height:150px}.badge img{width:82px;height:82px}.badge.locked{filter:grayscale(1);opacity:.35}.badge .bar{margin-top:5px}.coat{display:grid;grid-template-columns:230px 1fr;gap:12px;align-items:center}.coat img{width:210px;filter:drop-shadow(5px 5px 0 #030507)}
+.month{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.day{border:2px inset #52657c;background:#09111c;min-height:72px;padding:5px}.day b{display:block;color:#7fbfff}.check{appearance:none;width:18px;height:18px;border:2px outset #758aa5;background:#0b1119;vertical-align:middle}.check:checked{background:#2bd76c;box-shadow:inset 0 0 0 3px #0b1119}.friend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.friend{border:3px ridge #687c98;background:#0b121c;padding:8px}.friend img{width:100%;height:160px;object-fit:contain;background:#05070a}.tag{display:inline-block;padding:2px 6px;border:1px solid #667b98;background:#172337;margin:2px;font-size:15px}.onlinebox{display:flex;align-items:center;gap:8px;color:#9cc9ff}
+.calc-wrap{max-width:520px;margin:auto}.calc-screen{width:100%;font-family:'Press Start 2P';font-size:20px;text-align:right;padding:14px;background:#071019;color:#bfffd2;border:3px inset #667a95;min-height:58px}.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}.calc-key{min-height:54px;font-family:'Press Start 2P';font-size:13px;border:3px outset #6f829c;background:#1a2739;color:#fff}.calc-key.op{background:#2b5073}.calc-key.eq{background:#2b704b}.calc-key.clear{background:#71313b}.calc-key.backspace{font-size:9px;background:#3a4352}.calc-key.zero{grid-column:span 2}.calc-history{max-height:180px;overflow:auto;margin-top:10px}.calc-history .row{font-size:16px}.toast{position:fixed;right:14px;bottom:14px;z-index:50;background:#111d2d;border:3px ridge #8ba0ba;padding:10px 14px;box-shadow:5px 5px 0 #020305;display:none}.toast.show{display:block}.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:40;padding:12px}.modal.show{display:flex}.modal .panel{max-width:650px;width:100%;max-height:90vh;overflow:auto}.radio{display:flex;gap:8px}.footer{font-size:16px;color:#70839d;text-align:center;padding:12px}.dashboard-shell{display:grid;grid-template-columns:190px minmax(0,1fr) 275px;gap:8px;align-items:start}.dash-sidebar,.dash-rightbar{display:flex;flex-direction:column;gap:8px}.dash-main{min-width:0}.dash-box{border:3px ridge #667a95;background:linear-gradient(180deg,#151b32,#0d1222);box-shadow:3px 3px 0 #030507}.dash-box .dash-head{font-family:'Press Start 2P';font-size:11px;padding:7px 9px;border-bottom:2px ridge #586b88;background:linear-gradient(180deg,#1a2040,#11162b);color:#f8fbff}.dash-profile{padding:9px;text-align:left}.dash-profile .mini-trainer{width:100%;height:145px;object-fit:contain;background:radial-gradient(circle,#273754,#080c15);border:2px inset #52657c;image-rendering:auto}.dash-profile h2{margin:7px 0 2px;font-family:'Press Start 2P';font-size:15px;color:#7dbbff}.dash-profile .level{font-family:'Press Start 2P';font-size:10px;color:#ffd34d}.dash-side-stat{padding:8px;border-top:1px solid #2b3950}.dash-side-stat b{color:#f7f9ff}.dash-side-stat .tiny{display:block;margin-top:3px}.dash-rank{font-family:'Press Start 2P';font-size:13px;color:#ffd34d}.dash-hero{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:8px}.dash-overview{min-height:205px;padding:10px;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 110%,#51334f 0,#251e39 42%,#10172b 75%)}.dash-overview:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(85,52,88,.3)),repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.018) 5px);pointer-events:none}.dash-overview-inner{position:relative;z-index:1;display:grid;grid-template-columns:160px 1fr 230px;gap:10px;align-items:center}.dash-overview-trainer{height:185px;display:flex;align-items:end;justify-content:center}.dash-overview-trainer img{height:185px;max-width:150px;object-fit:contain}.dash-coat{height:190px;display:flex;align-items:center;justify-content:center}.dash-coat img{width:180px;height:180px;object-fit:contain;filter:drop-shadow(3px 3px 0 #030507)}.dash-meter{margin:7px 0}.dash-meter label{display:flex;justify-content:space-between;font-size:16px}.dash-meter .bar{height:14px}.dash-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.dash-kpi{padding:8px;border:2px inset #536983;background:#080d18}.dash-kpi strong{display:block;font-size:12px;font-family:'Press Start 2P';color:#9ecfff}.dash-kpi span{display:block;font-size:25px;color:#ffd34d;margin-top:3px}.dash-team-large{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;padding:7px}.dash-team-large .dash-mon{min-width:0}.dash-team-large .dash-mon img{height:74px}.dash-below{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:8px}.dash-badge-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:7px}.dash-badge-mini img{width:100%;height:54px;object-fit:contain;background:#0a101a;border:1px inset #52657c}.dash-objectives .row{padding:6px}.dash-calendar{padding:7px}.dash-cal-title{display:flex;justify-content:space-between;align-items:center;font-family:'Press Start 2P';font-size:10px;margin-bottom:6px}.dash-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}.dash-cal div{min-height:26px;padding:3px;text-align:center;border:1px solid #394a64;background:#090e18;font-size:14px}.dash-cal .hd{border:0;background:transparent;color:#7e91aa}.dash-cal .today{border:2px solid #65baff;color:#fff}.dash-cal .done{background:#174b2f;color:#8dffb0}.dash-streak{padding:9px;display:flex;align-items:center;justify-content:space-between}.dash-streak .flame{font-size:34px;color:#ff9c33}.dash-streak strong{font-family:'Press Start 2P';font-size:11px;color:#ffcf4f}.dash-streak span{display:block;font-size:24px}.dash-dj{padding:7px}.dash-dj-top{display:grid;grid-template-columns:75px 1fr;gap:8px;align-items:center}.dash-dj-top img{width:75px;height:95px;object-fit:contain;background:#090d15}.dash-dj-team{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:6px}.dash-dj-team img{width:100%;height:48px;object-fit:contain;background:#090d15;border:1px inset #3f4e65}.dash-quick{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:7px}.dash-quick .btn{font-size:15px}.dash-sync{padding:8px}.dash-sync-line{display:flex;align-items:center;gap:7px;color:#72f59a;font-size:18px}.dash-sync-line .dot{width:10px;height:10px}.dash-friends{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:5px;padding:7px}.dash-friend-mini{border:2px inset #536983;padding:4px;text-align:center;background:#090e18}.dash-friend-mini img{width:100%;height:55px;object-fit:contain}.dash-friend-mini span{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-footerbar{display:flex;justify-content:space-between;gap:10px;padding:6px 9px;margin-top:8px;border:2px outset #52657c;background:#0b101a;color:#8496ae;font-size:14px}.dashboard-shell .dash-tiles{display:none}.dash-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.dash-tile{border:3px ridge #667a95;background:linear-gradient(180deg,#18263b,#0c1420);padding:9px;min-height:105px;box-shadow:3px 3px 0 #04070b}.dash-tile h3{font-family:'Press Start 2P';font-size:10px;margin:0 0 8px;color:#f4f7ff}.dash-value{font-size:28px;color:#8fd0ff}.dash-mini{font-size:17px;color:#a8b9cf;line-height:1.1}.dash-team{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}.dash-mon{border:2px inset #536983;background:#080e17;padding:4px;text-align:center}.dash-mon img{width:100%;height:55px;object-fit:contain;background:radial-gradient(circle,#263a56,#080e17)}.dash-mon span{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.quick-actions{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.quick-actions .btn{width:100%}.sync-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:2px inset #536983;background:#08101a}.sync-pill .dot{width:9px;height:9px}.cloud-good{color:#66ef93}.cloud-bad{color:#ff8b8b}@media(max-width:1100px){.dash-tiles{grid-template-columns:repeat(3,1fr)}.quick-actions{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.dash-tiles{grid-template-columns:repeat(2,1fr)}.dash-team{grid-template-columns:repeat(3,1fr)}.quick-actions{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.dash-tiles{grid-template-columns:1fr}.quick-actions{grid-template-columns:repeat(2,1fr)}.dash-team{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.grid,.hero,.coat{grid-template-columns:1fr}.poke-grid{grid-template-columns:repeat(2,1fr)}.badge-grid{grid-template-columns:repeat(2,1fr)}.friend-grid{grid-template-columns:1fr 1fr}.trainer-card{height:360px}.rival{grid-template-columns:120px 1fr}}
+@media(max-width:550px){.app{padding:5px}.topbar{align-items:flex-start}.status{font-size:15px}.poke-grid,.friend-grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.badge-grid{grid-template-columns:repeat(2,1fr)}.month{grid-template-columns:repeat(2,1fr)}.trainer-card{height:330px}.brand{font-size:11px}}
+
+/* V11 90s desktop polish */
+:root{--win-purple:#252052;--win-purple2:#403b86;--lcd:#c9d7bf;--amber:#ffcf58;--green2:#55ef8a;--blue2:#7fbfff}
+body{background:radial-gradient(circle at 50% 0,#29214f 0,#0b0b12 48%,#050509 100%);letter-spacing:.15px}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.12;background:repeating-linear-gradient(0deg,rgba(255,255,255,.12) 0 1px,transparent 1px 4px);mix-blend-mode:screen}
+.app{max-width:1440px}
+.topbar{min-height:58px;background:linear-gradient(180deg,#30295e,#17152d);border-color:#8c83c8;box-shadow:0 0 0 2px #08070d,4px 4px 0 #05050a}
+.brand{font-size:15px;text-shadow:2px 2px #08070d}.brand:before{content:'◉ ';color:#ff4f4f}.brand small{color:#a8d2ff;text-transform:uppercase}
+.status{font-family:'Press Start 2P';font-size:10px;padding:7px 10px;border:2px inset #655d8d;background:#090a12;color:#63ef8a}.status .dot{width:12px;height:12px}
+.taskbar{width:214px;border-color:#8d83bd;background:linear-gradient(180deg,#211c45,#0b0b13);box-shadow:0 0 0 2px #05050a,5px 5px 0 #030307}
+.task-toggle{background:linear-gradient(180deg,#4a4389,#292554);border-color:#9d94d3}
+.task-brand{padding:10px 6px;border-color:#625b8d;background:linear-gradient(180deg,#292454,#16142d);font-size:12px}.task-pokeball{color:#ff5757}
+.taskbar .nav{gap:3px;padding:9px 0}.taskbar .nav button{display:flex;align-items:center;gap:9px;border:2px outset #655c92;background:linear-gradient(180deg,#1c1a34,#10101d);padding:9px 8px;color:#e9e6ff;font-family:'Press Start 2P';font-size:9px;min-height:38px;text-shadow:1px 1px #000}.taskbar .nav button:hover{background:#2d285c;border-color:#aaa0e0}.taskbar .nav button.active{background:linear-gradient(180deg,#5148a0,#342f70);border-color:#b8b0ec;box-shadow:inset 0 0 0 1px #7168c2}.nav-ico{width:23px;height:23px;display:grid;place-items:center;border:1px inset #7c73aa;background:#090914;color:#a9d8ff;font-size:12px;flex:0 0 23px}.nav-label{overflow:hidden}.task-bottom{gap:7px;border-color:#625b8d;background:#111020}.task-build{margin-left:auto;font-size:12px;color:#8e86b6}
+.taskbar.collapsed{width:58px}.taskbar.collapsed .nav button{justify-content:center;padding:7px}.taskbar.collapsed .nav-label,.taskbar.collapsed .task-brand-text,.taskbar.collapsed .task-build{display:none}.taskbar.collapsed .nav-ico{width:28px;height:28px;flex-basis:28px}.taskbar.collapsed .task-bottom{justify-content:center}.taskbar.collapsed .task-bottom .dot{margin:0}
+.app{margin-left:234px}.taskbar.collapsed + .app{margin-left:76px}
+.panel,.dash-box,.crt{border-color:#7169a3;background:linear-gradient(180deg,#17172b,#0d0d17);box-shadow:4px 4px 0 #030307, inset 0 0 0 1px rgba(150,140,220,.08)}
+.panel{padding:13px}.title,.dash-box .dash-head{letter-spacing:.6px}.dash-box .dash-head{background:linear-gradient(180deg,#28234f,#17162f);border-color:#635b90;color:#f4f2ff}
+.input,textarea,select{border-color:#6f6898;background:#080912;box-shadow:inset 2px 2px 0 #030308;color:#edf0ff}.btn{border-color:#7d73ac;background:linear-gradient(180deg,#302b5d,#1b1935);box-shadow:1px 1px 0 #030307}.btn:hover{filter:brightness(1.18)}.btn.primary{background:linear-gradient(180deg,#4e45a0,#332e70)}.btn.green{background:linear-gradient(180deg,#2e8b57,#1d5939)}.btn.danger{background:linear-gradient(180deg,#873d49,#55242d)}
+.dash-hero{grid-template-columns:minmax(0,1fr) 330px}.dash-overview{background:linear-gradient(135deg,#241d43,#111326 55%,#261c37)}.dash-coat img{filter:drop-shadow(0 0 9px rgba(156,137,255,.45))}.dash-kpi{background:#080a13;border-color:#5c5684}.dash-kpi span{color:#9bcaff}
+.dash-team-large .dash-mon,.dash-friend-mini,.dash-badge-mini img{border-color:#5f5884}.dash-mon{background:linear-gradient(180deg,#121326,#080910)}
+.footer{color:#77709e;border-top:1px solid #302b50}
+@media(max-width:900px){.taskbar{width:58px}.taskbar .nav-label,.taskbar .task-brand-text,.taskbar .task-build{display:none}.taskbar .nav button{justify-content:center}.taskbar .nav-ico{width:28px;height:28px;flex-basis:28px}.app{margin-left:76px;margin-right:5px}}
+
+/* V12 layout and readability pass */
+p,.tiny,.subtitle,.row span,.friend .tiny,.poke .evo{line-height:1.35;text-align:left}.panel,.dash-box{overflow:hidden}.dash-main,.dash-sidebar,.dash-rightbar{min-width:0}.poke-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}.poke{min-width:0}.poke img{height:135px}.badge-grid{grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch}.badge{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}.badge strong{margin-top:3px}.badge .tiny{width:100%;text-align:center}.badge .bar{width:100%}.badge-coat{margin:8px 0 12px;padding:8px;border:2px inset #5f5884;background:#0a0b13;display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center}.badge-coat img{width:100px;height:100px;object-fit:contain}.friend-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.friend{display:grid;grid-template-columns:120px 1fr;grid-template-rows:auto auto auto auto;column-gap:10px;align-items:start}.friend>img{grid-row:1 / span 4;width:120px;height:180px;object-fit:contain;border:2px inset #5b5682;background:radial-gradient(circle,#25233f,#07070d)}.friend h2,.friend .friend-meta,.friend .friend-tags,.friend .friend-team,.friend .friend-actions{grid-column:2}.friend h2{font-family:'Press Start 2P';font-size:13px;margin:2px 0 5px;color:#8dccff}.friend-meta{font-size:17px;color:#d9dcff}.friend-tags{margin:5px 0}.friend-team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:4px}.friend-poke{border:1px solid #5d5685;background:#0a0b12;padding:3px;text-align:center;min-width:0}.friend-poke img{width:100%;height:52px;object-fit:contain}.friend-poke span{display:block;font-size:12px;line-height:1.1;color:#bcd9ff}.friend-actions{margin-top:6px}.friend-progress{height:8px;background:#05060a;border:1px solid #6e6697;margin:5px 0}.friend-progress i{display:block;height:100%;background:linear-gradient(90deg,#7d6cff,#4fd8ff)}.empty-state{border:2px inset #5b5682;padding:14px;background:#090a11;color:#8e98b5;text-align:center}.taskbar .nav button{line-height:1.1}.taskbar .nav-label{white-space:nowrap}.dash-kpi strong,.dash-kpi span{display:block}.dash-kpi span{margin-top:3px}.dash-overview-inner>div{min-width:0}.dash-coat{min-width:0}.dash-coat img{max-width:100%}
+@media(max-width:1050px){.dashboard-shell{grid-template-columns:170px minmax(0,1fr)}.dash-rightbar{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.poke-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.badge-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.friend-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.dashboard-shell{display:block}.dash-sidebar,.dash-rightbar{display:flex}.dash-hero{grid-template-columns:1fr}.poke-grid{grid-template-columns:1fr 1fr}.badge-grid{grid-template-columns:1fr 1fr}.friend{grid-template-columns:90px 1fr}.friend>img{width:90px;height:145px}.friend-team{grid-template-columns:repeat(3,minmax(0,1fr))}.badge-coat{grid-template-columns:80px 1fr}.badge-coat img{width:72px;height:72px}}
+
+/* V14 POLISH + RESPONSIVE LAYOUT */
+:root{--bg:#070912;--panel:#10152a;--panel2:#171b37;--line:#60659b;--hi:#f7f7ff;--muted:#9298bd;--blue:#6ea8ff;--cyan:#78d9ff;--green:#49ef86;--yellow:#ffd84f;--pink:#ff72bd;--purple:#9f82ff}
+html,body{background:radial-gradient(circle at 50% -10%,#2a2048 0,#11142a 32%,#070912 75%);}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background:repeating-linear-gradient(0deg,transparent 0 2px,#fff 3px);mix-blend-mode:overlay;z-index:9999}
+.app{max-width:none;margin-left:208px;margin-right:12px;padding:10px}
+.topbar{min-height:66px;padding:10px 14px;border-color:#7773bd;background:linear-gradient(180deg,#12172b,#0a0d18);box-shadow:0 3px 0 #03040a, inset 0 1px #aaa6ff}
+.brand{font-size:15px}.brand small{color:#8bd4ff;letter-spacing:.7px}
+.taskbar{width:190px;background:linear-gradient(180deg,#141733,#080b15);border:3px ridge #7773bd;box-shadow:5px 5px 0 #020307}.taskbar .nav button{border-color:#686aa4;background:linear-gradient(180deg,#171b3b,#0e1226);padding:10px 9px}.taskbar .nav button.active{background:linear-gradient(180deg,#4e45a5,#29246c);border-color:#a69eff;box-shadow:inset 0 0 0 1px #c4c0ff}.task-bottom{color:#55ef87}
+.dashboard-shell{grid-template-columns:218px minmax(0,1fr) 292px;gap:10px}
+.dash-sidebar,.dash-rightbar{gap:10px}.dash-box{border-color:#716eae;background:linear-gradient(180deg,#151936,#0b0f20);box-shadow:4px 4px 0 #03040a,inset 0 1px rgba(255,255,255,.08)}
+.dash-box .dash-head{padding:8px 10px;background:linear-gradient(180deg,#201e49,#12152c);border-bottom-color:#69659e;letter-spacing:.5px}
+.dash-profile{padding:10px}.dash-profile .mini-trainer{height:165px;background:radial-gradient(circle at 50% 35%,#344066,#090d18);border-color:#646b9a}.dash-profile h2{color:#8cc9ff}.dash-side-stat{padding:9px;border-top-color:#2b3051}.dash-side-stat b{font-size:13px;letter-spacing:.4px}.dash-side-stat span:not(.tiny){font-size:22px}
+.dash-hero{grid-template-columns:1fr;gap:10px}.dash-overview{min-height:245px}.dash-overview-inner{grid-template-columns:165px minmax(0,1fr) 150px;gap:14px}.dash-overview-trainer{height:205px}.dash-overview-trainer img{height:205px;max-width:160px}.dash-coat{height:145px}.dash-coat img{width:145px;height:145px}.dash-overview .title{font-size:18px}.dash-overview .subtitle{font-size:21px;color:#a7a8ca}.dash-meter{margin:12px 0}.dash-meter label{font-size:18px}.dash-meter .bar{height:15px}.dash-rank{font-size:14px;color:#ffd84f}
+.dash-kpis{grid-template-columns:repeat(4,1fr);padding:8px;gap:8px}.dash-kpi{min-height:76px;display:flex;flex-direction:column;justify-content:center;padding:8px 10px}.dash-kpi strong{font-size:11px}.dash-kpi span{font-size:27px}.dash-hero>.dash-box:nth-child(2){min-height:150px}.dash-hero>.dash-box:nth-child(2) .dash-side-stat{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dash-team-large{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;padding:9px}.dash-team-large .dash-mon{padding:6px;min-height:118px}.dash-team-large .dash-mon img{height:82px}.dash-team-large .dash-mon span{font-size:15px}
+.dash-below{grid-template-columns:1.05fr 1fr 1fr;gap:10px}.dash-badge-mini{gap:6px;padding:9px}.dash-badge-mini img{height:60px;background:radial-gradient(circle,#1a2540,#080b15)}.dash-objectives .row,.dash-below .list .row{padding:8px}.dash-calendar{padding:9px}.dash-cal div{min-height:29px}.dash-streak{padding:10px}.dash-dj{padding:9px}.dash-dj-top{grid-template-columns:88px 1fr}.dash-dj-top img{width:88px;height:110px}.dash-dj-team{gap:4px}.dash-dj-team img{height:52px}.dash-quick{grid-template-columns:1fr 1fr;gap:6px;padding:9px}.dash-quick .btn{min-height:39px}.dash-sync{padding:9px}.dash-friends{grid-template-columns:repeat(4,1fr);gap:6px;padding:9px}.dash-friend-mini{padding:6px}.dash-friend-mini img{height:65px}.dash-footerbar{margin-top:10px;border-color:#6f6aa9;background:#0a0d18}
+/* cleaner general pages */
+.page>.panel{border-color:#716eae;background:linear-gradient(180deg,#151936,#0b0f20);box-shadow:4px 4px 0 #03040a}.title{letter-spacing:.4px}.btn{border-color:#777ba9;background:linear-gradient(180deg,#1e2744,#131a30)}.btn.primary{background:linear-gradient(180deg,#4d48a4,#2d286f);border-color:#aaa4ff}.btn.green{background:linear-gradient(180deg,#28794e,#17492f)}
+
+.mobile-nav,.mobile-more{display:none}
+@media(max-width:900px){
+ .taskbar{display:none}
+ .mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:0;right:0;bottom:0;height:68px;z-index:1000;padding:5px 4px calc(5px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#171a38,#090c18);border-top:3px ridge #7773bd;box-shadow:0 -4px 0 #03040a}
+ .mobile-nav .mnav{border:2px outset #676aa0;background:linear-gradient(180deg,#181c3b,#0d1124);color:#f7f7ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;padding:3px}.mobile-nav .mnav span{font-family:'Press Start 2P';font-size:14px;color:#8fd2ff}.mobile-nav .mnav small{font-family:'Press Start 2P';font-size:7px;line-height:1}.mobile-nav .mnav.active{background:linear-gradient(180deg,#514ca7,#2b286d);border-color:#aaa4ff}.mobile-more{position:fixed;right:8px;bottom:76px;z-index:1001;width:min(260px,calc(100vw - 16px));padding:7px;background:#0b0e1c;border:3px ridge #7773bd;box-shadow:5px 5px 0 #020307}.mobile-more.show{display:grid;grid-template-columns:1fr 1fr;gap:5px}.mobile-more button{min-height:40px;border:2px outset #676aa0;background:#171c36;color:#fff;font-family:'Press Start 2P';font-size:8px}.mobile-more button:active{border-style:inset}
+}
+
+/* MOBILE: PokéNav / handheld terminal */
+@media(max-width:900px){
+ body{padding-bottom:72px}.app{margin:0;padding:7px}.topbar{margin-bottom:8px;min-height:58px}.brand{font-size:11px;line-height:1.5}.brand small{font-size:15px}.status{font-size:14px}
+ .taskbar{display:none!important}
+ .dashboard-shell{display:flex;flex-direction:column;gap:8px}.dash-main{display:flex;flex-direction:column}.dash-sidebar{order:1}.dash-main{order:2}.dash-rightbar{order:3}.dash-sidebar .dash-box:nth-child(2){display:none}.dash-profile{display:grid;grid-template-columns:92px 1fr;column-gap:10px;align-items:center}.dash-profile .dash-head{grid-column:1/-1}.dash-profile .mini-trainer{grid-row:2/6;width:92px;height:120px}.dash-profile h2{grid-column:2;margin:0;font-size:14px}.dash-profile .level{grid-column:2}.dash-profile .dash-side-stat{grid-column:2;padding:4px 0;border-top:1px solid #292e4e}.dash-hero{gap:8px}.dash-overview{min-height:0}.dash-overview-inner{grid-template-columns:100px minmax(0,1fr);gap:10px;align-items:center}.dash-overview-trainer{height:145px}.dash-overview-trainer img{height:145px;max-width:100px}.dash-coat{display:none}.dash-overview .title{font-size:14px}.dash-overview .subtitle{font-size:18px}.dash-meter{margin:8px 0}.dash-meter label{font-size:16px}.dash-kpis{grid-template-columns:repeat(2,1fr);gap:5px}.dash-kpi{min-height:64px}.dash-kpi span{font-size:23px}.dash-hero>.dash-box:nth-child(2){min-height:0}.dash-hero>.dash-box:nth-child(2) .dash-side-stat{display:block}.dash-team-large{grid-template-columns:repeat(3,1fr);gap:5px;padding:6px}.dash-team-large .dash-mon{min-height:106px;padding:4px}.dash-team-large .dash-mon img{height:65px}.dash-team-large .dash-mon span{font-size:13px}.dash-below{grid-template-columns:1fr;gap:8px}.dash-badge-mini{grid-template-columns:repeat(4,1fr)}.dash-badge-mini img{height:52px}.dash-calendar{padding:7px}.dash-cal div{min-height:30px}.dash-dj-top{grid-template-columns:76px 1fr}.dash-dj-top img{width:76px;height:92px}.dash-dj-team img{height:45px}.dash-friends{grid-template-columns:repeat(2,1fr)}.dash-footerbar{font-size:12px}.dash-footerbar span:last-child{display:none}
+ .grid,.hero,.coat,.rival{grid-template-columns:1fr}.poke-grid{grid-template-columns:repeat(2,1fr)}.badge-grid{grid-template-columns:repeat(2,1fr)}.friend-grid{grid-template-columns:1fr}.friend img{height:180px}.formgrid{grid-template-columns:1fr}.formgrid .full{grid-column:1}.row{grid-template-columns:1fr}.actions{width:100%}.actions .btn{flex:1;min-height:38px}.list{max-height:none}.panel{padding:9px}.calc-wrap{max-width:none}.calc-key{min-height:58px}.footer{padding-bottom:5px}
+}
+@media(max-width:420px){
+ .app{padding:5px}.topbar{padding:7px 8px;gap:7px}.brand{font-size:9px;line-height:1.35}.brand small{font-size:12px}.status{font-size:12px}.status .dot{width:9px;height:9px}
+ .panel{padding:8px;margin-bottom:8px}.title{font-size:11px;line-height:1.3}.tiny{font-size:15px}
+ .dashboard-shell{gap:7px}.dash-profile{grid-template-columns:76px 1fr;column-gap:8px;padding:7px}.dash-profile .mini-trainer{width:76px;height:105px}.dash-profile h2{font-size:12px}.dash-profile .level{font-size:9px}.dash-side-stat{padding:6px}.dash-side-stat b{font-size:15px}.dash-side-stat span{font-size:18px}
+ .dash-overview{padding:7px}.dash-overview-inner{grid-template-columns:82px minmax(0,1fr);gap:7px}.dash-overview-trainer{height:125px}.dash-overview-trainer img{height:125px;max-width:82px}.dash-overview .title{font-size:11px}.dash-overview .subtitle{font-size:16px}.dash-meter label{font-size:14px}.dash-kpi{padding:6px;min-height:58px}.dash-kpi strong{font-size:9px}.dash-kpi span{font-size:19px}
+ .dash-team-large{grid-template-columns:repeat(2,1fr);gap:5px}.dash-team-large .dash-mon{min-height:104px}.dash-team-large .dash-mon img{height:62px}.dash-team-large .dash-mon span{font-size:12px}
+ .dash-below{gap:7px}.dash-badge-mini{grid-template-columns:repeat(4,1fr);padding:5px}.dash-badge-mini img{height:42px}.dash-calendar{padding:5px}.dash-cal div{min-height:27px;font-size:12px}
+ .dash-dj-top{grid-template-columns:68px 1fr;gap:6px}.dash-dj-top img{width:68px;height:82px}.dash-dj-team img{height:40px}.dash-friends{grid-template-columns:repeat(2,1fr);padding:5px}.dash-footerbar{padding:5px 7px;font-size:11px}
+ .poke-grid{grid-template-columns:1fr 1fr;gap:6px}.poke{padding:5px}.poke img{height:90px}.poke h3{font-size:18px}.badge-grid{grid-template-columns:1fr 1fr;gap:6px}.badge{min-height:125px;padding:6px}.badge img{width:66px;height:66px}.friend-grid{grid-template-columns:1fr}.friend{padding:7px}.friend img{height:150px}.friend-team{grid-template-columns:repeat(3,1fr)}
+ .formgrid{gap:6px}.input,textarea,select{font-size:17px;padding:7px}.actions{gap:4px}.actions .btn{min-height:40px;padding:5px 6px;font-size:14px}
+ .calc-wrap{width:100%}.calc-screen{font-size:16px;min-height:52px;padding:12px}.calc-grid{gap:5px}.calc-key{min-height:52px;font-size:11px}.calc-key.backspace{font-size:8px}
+ .mobile-nav{height:64px;padding:4px 3px calc(4px + env(safe-area-inset-bottom))}.mobile-nav .mnav{padding:2px 1px}.mobile-nav .mnav span{font-size:12px}.mobile-nav .mnav small{font-size:6px}
+}
+@media(max-width:340px){.mobile-nav .mnav span{font-size:10px}.mobile-nav .mnav small{font-size:5px}.dash-overview-inner{grid-template-columns:70px 1fr}.dash-overview-trainer,.dash-overview-trainer img{height:112px}.dash-overview-trainer img{max-width:70px}.dash-team-large{grid-template-columns:1fr 1fr}.poke-grid{grid-template-columns:1fr 1fr}.calc-key{min-height:48px}.calc-key.backspace{font-size:7px}}
+
+
+.active-rival{border-color:#54e68a!important;box-shadow:0 0 0 1px #54e68a,4px 4px 0 #030507}.active-rival-card{border-color:#54e68a!important}.rival-tag{color:#ff82bd}.active-tag{color:#71f39a}.friend-topline{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}.dash-friend-mini small{display:block;color:#8aa0bb;font-size:10px;margin-top:2px;line-height:1.2}
+
+/* V17 DESKTOP REBALANCE: keep the 90s terminal aesthetic, but stop the dashboard from becoming a tiny center column on medium desktop screens. */
+@media (min-width:901px) and (max-width:1199px){
+  .taskbar{width:54px;left:8px;top:8px;bottom:8px;padding:6px}
+  .taskbar .task-brand-text,.taskbar .nav button{font-size:0}
+  .taskbar .nav button:before{content:'◆';font-size:14px;color:#9ecfff}
+  .taskbar .task-bottom span:last-child{display:none}
+  .taskbar .task-toggle{align-self:center}
+  .app{margin-left:72px;margin-right:10px;max-width:none;padding:10px}
+  .topbar{margin-bottom:9px}
+  .dashboard-shell{grid-template-columns:175px minmax(0,1fr);gap:9px}
+  .dash-sidebar{grid-column:1}
+  .dash-main{grid-column:2}
+  .dash-rightbar{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;align-items:start}
+  .dash-rightbar .dash-calendar{grid-column:1}
+  .dash-rightbar .dash-streak{grid-column:2}
+  .dash-rightbar .dash-dj{grid-column:1}
+  .dash-rightbar .dash-quick{grid-column:2}
+  .dash-rightbar .dash-sync{grid-column:1/-1}
+  .dash-hero{grid-template-columns:1fr;gap:9px}
+  .dash-overview{min-height:225px}
+  .dash-overview-inner{grid-template-columns:145px minmax(0,1fr) 130px;gap:10px}
+  .dash-overview-trainer,.dash-overview-trainer img{height:190px}
+  .dash-overview-trainer img{max-width:140px}
+  .dash-coat,.dash-coat img{width:125px;height:125px}
+  .dash-team-large{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+  .dash-team-large .dash-mon{min-height:112px}
+  .dash-team-large .dash-mon img{height:76px}
+  .dash-below{grid-template-columns:1fr 1fr 1.1fr;gap:8px}
+  .dash-friends{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .dash-dj-team img{height:52px}
+}
+@media (min-width:1200px){
+  .taskbar{width:178px}
+  .app{margin-left:198px;margin-right:14px;max-width:none}
+  .dashboard-shell{grid-template-columns:190px minmax(0,1fr) 285px;gap:10px}
+  .dash-hero{grid-template-columns:minmax(0,1fr) 300px}
+}
+
+
+/* V18 DASHBOARD REDESIGN: compact command-center layout, no orphaned columns. */
+.dashboard-v18{display:flex;flex-direction:column;gap:10px;min-width:0}.v18-hero{display:grid;grid-template-columns:1.05fr 1.35fr .72fr;min-height:270px;overflow:hidden;background:radial-gradient(circle at 20% 80%,#382b58 0,#161a31 42%,#0b101b 100%)}.v18-trainer,.v18-progress,.v18-emblem{padding:13px;position:relative}.v18-trainer{border-right:2px ridge #536985}.v18-progress{border-right:2px ridge #536985}.v18-section-label{font-family:'Press Start 2P';font-size:9px;color:#89bfff;letter-spacing:.5px;padding-bottom:7px;border-bottom:1px solid #40516d}.v18-trainer-body{display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:center;height:220px}.v18-trainer-art{height:215px;display:flex;align-items:end;justify-content:center}.v18-trainer-art img{height:215px;width:130px;object-fit:contain;filter:drop-shadow(3px 3px 0 #030507)}.v18-kicker,.v18-rival-kicker{font-size:15px;color:#8da0b9}.v18-trainer-copy h1{font-family:'Press Start 2P';font-size:25px;color:#a7d7ff;margin:4px 0}.v18-level{font-family:'Press Start 2P';font-size:12px;color:#ffd34d;margin:8px 0}.v18-rank{font-family:'Press Start 2P';font-size:12px;color:#fff;margin-bottom:14px}.v18-statline{display:flex;justify-content:space-between;gap:8px;border-top:1px solid #2d3a52;padding:7px 0;font-size:15px}.v18-statline b{color:#ffd34d}.v18-progress-title{display:flex;justify-content:space-between;gap:8px;font-size:16px;margin:12px 0 4px}.v18-progress-title b{color:#a9d6ff}.v18-bigbar{height:17px;background:#05080e;border:2px inset #657b98}.v18-bigbar i{display:block;height:100%;background:linear-gradient(90deg,#367cff,#64dfff)}.v18-bigbar.green i{background:linear-gradient(90deg,#32a65c,#a4ff70)}.v18-milestone{margin-top:14px;padding:9px;border:2px inset #4d607b;background:#090e18;display:flex;justify-content:space-between;gap:10px}.v18-milestone span{color:#8da0b9;font-size:15px}.v18-milestone strong{color:#ffd34d;font-size:17px;text-align:right}.v18-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:10px}.v18-kpi-row div{border:2px inset #4d607b;background:#090e18;padding:6px;text-align:center}.v18-kpi-row span{display:block;font-size:12px;color:#8da0b9}.v18-kpi-row b{display:block;font-family:'Press Start 2P';font-size:12px;color:#fff;margin-top:4px}.v18-emblem{display:flex;flex-direction:column;align-items:center}.v18-emblem img{width:180px;height:190px;object-fit:contain;filter:drop-shadow(4px 4px 0 #030507);margin:auto}.v18-emblem-caption{font-family:'Press Start 2P';font-size:8px;color:#aab8cc;text-align:center}.v18-team{overflow:hidden}.v18-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-bottom:2px ridge #586b88;background:linear-gradient(180deg,#1b2340,#11172b);font-family:'Press Start 2P';font-size:10px}.v18-panel-head small{font-family:VT323;font-size:16px;color:#7f96b1}.v18-panel-head .btn{font-family:VT323;font-size:15px;padding:3px 8px}.v18-team-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:7px}.v18-team-grid .dash-mon{min-width:0;border:2px ridge #52657c;background:linear-gradient(180deg,#101a2b,#080d16);padding:5px;text-align:center}.v18-team-grid .dash-mon img{height:88px;width:100%;object-fit:contain;background:radial-gradient(circle,#263a56,#080d16)}.v18-team-grid .dash-mon span{display:block;font-family:'Press Start 2P';font-size:8px;margin-top:5px;color:#e9f0fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v18-main-grid{display:grid;grid-template-columns:1.15fr 1fr .95fr;gap:10px}.v18-card{min-width:0;overflow:hidden}.v18-list{padding:7px;min-height:154px;max-height:220px;overflow:auto}.v18-list .row{padding:7px;font-size:16px}.v18-list .row .tiny{font-size:14px}.v18-badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:8px}.v18-badge-grid img{width:100%;height:58px;object-fit:contain;border:1px inset #52657c;background:#080d15}.v18-badge-meta{display:flex;justify-content:space-between;gap:8px;padding:0 8px 8px;color:#8da0b9;font-size:15px}.v18-badge-meta b{color:#ffd34d;font-family:'Press Start 2P';font-size:9px}.v18-calendar-wrap{padding:8px}.v18-calendar-wrap .dash-cal div{min-height:26px}.v18-streak{border-top:2px ridge #536985;padding:8px 10px;display:flex;justify-content:space-between;align-items:center}.v18-streak span{display:block;color:#ffcf4f;font-family:'Press Start 2P';font-size:9px}.v18-streak strong{display:block;font-size:24px;margin-top:3px}.v18-streak-mark{font-size:30px;color:#ff9c33}.v18-rival-main{display:grid;grid-template-columns:100px 1fr;gap:10px;align-items:center;padding:8px}.v18-rival-main img{width:100px;height:120px;object-fit:contain;background:#070b12;border:2px inset #52657c}.v18-rival-main h2{font-family:'Press Start 2P';font-size:15px;color:#ff77bb;margin:4px 0}.v18-rival-main strong{font-family:'Press Start 2P';font-size:9px;color:#ffd34d}.v18-rival-main p{margin:7px 0 0;color:#8da0b9;font-size:15px}.v18-rival-team{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;padding:0 8px 8px}.v18-rival-team img{width:100%;height:45px;object-fit:contain;background:#080d15;border:1px inset #3f4e65}.v18-friends-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:7px}.v18-friends-grid .dash-friend-mini{min-width:0;padding:4px;border:2px inset #536983;background:#080e18}.v18-friends-grid .dash-friend-mini img{height:72px}.v18-friends-grid .dash-friend-mini span{font-size:13px}.v18-friends-grid .dash-friend-mini small{font-size:12px;color:#8da0b9}.v18-actions .v18-action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:8px}.v18-action-grid .btn{min-height:38px;font-size:14px}.v18-online{font-family:VT323;font-size:16px;color:#69ef94;display:flex;align-items:center;gap:5px}.v18-sync-line{display:flex;align-items:center;gap:7px;padding:6px 8px;border-top:1px solid #2d3a52;color:#69ef94;font-size:17px}.v18-sync-line small{margin-left:auto;color:#8da0b9;font-size:14px}.v18-sync-line .dot{width:9px;height:9px}.v18-hero .dash-head{display:none}.v18-main-grid .dash-box{margin-bottom:0}.v18-main-grid .btn{white-space:nowrap}@media(max-width:1180px){.v18-hero{grid-template-columns:1fr 1.1fr}.v18-emblem{display:none}.v18-main-grid{grid-template-columns:1fr 1fr}.v18-actions{grid-column:1/-1}.v18-team-grid .dash-mon img{height:76px}}@media(max-width:820px){.v18-hero{grid-template-columns:1fr}.v18-trainer{border-right:0;border-bottom:2px ridge #536985}.v18-progress{border-right:0}.v18-team-grid{grid-template-columns:repeat(3,1fr)}.v18-main-grid{grid-template-columns:1fr}.v18-actions{grid-column:auto}.v18-rival-card{order:5}.v18-friends-grid{grid-template-columns:repeat(2,1fr)}.v18-kpi-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<style id="v19-redesign">
+/* V21 DASHBOARD REDESIGN: warmer 90s terminal palette, stronger hierarchy, no dead space */
+:root{
+  --v19-bg:#070a0f;
+  --v19-panel:#0e141c;
+  --v19-panel2:#121b25;
+  --v19-ink:#eef4f0;
+  --v19-muted:#8fa4a4;
+  --v19-cyan:#73e1dc;
+  --v19-cyan2:#b4fff1;
+  --v19-amber:#ffc84a;
+  --v19-red:#ff6b5f;
+  --v19-green:#53e58a;
+  --v19-line:#426466;
+  --v19-line2:#7ea9a6;
+}
+body{
+  background:
+    radial-gradient(circle at 50% -10%,#18353a 0,#0b1118 34%,#05070a 78%);
+  color:var(--v19-ink);
+}
+body:before{
+  opacity:.08;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.18) 0 1px,transparent 1px 4px);
+}
+.app{max-width:1500px}
+.topbar{
+  background:linear-gradient(180deg,#172a2d,#0b1418);
+  border-color:#6faaa5;
+  box-shadow:0 0 0 2px #030507,4px 4px 0 #020304;
+}
+.brand{color:#f1f7f4;text-shadow:2px 2px #020304}
+.brand:before{color:var(--v19-red)}
+.brand small{color:var(--v19-cyan)}
+.status{background:#07100f;border-color:#5d8e8a;color:var(--v19-green)}
+.taskbar{
+  background:linear-gradient(180deg,#101b20,#070b10);
+  border-color:#6b9996;
+}
+.task-toggle{background:linear-gradient(180deg,#29484b,#152b2d);border-color:#86b9b4}
+
+.dashboard-v18{
+  max-width:1440px;
+  margin:0 auto;
+  gap:12px;
+}
+.dash-box{
+  border:2px ridge var(--v19-line2);
+  background:linear-gradient(180deg,#111a22,#0a1016);
+  box-shadow:3px 3px 0 #020406;
+}
+.v18-hero{
+  grid-template-columns:minmax(270px,1fr) minmax(380px,1.35fr) minmax(210px,.72fr);
+  min-height:300px;
+  background:
+    linear-gradient(90deg,rgba(19,45,47,.55),transparent 42%,rgba(55,38,19,.2)),
+    radial-gradient(circle at 12% 90%,#1e4545 0,#111b22 48%,#090d13 100%);
+}
+.v18-trainer,.v18-progress{border-color:#31565a}
+.v18-section-label{
+  color:var(--v19-cyan);
+  border-color:#31565a;
+  font-size:10px;
+}
+.v18-trainer-body{grid-template-columns:150px 1fr;gap:16px;height:240px}
+.v18-trainer-art{height:232px}
+.v18-trainer-art img{height:232px;width:145px;image-rendering:auto}
+.v18-kicker,.v18-rival-kicker{color:#9ab1b0}
+.v18-trainer-copy h1{color:#c2fff6;font-size:27px}
+.v18-level{color:var(--v19-amber)}
+.v18-rank{color:#f5f8f6}
+.v18-statline{border-color:#24383c}
+.v18-statline b{color:var(--v19-amber)}
+.v18-progress-title{font-size:15px}
+.v18-progress-title b{color:var(--v19-cyan2)}
+.v18-bigbar{height:18px;background:#040708;border-color:#4c6d70}
+.v18-bigbar i{background:linear-gradient(90deg,#258e8a,#8ff7e4)}
+.v18-bigbar.green i{background:linear-gradient(90deg,#2d9d5c,#6ef09a)}
+.v18-milestone{border-color:#3b5c5f;background:#091216}
+.v18-milestone strong{color:var(--v19-amber)}
+.v18-kpi-row div{border-color:#3b5c5f;background:#081015}
+.v18-kpi-row span{color:#8ba4a4}
+.v18-emblem{background:linear-gradient(180deg,rgba(12,21,25,.15),rgba(4,8,11,.5))}
+.v18-emblem img{
+  width:190px;height:200px;
+  filter:drop-shadow(0 0 12px rgba(115,225,220,.22)) drop-shadow(4px 4px 0 #020304);
+}
+.v18-emblem-caption{color:var(--v19-amber)}
+.v18-panel-head{
+  background:linear-gradient(180deg,#16282b,#0c171b);
+  border-color:#3f6668;
+  color:#eff8f5;
+}
+.v18-panel-head small{color:#7f9b9b}
+.v18-panel-head .btn{border-color:#658c89;background:#122024;color:#dcece9}
+.v18-team-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;padding:8px}
+.v18-team-grid .dash-mon{
+  min-height:125px;
+  border:2px ridge #527476;
+  background:linear-gradient(180deg,#101b21,#080e13);
+  padding:6px;
+}
+.v18-team-grid .dash-mon img{
+  height:92px;
+  background:radial-gradient(circle,#20383c,#070c11);
+  image-rendering:auto;
+  display:block;
+}
+.v18-team-grid .dash-mon span{font-size:8px;color:#eff7f4}
+.v18-main-grid{
+  grid-template-columns:1.15fr 1.05fr .9fr;
+  gap:10px;
+  align-items:stretch;
+}
+.v18-card{min-height:0}
+.v18-list{min-height:170px;max-height:230px}
+.v18-list .row{border-bottom:1px solid #203136}
+.v18-badge-grid{grid-template-columns:repeat(4,1fr);gap:7px;padding:9px}
+.v18-badge-grid img{
+  display:block;
+  width:100%;height:70px;
+  object-fit:contain;
+  padding:3px;
+  border:2px inset #527476;
+  background:radial-gradient(circle,#172b2e,#070c10);
+  image-rendering:auto;
+}
+.v18-badge-meta{color:#91a6a5}
+.v18-badge-meta b{color:var(--v19-amber)}
+.v18-calendar-wrap{background:#091015}
+.dash-cal div{border-color:#294348;background:#070d11}
+.dash-cal .today{border-color:var(--v19-cyan);color:#fff}
+.dash-cal .done{background:#123b29;color:#8dffb0}
+.v18-streak{border-color:#36575a}
+.v18-streak span{color:var(--v19-amber)}
+.v18-streak-mark{color:#e3a83c}
+.v18-rival-main img{
+  background:#080d11;border-color:#527476;
+}
+.v18-rival-main h2{color:#ff8bc3}
+.v18-rival-main strong{color:var(--v19-amber)}
+.v18-rival-team img{background:#070d11;border-color:#385457;display:block}
+.v18-friends-grid{grid-template-columns:repeat(4,1fr);gap:6px}
+.v18-friends-grid .dash-friend-mini{border-color:#527476;background:#080f13}
+.v18-friends-grid .dash-friend-mini img{height:78px;display:block}
+.v18-actions .v18-action-grid{grid-template-columns:repeat(3,1fr);gap:6px}
+.v18-action-grid .btn{border-color:#5c8381;background:#102024}
+.v18-action-grid .btn.primary{background:linear-gradient(180deg,#245d5b,#173d3c);border-color:#80b8b2}
+.v18-action-grid .btn.green{background:linear-gradient(180deg,#276b48,#19452f);border-color:#69e69a}
+.v18-sync-line{border-color:#254044;color:var(--v19-green)}
+.dash-footerbar{border-color:#527476;background:#091115;color:#789291}
+
+/* Dedicated placement on wide desktop. The dashboard now reads as one interface. */
+@media(min-width:1051px){
+  .v18-objectives{grid-column:1;grid-row:1}
+  .v18-main-grid>section:nth-child(2){grid-column:2;grid-row:1}
+  .v18-badges{grid-column:3;grid-row:1}
+  .v18-main-grid>section:nth-child(4){grid-column:1;grid-row:2}
+  .v18-rival-card{grid-column:2;grid-row:2}
+  .v18-main-grid>section:nth-child(6){grid-column:3;grid-row:2}
+  .v18-actions{grid-column:1/-1;grid-row:3}
+}
+@media(min-width:1051px) and (max-width:1250px){
+  .v18-hero{grid-template-columns:1fr 1.25fr .65fr}
+  .v18-trainer-body{grid-template-columns:125px 1fr}
+  .v18-trainer-art img{width:125px}
+  .v18-team-grid .dash-mon img{height:78px}
+}
+@media(max-width:1050px) and (min-width:701px){
+  .v18-hero{grid-template-columns:1fr 1.15fr}
+  .v18-emblem{display:none}
+  .v18-main-grid{grid-template-columns:1fr 1fr}
+  .v18-actions{grid-column:1/-1}
+  .v18-team-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:700px){
+  .dashboard-v18{gap:8px}
+  .v18-hero{grid-template-columns:1fr;min-height:0}
+  .v18-trainer{border-right:0;border-bottom:2px ridge #31565a}
+  .v18-progress{border-right:0}
+  .v18-emblem{display:flex;min-height:180px}
+  .v18-emblem img{width:135px;height:140px}
+  .v18-trainer-body{grid-template-columns:105px 1fr;height:175px}
+  .v18-trainer-art,.v18-trainer-art img{height:170px}
+  .v18-trainer-art img{width:105px}
+  .v18-trainer-copy h1{font-size:20px}
+  .v18-kicker{font-size:12px}
+  .v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .v18-team-grid .dash-mon{min-height:112px}
+  .v18-team-grid .dash-mon img{height:72px}
+  .v18-main-grid{grid-template-columns:1fr}
+  .v18-actions{grid-column:auto}
+  .v18-badge-grid{grid-template-columns:repeat(4,1fr)}
+  .v18-badge-grid img{height:54px}
+  .v18-friends-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+
+<style id="v21-desktop-redesign">
+:root{--v21-bg:#050b10;--v21-panel:#0a151b;--v21-panel2:#0d2028;--v21-line:#4d8790;--v21-cyan:#65e8f2;--v21-cyan2:#2cb8ca;--v21-red:#f34b45;--v21-yellow:#ffd24a;--v21-white:#edf8f8;--v21-muted:#89a7ad;--v21-green:#4cf08b}
+html,body{background:#050b10!important;color:var(--v21-white)}body{overflow-x:hidden}
+body:before{opacity:.08;background:repeating-linear-gradient(0deg,rgba(255,255,255,.16) 0 1px,transparent 1px 4px);mix-blend-mode:screen}
+.app{width:calc(100vw - 255px);max-width:none;margin-left:235px!important;margin-right:20px!important;padding:10px 0 18px}
+.topbar{margin-bottom:10px;min-height:64px;padding:10px 14px;background:linear-gradient(180deg,#10222a,#071015)!important;border:2px solid #43818a!important;box-shadow:0 0 0 2px #020608,4px 4px 0 #020608!important}
+.brand{font-size:14px;color:#f4ffff}.brand small{color:var(--v21-cyan);font-size:17px}.status{color:var(--v21-green);border:2px inset #28555a;background:#041015;padding:6px 9px}
+.taskbar{width:210px;background:linear-gradient(180deg,#0d2028,#071015)!important;border-color:#43818a!important;box-shadow:0 0 0 2px #020608,4px 4px 0 #020608!important}.task-brand{background:#0d252c;border-color:#376b72}.taskbar .nav button{background:linear-gradient(180deg,#102a32,#08151b);border-color:#3e737b}.taskbar .nav button.active{background:linear-gradient(180deg,#1f6976,#12444e);border-color:#7feef5;box-shadow:inset 0 0 0 1px #2fb5c4}.nav-ico{background:#061116;border-color:#4a7c83;color:#8ff2f6}.task-bottom{border-color:#376b72;background:#07151a}.task-build{color:#6f969d}
+.dashboard-v18{gap:9px}
+.v18-hero{grid-template-columns:1.05fr 1.25fr .72fr!important;min-height:245px;background:linear-gradient(145deg,#0e252d,#09151b 58%,#101f27)!important;border-color:#4b8790!important;box-shadow:4px 4px 0 #020608!important}
+.v18-trainer,.v18-progress{border-color:#315e65!important}.v18-section-label{color:var(--v21-cyan);border-color:#315e65}.v18-trainer-body{grid-template-columns:145px 1fr;gap:10px;height:205px}.v18-trainer-art,.v18-trainer-art img{height:198px}.v18-trainer-art img{width:125px}.v18-trainer-copy h1{color:#8cecf3;font-size:25px}.v18-kicker,.v18-rival-kicker{color:#8aaeb5}.v18-level{color:var(--v21-yellow)}.v18-statline{border-color:#25464d}.v18-statline b{color:var(--v21-yellow)}
+.v18-progress-title b{color:#9eeef3}.v18-bigbar{height:15px;border-color:#3d6d75;background:#02080b}.v18-bigbar i{background:linear-gradient(90deg,#168fa4,#6debf0)}.v18-bigbar.green i{background:linear-gradient(90deg,#268b57,#7cf3a2)}.v18-milestone{border-color:#315e65;background:#071318}.v18-milestone strong{color:var(--v21-yellow)}.v18-kpi-row div{border-color:#315e65;background:#071318}.v18-kpi-row b{color:#eaf9f9}
+.v18-emblem{background:linear-gradient(180deg,#0b1b22,#071116)}.v18-emblem img{width:165px;height:170px;filter:drop-shadow(0 0 10px rgba(80,221,232,.18))}
+.v18-panel-head{background:linear-gradient(180deg,#103039,#0a1b21)!important;border-color:#3b727a!important;color:#f0ffff}.v18-panel-head small{color:#7ea3aa}.v18-team-grid{gap:7px!important;padding:8px!important}.v18-team-grid .dash-mon{border-color:#3e737b!important;background:linear-gradient(180deg,#0d2027,#071116)!important;min-height:120px}.v18-team-grid .dash-mon img{height:82px!important;background:radial-gradient(circle,#163b45,#071116)!important}.v18-team-grid .dash-mon span{color:#efffff!important}
+.v18-main-grid{grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:9px!important}.v18-main-grid>.v18-objectives{grid-column:span 4}.v18-main-grid>.v18-card:nth-child(2){grid-column:span 4}.v18-main-grid>.v18-badges{grid-column:span 4}.v18-main-grid>.v18-card:nth-child(4){grid-column:span 4}.v18-main-grid>.v18-rival-card{grid-column:span 4}.v18-main-grid>.v18-card:nth-child(6){grid-column:span 4}.v18-main-grid>.v18-actions{grid-column:1/-1}
+.v18-card{background:#08141a!important;border-color:#3e737b!important}.v18-list{min-height:170px}.row{border-color:#315e65;background:#071318}.btn{border-color:#4c7c83;background:#10252d;color:#f1ffff}.btn.primary{background:#175f6b}.btn.green{background:#17603f}.btn.danger{background:#713039}.v18-badge-grid{gap:7px}.v18-badge-grid img{height:68px;background:#071318;border-color:#3e737b}.v18-badge-meta b{color:var(--v21-yellow)}.dash-cal div{border-color:#294348;background:#071116}.dash-cal .today{border-color:var(--v21-cyan)}.dash-cal .done{background:#123b29}.v18-rival-main img{border-color:#3e737b;background:#061015}.v18-rival-main h2{color:#ff7cae}.v18-rival-team img{background:#071116;border-color:#294b52}.v18-friends-grid .dash-friend-mini{border-color:#315e65;background:#071318}.v18-friends-grid .dash-friend-mini img{height:78px;object-fit:contain;background:#061015}.v18-action-grid .btn{min-height:42px}.v18-sync-line{border-color:#25464d}.dash-footerbar{border-color:#3e737b;background:#071318;color:#76959b}
+/* desktop breathing room without giant empty blocks */
+@media(min-width:1400px){.v18-team-grid .dash-mon img{height:92px!important}.v18-team-grid .dash-mon{min-height:130px}.v18-list{min-height:185px}.v18-badge-grid img{height:74px}}
+@media(max-width:1180px) and (min-width:901px){.app{width:calc(100vw - 235px);margin-left:220px!important;margin-right:10px!important}.v18-hero{grid-template-columns:1fr 1fr!important}.v18-emblem{display:none}.v18-main-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}.v18-main-grid>.v18-card{grid-column:span 3!important}.v18-main-grid>.v18-actions{grid-column:1/-1!important}}
+@media(max-width:900px){.app{width:auto;margin:0!important;padding:6px 6px 88px}.topbar{min-height:56px}.v18-hero{grid-template-columns:1fr!important}.v18-emblem{display:none}.v18-trainer{border-right:0!important;border-bottom:2px ridge #315e65}.v18-progress{border-right:0!important}.v18-main-grid{grid-template-columns:1fr!important}.v18-main-grid>.v18-card,.v18-main-grid>.v18-actions{grid-column:auto!important}.v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.v18-team-grid .dash-mon img{height:78px!important}.taskbar{display:none!important}}
+@media(max-width:520px){.brand{font-size:10px}.brand small{font-size:14px}.status{font-size:10px}.v18-trainer-body{grid-template-columns:110px 1fr;height:175px}.v18-trainer-art,.v18-trainer-art img{height:170px}.v18-trainer-art img{width:105px}.v18-trainer-copy h1{font-size:20px}.v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v18-team-grid .dash-mon img{height:86px!important}.v18-kpi-row{grid-template-columns:repeat(2,1fr)}.v18-badge-grid{grid-template-columns:repeat(4,1fr)}.v18-badge-grid img{height:54px}.v18-friends-grid{grid-template-columns:repeat(2,1fr)}}
+
+.rival-roster-list{display:grid;gap:14px}.rival-roster{border:1px solid #315e65;padding:12px;background:rgba(0,0,0,.2)}.rival-roster-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.rival-roster-team{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.rival-mini{border:1px solid #253f47;padding:6px;text-align:center;min-width:0}.rival-mini img{width:100%;height:80px;object-fit:contain;image-rendering:auto}.rival-mini span{display:block;font-size:9px;overflow-wrap:anywhere}.rival-roster.active-rival{border-color:#43e07d;box-shadow:0 0 0 1px rgba(67,224,125,.18) inset}@media(max-width:700px){.rival-roster-team{grid-template-columns:repeat(3,minmax(0,1fr))}.rival-mini img{height:72px}}
+.header-actions{display:flex;align-items:center;gap:8px}.header-actions .btn{white-space:nowrap;font-family:'Press Start 2P';font-size:10px;min-height:34px}.header-actions .status{flex:0 0 auto}
+@media(max-width:520px){.header-actions .btn{font-size:7px;padding:6px}.header-actions{gap:4px}.topbar .brand small{font-size:9px}}
+</style>
+<style>.poke img,.dash-mon img,.friend-poke img,.rival-mini img,.rival-roster-team img{animation:pokeIdle 1.8s steps(2,end) infinite;transform-origin:50% 85%}@keyframes pokeIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}.pokedex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}.dex-card{border:3px ridge #667a95;background:#0a1019;padding:7px;text-align:center;min-height:145px}.dex-card img{width:100%;height:82px;object-fit:contain;background:radial-gradient(circle,#273b58,#0a1019);animation:pokeIdle 1.8s steps(2,end) infinite}.dex-card strong{display:block;font-size:17px}.dex-entry{font-size:11px;line-height:1.35;text-align:left;margin:6px 0 0;color:#d7e3f1}.dex-entry b{color:#f0b94b}.dex-entry em{color:#8fe8ff;font-style:normal}@media(max-width:700px){.dex-entry{font-size:10px}}.dex-card .tiny{font-size:14px}@media(max-width:700px){.pokedex-grid{grid-template-columns:repeat(3,1fr)}.dex-card{min-height:125px}.dex-card img{height:65px}}</style>
+<style id="v37-final-stability">
+/* ===== V37 FINAL STABILITY / POLISH LAYER ===== */
+html,body{width:100%;overflow-x:hidden}
+body{min-width:0}
+.app{width:100%;max-width:none;margin:0 auto;padding:10px 12px 18px 198px}
+main{min-width:0}
+.dashboard-v18{width:100%;max-width:1680px;margin:0 auto}
+.v18-hero{grid-template-columns:minmax(250px,.9fr) minmax(340px,1.15fr) minmax(190px,.55fr);min-height:285px}
+.v18-trainer-body{grid-template-columns:140px minmax(0,1fr)}
+.v18-trainer-art img{width:140px;height:220px}
+.v18-emblem img{max-width:170px}
+.v18-team-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+.v18-team-grid .dash-mon{min-height:145px;display:grid;grid-template-rows:1fr auto}
+.v18-team-grid .dash-mon img{height:92px;min-height:0;max-width:100%;object-fit:contain}
+.v18-main-grid{grid-template-columns:1.15fr 1fr .95fr;align-items:start}
+.v18-card{min-height:0}
+.v18-list{min-height:150px}
+.v18-badge-grid img{height:66px;object-fit:contain}
+.v18-rival-main img{height:125px}
+.v18-friends-grid .dash-friend-mini img{width:100%;height:76px;object-fit:contain}
+.poke-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.poke{min-width:0;overflow:hidden}
+.poke img{width:100%;height:150px;object-fit:contain;background:radial-gradient(circle,#1c3149,#070d16 70%);image-rendering:auto}
+.friend-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}
+.friend{min-width:0;overflow:hidden}
+.friend>img{width:100%;height:230px;object-fit:contain;background:radial-gradient(circle,#1c3149,#070d16 72%);display:block}
+.friend-team{grid-template-columns:repeat(3,minmax(0,1fr))}
+.friend-poke{min-width:0;overflow:hidden}
+.friend-poke img{width:100%;height:58px;object-fit:contain}
+.badge-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.badge{min-width:0}
+.badge img{width:90px;height:90px;object-fit:contain}
+.coat{grid-template-columns:280px minmax(0,1fr)}
+.coat img{max-width:240px;max-height:330px;object-fit:contain}
+.month{min-width:0}
+.day{min-width:0}
+.journal .row{align-items:start}
+.journal-entry,.journalEntry{overflow:hidden}
+.input[type=file]{max-width:100%}
+.sync-status,.syncStatus{min-height:22px}
+img{max-width:100%}
+img[data-fallback]{background:#07111c}
+@media(min-width:1500px){
+  .app{padding-left:202px;padding-right:18px}
+  .dashboard-v18{max-width:1740px}
+  .v18-team-grid .dash-mon img{height:102px}
+}
+@media(max-width:1199px) and (min-width:901px){
+  .app{padding-left:78px;padding-right:10px}
+  .dashboard-v18{max-width:none}
+  .v18-hero{grid-template-columns:1fr 1.1fr}
+  .v18-emblem{display:none}
+  .v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .v18-main-grid{grid-template-columns:1fr 1fr}
+  .v18-actions{grid-column:1/-1}
+}
+@media(max-width:900px){
+  .app{padding:8px 8px 74px}
+  .v18-hero{grid-template-columns:1fr}
+  .v18-trainer{border-right:0;border-bottom:2px ridge #536985}
+  .v18-progress{border-right:0}
+  .v18-emblem{display:none}
+  .v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .v18-main-grid{grid-template-columns:1fr}
+  .friend-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .poke-grid{grid-template-columns:1fr 1fr}
+  .friend-grid{grid-template-columns:1fr}
+  .friend>img{height:210px}
+  .badge-grid{grid-template-columns:1fr 1fr}
+  .coat{grid-template-columns:1fr}
+}
+</style>
+
+<style id="v37-clean-final">
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}body{min-width:0}
+.app{width:calc(100vw - 232px)!important;max-width:none!important;margin-left:222px!important;margin-right:10px!important;padding:10px 0 20px!important}main{width:100%;min-width:0}
+.dashboard-v18{width:100%!important;max-width:none!important;margin:0!important;display:grid!important;grid-template-columns:minmax(270px,.88fr) minmax(520px,1.52fr) minmax(300px,.92fr)!important;grid-template-areas:"trainer team progress" "trainer team objectives" "calendar recent badges" "friends rival emblem" "actions actions actions";grid-auto-rows:auto;gap:10px;align-items:stretch}
+.v18-hero{display:contents!important}.v18-trainer{grid-area:trainer;display:block!important;min-width:0;min-height:390px;padding:12px!important;border:2px ridge #4b8790!important;background:linear-gradient(180deg,#10242a,#081217)!important;overflow:hidden}.v18-progress{grid-area:progress;min-width:0;padding:12px!important;border:2px ridge #4b8790!important;background:linear-gradient(180deg,#10242a,#081217)!important;overflow:hidden}.v18-emblem{grid-area:emblem;min-width:0;min-height:180px;padding:10px!important;border:2px ridge #4b8790!important;background:linear-gradient(180deg,#10242a,#081217)!important;display:flex!important;align-items:center;justify-content:center}.v18-team{grid-area:team;min-width:0;overflow:hidden}.v18-objectives{grid-area:objectives}.v18-main-grid{display:contents!important}.v18-rival-card{grid-area:rival}.v18-actions{grid-area:actions}
+.v18-main-grid>.v18-card:nth-child(2){grid-area:recent}.v18-main-grid>.v18-card:nth-child(3){grid-area:badges}.v18-main-grid>.v18-card:nth-child(4){grid-area:calendar}.v18-main-grid>.v18-card:nth-child(6){grid-area:friends}
+.v18-trainer-body{grid-template-columns:145px minmax(0,1fr)!important;gap:12px!important;height:300px!important;align-items:center}.v18-trainer-art{height:290px!important;display:flex;align-items:end;justify-content:center}.v18-trainer-art img{width:145px!important;height:285px!important;object-fit:contain!important;display:block!important}.v18-trainer-copy{min-width:0}
+.v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:8px!important;gap:8px!important}.v18-team-grid .dash-mon{min-width:0;height:150px;display:grid!important;grid-template-rows:1fr auto;overflow:hidden}.v18-team-grid .dash-mon img{width:100%!important;height:108px!important;object-fit:contain!important;display:block!important}
+.v18-list{max-height:210px!important;overflow:auto}.v18-rival-main{grid-template-columns:100px minmax(0,1fr)!important}.v18-rival-main img{width:100px!important;height:125px!important;object-fit:contain!important}.v18-friends-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v18-friends-grid .dash-friend-mini{min-width:0;overflow:hidden}.v18-friends-grid .dash-friend-mini img{width:100%!important;height:78px!important;object-fit:contain!important}.v18-badge-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}.v18-badge-grid img{width:100%!important;height:66px!important;object-fit:contain!important;background:transparent!important;border:0!important}.v18-calendar-wrap{min-width:0;overflow:hidden}.v18-emblem img{width:150px!important;height:145px!important;max-width:100%!important;object-fit:contain!important;display:block!important}.v18-action-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+.poke-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.poke img{height:170px!important;object-fit:contain!important}.friend-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.friend>img{height:230px!important;object-fit:contain!important}.badge-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}.badge img{height:95px!important;object-fit:contain!important}.coat{grid-template-columns:260px minmax(0,1fr)!important}.coat img{max-width:220px!important;max-height:300px!important;object-fit:contain!important}
+@media(max-width:1250px) and (min-width:901px){.app{width:calc(100vw - 82px)!important;margin-left:72px!important;margin-right:10px!important}.dashboard-v18{grid-template-columns:minmax(230px,.85fr) minmax(420px,1.45fr) minmax(260px,.9fr)!important}.v18-trainer-body{grid-template-columns:115px minmax(0,1fr)!important}.v18-trainer-art img{width:115px!important}}
+@media(max-width:900px){.app{width:100%!important;margin:0!important;padding:7px 7px 88px!important}.dashboard-v18{display:grid!important;grid-template-columns:1fr!important;grid-template-areas:"trainer" "progress" "team" "objectives" "recent" "badges" "calendar" "rival" "friends" "emblem" "actions"!important}.v18-trainer{min-height:0}.v18-trainer-body{height:210px!important;grid-template-columns:105px minmax(0,1fr)!important}.v18-trainer-art{height:200px!important}.v18-trainer-art img{width:105px!important;height:195px!important}.v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v18-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:520px){.v18-team-grid{grid-template-columns:1fr 1fr!important}.poke-grid,.friend-grid{grid-template-columns:1fr!important}.badge-grid{grid-template-columns:1fr 1fr!important}.coat{grid-template-columns:1fr!important}}
+</style>
+<style id="v38-final-layout">
+/* V38: dense 90s RPG dashboard, no overflow, readable at normal desktop widths */
+.app{max-width:none;width:calc(100% - 218px);margin-left:208px;margin-right:10px;padding:10px 12px 20px}.dashboard-v18{width:100%;max-width:1500px;margin:0 auto}.v18-hero{grid-template-columns:minmax(240px,.92fr) minmax(360px,1.28fr) minmax(180px,.62fr);min-height:270px}.v18-trainer-body{grid-template-columns:145px minmax(0,1fr)}.v18-trainer-art{height:220px}.v18-trainer-art img{width:145px;height:220px;object-fit:contain}.v18-emblem img{width:175px;height:190px;object-fit:contain}.v18-team-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}.v18-team-grid .dash-mon{height:150px}.v18-team-grid .dash-mon img{height:102px;object-fit:contain;background:radial-gradient(circle,#203b59 0,#0a111b 72%)}.v18-main-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.v18-main-grid>.v18-card{min-width:0}.v18-main-grid>.v18-card:nth-child(1){grid-column:1}.v18-main-grid>.v18-card:nth-child(2){grid-column:2}.v18-main-grid>.v18-card:nth-child(3){grid-column:3}.v18-main-grid>.v18-card:nth-child(4){grid-column:1}.v18-main-grid>.v18-card:nth-child(5){grid-column:2}.v18-main-grid>.v18-card:nth-child(6){grid-column:3}.v18-main-grid>.v18-actions{grid-column:1/-1}.v18-rival-main img{object-fit:contain;background:radial-gradient(circle,#1b2d45,#060a10)}.v18-friends-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.v18-friends-grid img{object-fit:contain}.v18-badge-grid img{object-fit:contain}.v18-calendar-wrap{min-height:190px}.dash-cal{grid-template-columns:repeat(7,1fr);gap:3px}.dash-cal>div{min-height:25px;padding:3px;text-align:center}.dash-cal>div small{display:block;color:#67e6ff;font-size:11px}.v18-footerbar{white-space:nowrap;overflow:hidden}
+.monthly-v38-head{display:flex;justify-content:space-between;gap:16px;align-items:center}.monthly-v38-grid{display:grid;grid-template-columns:1fr 1.45fr 1fr;gap:10px;align-items:start}.monthly-v38-grid>.panel{margin-bottom:0}.monthly-v38-title{display:flex;justify-content:space-between;align-items:center;font-family:'Press Start 2P';font-size:10px;padding-bottom:8px;border-bottom:2px ridge #536985;margin-bottom:9px}.monthly-v38-title b{color:#ffd34d}.monthly-goals-list{max-height:560px;overflow:auto;margin-top:10px}.monthly-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.mc-head{font-family:'Press Start 2P';font-size:7px;text-align:center;color:#7fbfff;padding:4px 0}.mc-empty{min-height:68px}.mc-day{min-height:68px;border:2px ridge #536985;background:linear-gradient(180deg,#111d2d,#08101a);color:#f5f7fb;text-align:left;padding:5px;display:flex;flex-direction:column;gap:3px}.mc-day:hover{border-color:#7bdfff;transform:translateY(-1px)}.mc-day span{font-family:'Press Start 2P';font-size:9px}.mc-day strong{font-size:18px;color:#a9d6ff}.mc-day small{font-size:12px;color:#7f96b1}.mc-day.today{outline:2px solid #ffd34d}.mc-day.partial{background:linear-gradient(180deg,#1b2734,#0b121b)}.mc-day.all-done{background:linear-gradient(180deg,#143526,#091710);border-color:#55d77a}.monthly-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;color:#8da0b9;font-size:14px}.mc-dot{display:inline-block;width:9px;height:9px;border:1px solid #71849e;margin-right:4px}.mc-dot.done{background:#55d77a}.mc-dot.part{background:#ffd34d}.mc-dot.today{background:#5ddfff}.daily-row{display:grid;grid-template-columns:1fr auto auto;gap:7px;align-items:center;border:2px inset #4f6178;background:#0a111b;padding:7px;margin-bottom:5px}.daily-row b,.daily-row span{display:block}.daily-row span{color:#8da0b9;font-size:14px}.daily-row label{font-size:14px;white-space:nowrap}.monthly-v38-daily .list{max-height:560px;overflow:auto}
+@media(max-width:1250px) and (min-width:901px){.app{width:calc(100% - 82px);margin-left:72px}.v18-hero{grid-template-columns:1fr 1.25fr}.v18-emblem{display:none}.v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.v18-main-grid{grid-template-columns:1fr 1fr}.v18-main-grid>.v18-card:nth-child(1){grid-column:1}.v18-main-grid>.v18-card:nth-child(2){grid-column:2}.v18-main-grid>.v18-card:nth-child(3){grid-column:1}.v18-main-grid>.v18-card:nth-child(4){grid-column:2}.v18-main-grid>.v18-card:nth-child(5){grid-column:1}.v18-main-grid>.v18-card:nth-child(6){grid-column:2}.monthly-v38-grid{grid-template-columns:1fr 1.25fr}}
+@media(max-width:900px){.app{width:100%;margin:0;padding:8px 8px 76px}.v18-hero{grid-template-columns:1fr}.v18-emblem{display:none}.v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.v18-main-grid{grid-template-columns:1fr}.v18-main-grid>.v18-card{grid-column:1!important}.monthly-v38-head{align-items:flex-start;flex-direction:column}.monthly-v38-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.monthly-calendar{gap:2px}.mc-day,.mc-empty{min-height:55px}.mc-head{font-size:6px}.daily-row{grid-template-columns:1fr auto}.daily-row button{grid-column:2}.daily-row label{grid-column:1}.monthly-v38-grid .formgrid{grid-template-columns:1fr}}
+</style>
+<style id="v39-clean-dashboard">
+/* V39: one coherent desktop shell. Legacy styles remain for non-dashboard pages, but this block owns the home screen. */
+:root{--v39-bg:#050a0f;--v39-panel:#0a141b;--v39-panel2:#0d1d25;--v39-line:#4b8790;--v39-line2:#78aeb2;--v39-cyan:#69e9ef;--v39-yellow:#ffd34d;--v39-green:#4cf08b;--v39-muted:#89a6ab;--v39-white:#eef8f8}
+body{background:#050a0f!important;overflow-x:hidden}.app{width:calc(100vw - 250px)!important;max-width:none!important;margin:0 14px 0 224px!important;padding:8px 0 20px!important}.topbar{width:100%;margin-bottom:10px!important;min-height:62px!important}.dashboard-v18{width:100%;max-width:none!important;display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr));gap:9px!important}.dashboard-v18>.v18-hero{grid-column:1/-1;grid-row:1}.dashboard-v18>.v18-team{grid-column:1/-1;grid-row:2}.dashboard-v18>.v18-main-grid{grid-column:1/-1;grid-row:3;display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:9px!important;align-items:stretch!important}.v18-hero{grid-template-columns:minmax(260px,1.02fr) minmax(350px,1.3fr) minmax(190px,.7fr)!important;min-height:285px!important}.v18-trainer-body{grid-template-columns:140px minmax(0,1fr)!important;height:225px!important}.v18-trainer-art,.v18-trainer-art img{height:215px!important}.v18-trainer-art img{width:140px!important;object-fit:contain!important}.v18-emblem img{width:165px!important;height:175px!important;object-fit:contain!important}.v18-team-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:7px!important;padding:8px!important}.v18-team-grid .dash-mon{min-height:132px!important;display:grid!important;grid-template-rows:1fr auto!important;align-items:center!important}.v18-team-grid .dash-mon img{height:86px!important;width:100%!important;object-fit:contain!important;background:radial-gradient(circle,#18343b,#071014)!important;image-rendering:pixelated!important}.dash-mon-sprite{height:88px;display:flex;align-items:center;justify-content:center}.dash-mon-sprite img{height:100%!important}.v18-team-grid .dash-mon span{font-family:'Press Start 2P';font-size:8px!important}.v18-team-grid .dash-mon small{font-size:13px;color:#7fa0a5;text-align:center}.v18-main-grid>.v18-objectives{grid-column:span 4}.v18-main-grid>.v18-card:nth-child(2){grid-column:span 4}.v18-main-grid>.v18-badges{grid-column:span 4}.v18-main-grid>.v18-card:nth-child(4){grid-column:span 4}.v18-main-grid>.v18-rival-card{grid-column:span 4}.v18-main-grid>.v18-card:nth-child(6){grid-column:span 4}.v18-main-grid>.v18-actions{grid-column:1/-1}.v18-list{min-height:160px!important;max-height:210px!important}.v18-badge-grid{grid-template-columns:repeat(4,1fr)!important}.v18-badge-grid img{height:66px!important;width:100%!important;object-fit:contain!important}.v18-calendar-wrap{min-height:135px}.dash-cal div{min-height:27px!important}.v18-rival-main img{height:120px!important;width:100px!important;object-fit:contain!important}.v18-friends-grid{grid-template-columns:repeat(4,1fr)!important}.v18-friends-grid .dash-friend-mini img{height:70px!important;width:100%!important;object-fit:contain!important}.v18-actions .v18-action-grid{grid-template-columns:repeat(6,1fr)!important}.v18-action-grid .btn{min-height:40px}.dash-footerbar{grid-column:1/-1}.monthly-v38-grid{grid-template-columns:minmax(250px,.9fr) minmax(420px,1.5fr) minmax(250px,.9fr)!important}.monthly-calendar{gap:4px}.mc-day,.mc-empty{min-height:78px}.mc-day strong{font-size:20px}.mc-day small{font-size:13px}.friend-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.friend{grid-template-columns:125px minmax(0,1fr)!important}.friend>img{width:125px!important;height:190px!important;object-fit:contain!important}.friend-team{grid-template-columns:repeat(3,minmax(0,1fr))!important}.friend-poke img{height:60px!important;object-fit:contain!important}.badge-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}.badge img{width:92px!important;height:92px!important;object-fit:contain!important}.coat img{width:230px!important;height:260px!important;object-fit:contain!important}.pokedex-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr))}.dex-card img{height:95px!important;object-fit:contain!important;image-rendering:pixelated!important}
+@media(min-width:1450px){.app{margin-left:230px!important;margin-right:18px!important}.v18-hero{min-height:300px!important}.v18-team-grid .dash-mon{min-height:142px!important}.v18-team-grid .dash-mon img{height:94px!important}.v18-list{min-height:175px!important}}
+@media(max-width:1200px) and (min-width:901px){.app{width:calc(100vw - 90px)!important;margin-left:72px!important;margin-right:10px!important}.taskbar{width:56px!important}.taskbar .task-brand-text,.taskbar .nav-label,.taskbar .task-build{display:none!important}.taskbar .nav button{justify-content:center!important}.v18-hero{grid-template-columns:1fr 1fr!important}.v18-emblem{display:none}.v18-team-grid{grid-template-columns:repeat(3,1fr)!important}.v18-main-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}.v18-main-grid>.v18-card{grid-column:span 3!important}.v18-main-grid>.v18-actions{grid-column:1/-1!important}.monthly-v38-grid{grid-template-columns:1fr 1.4fr!important}.monthly-v38-daily{grid-column:1/-1}}
+@media(max-width:900px){.app{width:100%!important;margin:0!important;padding:7px 7px 78px!important}.taskbar{display:none!important}.dashboard-v18{display:flex!important;flex-direction:column!important;gap:8px!important}.dashboard-v18>.v18-hero,.dashboard-v18>.v18-team,.dashboard-v18>.v18-main-grid{grid-column:auto;grid-row:auto}.v18-hero{grid-template-columns:1fr!important;min-height:0!important}.v18-emblem{display:none!important}.v18-trainer{border-right:0!important;border-bottom:2px ridge #315e65}.v18-progress{border-right:0!important}.v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.v18-main-grid{display:grid!important;grid-template-columns:1fr!important}.v18-main-grid>.v18-card,.v18-main-grid>.v18-actions{grid-column:1!important}.v18-actions .v18-action-grid{grid-template-columns:repeat(2,1fr)!important}.monthly-v38-grid{grid-template-columns:1fr!important}.friend-grid{grid-template-columns:1fr!important}.badge-grid{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:560px){.v18-team-grid{grid-template-columns:repeat(2,1fr)!important}.v18-team-grid .dash-mon{min-height:118px!important}.v18-team-grid .dash-mon img{height:80px!important}.v18-trainer-body{grid-template-columns:105px 1fr!important;height:175px!important}.v18-trainer-art,.v18-trainer-art img{height:165px!important}.v18-trainer-art img{width:105px!important}.v18-kpi-row{grid-template-columns:repeat(2,1fr)!important}.mc-day,.mc-empty{min-height:62px}.monthly-calendar{gap:2px}.mc-day{padding:4px}.mc-day strong{font-size:17px}.mc-day span{font-size:8px}.friend{grid-template-columns:95px 1fr!important}.friend>img{width:95px!important;height:155px!important}.badge-grid{grid-template-columns:repeat(2,1fr)!important}.badge img{width:70px!important;height:70px!important}}
+</style>
+<style id="pokemon-sprite-unification-v40">
+/* V40: one consistent Pokémon sprite treatment everywhere */
+.pokemon-sprite,
+.poke img,
+.dash-mon img,
+.friend-poke img,
+.rival-mini img,
+.rival-roster-team img,
+.dex-card img {
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  image-rendering:pixelated !important;
+  image-rendering:-moz-crisp-edges !important;
+  image-rendering:crisp-edges !important;
+  background:transparent !important;
+  border:0 !important;
+}
+.dash-mon-sprite { height:88px !important; width:100% !important; display:flex !important; align-items:center !important; justify-content:center !important; overflow:hidden !important; }
+.dash-mon-sprite .pokemon-sprite { width:100% !important; height:88px !important; }
+.dash-team-large .dash-mon img { width:100% !important; height:74px !important; }
+.poke > .pokemon-sprite { height:135px !important; min-height:135px !important; background:radial-gradient(circle,#273b58,#0a1019) !important; border:2px inset #51657f !important; }
+.friend-poke { overflow:hidden !important; }
+.friend-poke .pokemon-sprite { height:58px !important; }
+.rival-mini .pokemon-sprite { height:80px !important; }
+.dex-card .pokemon-sprite { height:95px !important; background:radial-gradient(circle,#273b58,#0a1019) !important; }
+/* Never upscale the source into a blurry illustration. Keep pixel sprites crisp. */
+.pokemon-sprite[src*="generation-v/black-white"] { image-rendering:pixelated !important; }
+@media(max-width:900px){
+  .poke > .pokemon-sprite { height:90px !important; min-height:90px !important; }
+  .rival-mini .pokemon-sprite { height:72px !important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar crt"><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
+<aside class="taskbar crt" id="taskbar">
+  <button class="task-toggle" id="taskToggle" aria-label="Collapse League taskbar" title="Collapse / expand taskbar" onclick="toggleTaskbar()">◀</button>
+  <div class="task-brand"><span class="task-pokeball">◉</span><span class="task-brand-text">LEAGUE OS</span></div>
+  <nav class="nav" id="nav" aria-label="League OS applications">
+  <button data-page="dashboard" onclick="showPage('dashboard')"><span class="nav-ico">▣</span><span class="nav-label">HOME</span></button>
+  <button data-page="quests" onclick="showPage('quests')"><span class="nav-ico">!</span><span class="nav-label">QUESTS</span></button>
+  <button data-page="monthly" onclick="showPage('monthly')"><span class="nav-ico">□</span><span class="nav-label">MONTHLY</span></button>
+  <button data-page="pokemon" onclick="showPage('pokemon')"><span class="nav-ico">◈</span><span class="nav-label">POKÉMON</span></button><button data-page="pokedex" onclick="showPage('pokedex')"><span class="nav-ico">▣</span><span class="nav-label">POKÉDEX</span></button>
+  <button data-page="badges" onclick="showPage('badges')"><span class="nav-ico">★</span><span class="nav-label">BADGES</span></button>
+  <button data-page="journal" onclick="showPage('journal')"><span class="nav-ico">▤</span><span class="nav-label">JOURNAL</span></button>
+  <button data-page="rewards" onclick="showPage('rewards')"><span class="nav-ico">$</span><span class="nav-label">REWARDS</span></button>
+  <button data-page="friends" onclick="showPage('friends')"><span class="nav-ico">♟</span><span class="nav-label">FRIENDS</span></button>
+  <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
+  <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
+</nav>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V31</span></div>
+</aside>
+<div class="mobile-nav">
+  <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
+  <button class="mnav" data-page="quests" onclick="showPage('quests')"><span>!</span><small>QUESTS</small></button>
+  <button class="mnav" data-page="pokemon" onclick="showPage('pokemon')"><span>◈</span><small>PARTY</small></button><button class="mnav" data-page="pokedex" onclick="showPage('pokedex')"><span>▣</span><small>DEX</small></button>
+  <button class="mnav" data-page="badges" onclick="showPage('badges')"><span>★</span><small>BADGES</small></button>
+  <button class="mnav" id="moreBtn" onclick="toggleMobileMore()"><span>•••</span><small>MORE</small></button>
+</div>
+<div class="mobile-more" id="mobileMore">
+  <button onclick="showPage('monthly');toggleMobileMore()">MONTHLY</button>
+  <button onclick="showPage('journal');toggleMobileMore()">JOURNAL</button>
+  <button onclick="showPage('rewards');toggleMobileMore()">REWARDS</button>
+  <button onclick="showPage('friends');toggleMobileMore()">FRIENDS</button>
+  <button onclick="showPage('calculator');toggleMobileMore()">CALCULATOR</button>
+  <button onclick="showPage('sync');toggleMobileMore()">SYNC</button>
+</div>
+<main>
+<section id="dashboard" class="page active">
+<div class="dashboard-v18">
+  <section class="v18-hero dash-box">
+    <div class="v18-trainer">
+      <div class="v18-section-label">TRAINER FILE</div>
+      <div class="v18-trainer-body">
+        <div class="v18-trainer-art"><img src="assets/russ-trainer.png" alt="Russ trainer" onerror="this.onerror=null;this.src='assets/russ-source-sheet.png'"></div>
+        <div class="v18-trainer-copy">
+          <div class="v18-kicker">UNOVA LEAGUE TRAINER</div>
+          <h1>RUSS</h1>
+          <div class="v18-level" id="dashLevel">LEVEL 1</div>
+          <div class="v18-rank" id="dashRank">ROOKIE</div>
+          <div class="v18-statline"><span>LEAGUE POINTS</span><b id="dashRewardXp">0 LP</b></div>
+          <div class="v18-statline"><span>BADGE AVG</span><b id="dashBadgeAvg">LV 1</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="v18-progress">
+      <div class="v18-section-label">LEAGUE PROGRESS</div><span id="dashGreeting" hidden></span><span id="dashHeroXp" hidden></span><span id="dashFriendCount" hidden></span>
+      <div class="v18-progress-title"><span>TRAINER XP</span><b id="dashXpLine">0 / 100 XP</b></div>
+      <div class="v18-bigbar"><i id="dashXpBar" style="width:0%"></i></div>
+      <div class="v18-progress-title"><span>MONTHLY OBJECTIVES</span><b id="dashGoalCount">0/0</b></div>
+      <div class="v18-bigbar green"><i id="dashGoalBar" style="width:0%"></i></div>
+      <div class="v18-milestone"><span>NEXT MILESTONE</span><strong id="dashMilestone">Loading...</strong></div>
+      <div class="v18-kpi-row">
+        <div><span>QUESTS</span><b id="dashQuestCount">0</b></div>
+        <div><span>JOURNAL</span><b id="dashHeroJournal">0</b></div>
+        <div><span>REWARDS</span><b id="dashHeroItems">0</b></div>
+        <div><span>BADGES</span><b id="dashHeroBadges">0</b></div>
+      </div>
+    </div>
+    <div class="v18-emblem">
+      <div class="v18-section-label">LEAGUE EMBLEM</div>
+      <img src="assets/coat-of-arms.svg" alt="League coat of arms" onerror="this.onerror=null;this.src=\'assets/placeholder-pokemon.svg\'">
+      <div class="v18-emblem-caption">UNOVA // LEAGUE OS</div>
+    </div>
+  </section>
+
+  <section class="v18-team dash-box">
+    <div class="v18-panel-head"><span>YOUR PARTY</span><small>EVOLUTION TRACK // LEVEL SCALED</small></div>
+    <div id="dashTeam" class="v18-team-grid"></div>
+  </section>
+
+  <div class="v18-main-grid">
+    <section class="dash-box v18-card v18-objectives">
+      <div class="v18-panel-head"><span>TODAY // QUEST LOG</span><button class="btn" onclick="showPage('quests')">OPEN QUESTS</button></div>
+      <div id="dashObjectives" class="v18-list"></div>
+    </section>
+
+    <section class="dash-box v18-card">
+      <div class="v18-panel-head"><span>RECENT ACTIVITY</span><button class="btn" onclick="showPage('journal')">JOURNAL</button></div>
+      <div id="dashRecent" class="v18-list"></div>
+    </section>
+
+    <section class="dash-box v18-card v18-badges">
+      <div class="v18-panel-head"><span>UNOVA BADGE CASE</span><button class="btn" onclick="showPage('badges')">VIEW CASE</button></div>
+      <div id="dashBadgeMini" class="v18-badge-grid"></div>
+      <div class="v18-badge-meta"><span id="dashBadgeLine">8 categories progressing</span><b id="dashBadgeRank">ROOKIE</b></div>
+    </section>
+
+    <section class="dash-box v18-card">
+      <div class="v18-panel-head"><span>CALENDAR // STREAK</span><button class="btn" onclick="showPage('monthly')">MONTHLY</button></div>
+      <div class="v18-calendar-wrap"><div class="dash-cal-title"><button class="btn" onclick="dashShiftMonth(-1)">‹</button><span id="dashCalTitle">MONTH</span><button class="btn" onclick="dashShiftMonth(1)">›</button></div><div id="dashCalendar" class="dash-cal"></div></div>
+      <div class="v18-streak"><div><span>CURRENT STREAK</span><strong id="dashStreak">0 DAYS</strong></div><div class="v18-streak-mark">♦</div></div>
+    </section>
+
+    <section class="dash-box v18-card v18-rival-card">
+      <div class="v18-panel-head"><span>ACTIVE RIVAL</span><button class="btn" onclick="showPage('friends')">MANAGE</button></div>
+      <div class="v18-rival-main"><img id="dashRivalImg" src="assets/dj-trainer.png" alt="DJ rival" onerror="this.onerror=null;this.src='assets/dj-source-sheet.png'"><div><div class="v18-rival-kicker">LEAGUE TRAINER</div><h2 id="dashRivalName">DJ</h2><strong id="dashRivalLevel">LEVEL 1</strong><p id="dashRivalLine">parallel run</p></div></div>
+      <div id="dashDjTeam" class="v18-rival-team"></div>
+    </section>
+
+    <section class="dash-box v18-card">
+      <div class="v18-panel-head"><span>LEAGUE TRAINERS</span><button class="btn" onclick="showPage('friends')">FRIENDS</button></div>
+      <div id="dashFriends" class="v18-friends-grid"></div>
+    </section>
+
+    <section class="dash-box v18-card v18-actions">
+      <div class="v18-panel-head"><span>COMMAND DECK</span><span class="v18-online"><i class="dot online"></i> ONLINE</span></div>
+      <div class="v18-action-grid">
+        <button class="btn primary" onclick="showPage('quests')">+ OBJECTIVE</button>
+        <button class="btn" onclick="showPage('journal')">JOURNAL ENTRY</button>
+        <button class="btn" onclick="showPage('rewards')">REWARDS</button>
+        <button class="btn" onclick="showPage('calculator')">CALCULATOR</button>
+        <button class="btn" onclick="showPage('pokemon')">POKÉMON</button>
+        <button class="btn green" onclick="showPage('sync')">SYNC CENTER</button>
+      </div>
+      <div class="v18-sync-line"><span class="dot online" id="dashCloudDot"></span><span id="dashCloudText">ONLINE</span><small id="dashCloudLine">Local save active</small></div>
+    </section>
+  </div>
+  <div class="dash-footerbar"><span>UNOVA TERMINAL // RUSS'S LEAGUE OS</span><span>ONLINE • LOCAL SAVE • CLOUD READY</span></div>
+</div>
+</section>
+<section id="quests" class="page"><div class="panel"><div class="title">QUEST TERMINAL // OBJECTIVES</div><p class="tiny">Create as many objectives as you need. Each quest can feed multiple badges at once. Completing it awards XP to every selected badge and to your overall trainer level.</p><div class="formgrid"><input id="qTitle" class="input" placeholder="Objective title, e.g. Finish pharmacology review"><input id="qXp" class="input" type="number" min="1" value="25" placeholder="XP"><textarea id="qDesc" class="input full" rows="2" placeholder="Describe what success actually means, with enough detail that future-you cannot conveniently reinterpret it."></textarea><div class="full"><strong>Assign XP to badges:</strong><div id="badgeChecks" class="tabs"></div></div><div class="full actions"><button class="btn primary" onclick="addQuest()">ADD OBJECTIVE</button></div></div></div><div class="panel"><div class="title">QUEST LOG</div><div id="questList" class="list"></div></div></section>
+<section id="monthly" class="page">
+<div class="panel monthly-v38-head"><div><div class="title">MONTHLY PLANNER // DAILY COUNTER</div><div class="tiny">Plan the month, track every day, and keep the completion history visible instead of pretending memory is a database.</div></div><div class="actions"><button class="btn" onclick="shiftPlannerMonth(-1)">‹</button><input id="monthPicker" class="input" type="month" style="max-width:210px" onchange="renderGoals()"><button class="btn" onclick="shiftPlannerMonth(1)">›</button></div></div>
+<div class="monthly-v38-grid">
+<section class="panel"><div class="monthly-v38-title"><span>MONTHLY GOALS</span><b id="monthlyGoalSummary">0 / 0</b></div><div class="formgrid"><input id="goalTitle" class="input" placeholder="Monthly goal"><textarea id="goalDesc" class="input full" rows="2" placeholder="What does completing this goal look like?"></textarea><button class="btn primary full" onclick="addGoal()">+ ADD MONTHLY GOAL</button></div><div id="goalList" class="list monthly-goals-list"></div></section>
+<section class="panel"><div class="monthly-v38-title"><span>MONTH CALENDAR</span><span class="tiny" id="monthlyDailySnapshot">DAILY COMPLETIONS • 0 / 0</span></div><div id="monthlyCalendar" class="monthly-calendar"></div><div class="monthly-legend"><span><i class="mc-dot done"></i> completed</span><span><i class="mc-dot part"></i> partial</span><span><i class="mc-dot today"></i> today</span></div></section>
+<section class="panel monthly-v38-daily"><div class="monthly-v38-title"><span>DAILY PLANNER</span><b id="dailySummary">0 / 0</b></div><div class="formgrid"><input id="dailyDate" class="input" type="date"><input id="dailyTitle" class="input" placeholder="Daily objective"><input id="dailyXp" class="input" type="number" min="1" value="20" placeholder="XP"><button class="btn green full" onclick="addDailyObjective()">+ ADD DAILY OBJECTIVE</button></div><div id="dailyList" class="list"></div></section>
+</div>
+</section>
+<section id="pokemon" class="page">
+  <div class="panel">
+    <div class="title">POKÉMON PARTY // LEVEL SCALED</div>
+    <p class="tiny">Your six Pokémon are shown at their current evolutionary stage. As your League level rises, each line advances automatically. No final evolutions at level one. Civilization may yet survive.</p>
+    <div id="playerTeam" class="poke-grid"></div>
+  </div>
+  <div class="panel">
+    <div class="title" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span id="rivalPartyTitle">DJ // RIVAL PARTY</span><span class="tag">TEAM LOCKED</span></div>
+    <p class="tiny">The active rival has a permanent independent six-Pokémon roster. Every rival you create gets their own randomized team.</p>
+    <div id="rivalTeam" class="poke-grid"></div>
+  </div>
+  <div class="panel">
+    <div class="title">ALL RIVALS // POKÉDEX ROSTERS</div>
+    <p class="tiny">Every rival's locked team is listed here. Teams remain unchanged until that rival is removed.</p>
+    <div id="allRivalTeams" class="rival-roster-list"></div>
+  </div>
+</section>
+<section id="pokedex" class="page"><div class="panel"><div class="title">UNOVA TERMINAL // NATIONAL POKÉDEX</div><p class="tiny">Browse the full National Pokédex. Search by species name or Dex number. Sprites are loaded from the Pokémon sprite archive and cached by the browser.</p><div class="formgrid"><input id="dexSearch" class="input full" placeholder="Search Pokémon or Dex #..." oninput="renderPokedex()"></div></div><div class="panel"><div id="pokedexGrid" class="pokedex-grid"></div></div></section>
+<section id="badges" class="page">
+  <div class="panel">
+    <div class="title">UNOVA LEAGUE BADGE CASE</div>
+    <p class="tiny">Every category develops independently. Objectives can feed several badges at once, and every badge shows its current level and progress toward the next one.</p>
+    <div class="coat badge-coat"><img src="assets/coat-of-arms.svg" alt="League coat of arms"><div><strong>LEAGUE EMBLEM</strong><p class="tiny">Eight disciplines form the complete League insignia. Build the whole emblem by building every part of yourself.</p></div></div>
+    <div id="badgeGrid" class="badge-grid"></div>
+  </div>
+</section>
+<section id="journal" class="page"><div class="panel"><div class="title">JOURNAL // FIELD LOG</div><div class="formgrid"><input id="jTitle" class="input" placeholder="Entry title"><textarea id="jText" class="input full" rows="5" placeholder="What happened? What did you learn? What did you actually do? Keep the useful bits."></textarea><div class="actions full"><button class="btn primary" onclick="addJournal()">FILE ENTRY</button></div></div></div><div class="panel"><div id="journalList" class="list"></div></div></section>
+<section id="rewards" class="page"><div class="panel"><div class="title">REWARD SHOP</div><p class="tiny">XP becomes usable currency. Spend it on real-world rewards you define. The app records purchases so rewards become part of the game rather than another decorative dashboard box.</p><div class="formgrid"><input id="rewardName" class="input" placeholder="Reward, e.g. movie night"><input id="rewardCost" class="input" type="number" min="1" value="100"><input id="rewardDesc" class="input full" placeholder="What do you get when redeemed?"><div class="actions full"><button class="btn primary" onclick="addReward()">ADD REWARD</button></div></div></div><div class="panel"><div id="rewardList" class="list"></div></div></section>
+<section id="friends" class="page">
+  <div class="panel">
+    <div class="title">FRIEND LEAGUE // NEW TRAINERS</div>
+    <p class="tiny">Create a friend with a gender and three descriptive words. The League assigns a six-Pokémon team from those traits. If you do not provide a custom image, the correct built-in guy or girl trainer sprite is used automatically.</p>
+    <div class="formgrid">
+      <input id="fName" class="input" placeholder="Friend name">
+      <select id="fGender" class="input"><option value="guy">Guy</option><option value="girl">Girl</option><option value="other">Other / custom sprite</option></select>
+      <input id="fWords" class="input full" placeholder="Three words, e.g. calm, clever, nocturnal">
+      <input id="fSprite" class="input full" type="file" accept="image/*">
+      <div class="actions full"><button class="btn primary" onclick="addFriend()">START JOURNEY</button></div>
+    </div>
+  </div>
+  <div class="panel"><div id="friendList" class="friend-grid"></div></div>
+</section>
+<section id="calculator" class="page"><div class="panel calc-wrap"><div class="title">POCKET CALCULATOR // LEAGUE TERMINAL</div><p class="tiny">A tiny 90s desktop calculator for quick numbers while you're in the League OS.</p><input id="calcScreen" class="calc-screen" value="0" readonly><div class="calc-grid"><button class="calc-key clear" onclick="calcClear()">C</button><button class="calc-key backspace" aria-label="Backspace" title="Backspace" onclick="calcBack()">BACKSPACE</button><button class="calc-key op" onclick="calcOp('%')">%</button><button class="calc-key op" onclick="calcOp('/')">÷</button><button class="calc-key" onclick="calcDigit('7')">7</button><button class="calc-key" onclick="calcDigit('8')">8</button><button class="calc-key" onclick="calcDigit('9')">9</button><button class="calc-key op" onclick="calcOp('*')">×</button><button class="calc-key" onclick="calcDigit('4')">4</button><button class="calc-key" onclick="calcDigit('5')">5</button><button class="calc-key" onclick="calcDigit('6')">6</button><button class="calc-key op" onclick="calcOp('-')">−</button><button class="calc-key" onclick="calcDigit('1')">1</button><button class="calc-key" onclick="calcDigit('2')">2</button><button class="calc-key" onclick="calcDigit('3')">3</button><button class="calc-key op" onclick="calcOp('+')">+</button><button class="calc-key zero" onclick="calcDigit('0')">0</button><button class="calc-key" onclick="calcDigit('.')">.</button><button class="calc-key eq" onclick="calcEquals()">=</button></div><div class="panel" style="margin-top:10px;margin-bottom:0"><div class="title">CALC HISTORY</div><div id="calcHistory" class="calc-history"></div></div></div></section><section id="sync" class="page"><div class="panel"><div class="title">CLOUD LINK // PC ↔ PHONE</div><p class="tiny">This build stores locally first, then automatically pushes changes to Supabase and polls for remote changes. Use the same Trainer ID, project URL and publishable key on every device.</p><div class="formgrid"><input id="sbUrl" class="input full" placeholder="Supabase Project URL"><input id="sbKey" class="input full" placeholder="Supabase publishable / anon key"><input id="trainerId" class="input" placeholder="Trainer ID"><div class="actions"><button class="btn primary" onclick="saveConnection()">SAVE CONNECTION</button><button class="btn" onclick="pullCloud(true)">PULL CLOUD</button><button class="btn green" onclick="pushCloud(true)">PUSH LOCAL</button></div></div><p id="syncStatus" class="tiny"></p><details><summary>Required Supabase SQL</summary><pre style="white-space:pre-wrap;color:#9fd0ff">create table if not exists public.trainer_saves (id text primary key, data jsonb not null, updated_at timestamptz not null default now());
+alter table public.trainer_saves enable row level security;
+create policy "league_select" on public.trainer_saves for select to anon using (true);
+create policy "league_insert" on public.trainer_saves for insert to anon with check (true);
+create policy "league_update" on public.trainer_saves for update to anon using (true) with check (true);</pre></details></div></section>
+</main><div class="footer">LEAGUE OS // SAVE DATA LOCALLY • CLOUD SYNC WHEN CONFIGURED • NO CRINGEY MOTIVATIONAL SLOGANS</div></div><div id="toast" class="toast"></div>
+<script>
+const POKE_BASE='https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/';
+const LOCAL_ASSETS={
+  russ:'assets/russ-trainer.png', russSheet:'assets/russ-sprite-sheet.png',
+  dj:'assets/dj-trainer.png', djSheet:'assets/dj-sprite-sheet.png',
+  coat:'assets/coat-of-arms.svg', placeholder:'assets/placeholder-pokemon.svg',
+  friendGuy:'assets/friend-guy.svg', friendGirl:'assets/friend-girl.svg',
+  badges:Array.from({length:8},(_,i)=>`assets/badge-${i+1}.svg`)
+};
+const defaultQuests=[
+{id:'q-mind',title:'Focused study block',desc:'Complete at least 45 minutes of focused study with notifications off.',xp:50,badges:[0],done:false},
+{id:'q-body',title:'Intentional movement',desc:'Complete at least 30 minutes of walking, training, sport, or mobility.',xp:40,badges:[1],done:false},
+{id:'q-health',title:'Protect your sleep',desc:'Keep a deliberate sleep routine and avoid sacrificing rest for low-value scrolling.',xp:40,badges:[4],done:false},
+{id:'q-social',title:'Meaningful connection',desc:'Have one genuine conversation or make a useful contribution to someone else.',xp:30,badges:[3],done:false},
+{id:'q-craft',title:'Finish something',desc:'Complete one concrete task that has been sitting unfinished.',xp:40,badges:[2],done:false},
+{id:'q-career',title:'Build future-you',desc:'Spend focused time on a skill, academic task, portfolio item, or career milestone.',xp:50,badges:[5],done:false},
+{id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
+{id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
+];
+const data={version:38,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
+let state=loadLocal();
+if(!Array.isArray(state.quests)||state.quests.length===0) state.quests=structuredClone(defaultQuests);
+function rivalTeamIds(team){return (normaliseRivalTeam(team)||[]).map(x=>+x.__dexId)}
+function rivalTeamIsUsable(team,blocked){const t=normaliseRivalTeam(team);if(!t)return false;const b=new Set((blocked||[]).map(Number));return !!t&&t.every(x=>!b.has(+x.__dexId))}
+function rivalTeamOverlapsOther(team,ownerId){const ids=new Set(rivalTeamIds(team));if(ownerId!=='DJ'&&state.djRivalTeamLocked===true&&rivalTeamIds(state.djRivalTeam).some(id=>ids.has(id)))return true;return state.friends.some(f=>f.id!==ownerId&&f.rivalTeamLocked===true&&rivalTeamIds(f.rivalTeam).some(id=>ids.has(id)))}
+function makeRandomRivalTeam(blocked=[]){return randomDexIds(blocked).map(id=>({__dexId:id}))}
+function getLockedRivalTeam(rival){
+  if(rival){
+    const existing=normaliseRivalTeam(rival.rivalTeam);
+    if(existing&&rivalTeamIsUsable(existing,currentPlayerIds())&&!rivalTeamOverlapsOther(existing,rival.id)){rival.rivalTeam=existing;rival.rivalTeamLocked=true;return existing}
+    const used=[...currentPlayerIds()];
+    if(state.djRivalTeamLocked===true)used.push(...rivalTeamIds(state.djRivalTeam));
+    state.friends.forEach(f=>{if(f.id!==rival.id&&f.rivalTeamLocked===true)used.push(...rivalTeamIds(f.rivalTeam))});
+    rival.rivalTeam=makeRandomRivalTeam(used);rival.rivalTeamLocked=true;return rival.rivalTeam;
+  }
+  const existing=normaliseRivalTeam(state.djRivalTeam);
+  if(existing&&rivalTeamIsUsable(existing,currentPlayerIds())&&!rivalTeamOverlapsOther(existing,'DJ')){state.djRivalTeam=existing;state.djRivalTeamLocked=true;return existing}
+  const used=[...currentPlayerIds()];state.friends.forEach(f=>{if(f.rivalTeamLocked===true)used.push(...rivalTeamIds(f.rivalTeam))});
+  state.djRivalTeam=makeRandomRivalTeam(used);state.djRivalTeamLocked=true;return state.djRivalTeam;
+}
+function ensureAllRivalTeams(){getLockedRivalTeam(null);state.friends.forEach(f=>getLockedRivalTeam(f));try{localStorage.setItem('leagueOS',JSON.stringify(state))}catch{}}
+function ensureRivalTeam(rival){return getLockedRivalTeam(rival)}
+function getRivalLines(rival){const team=getLockedRivalTeam(rival);const names=loadDexNames();return team.map(x=>{const n=names[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;rivalNameIds[n]=x.__dexId;return [n]})}
+
+const badges=[['Mind','Planning, study and deliberate learning'],['Body','Training, movement and physical upkeep'],['Craft','Building, creating and finishing work'],['Social','Relationships, communication and contribution'],['Health','Sleep, nutrition and sustainable routines'],['Career','Professional growth and serious milestones'],['Adventure','Novel experiences and courage'],['Resilience','Recovery, consistency and doing it anyway']];
+const playerLines=[['Gible','Gabite','Garchomp'],['Eevee','Umbreon'],['Riolu','Lucario'],['Mew'],['Snivy','Servine','Serperior'],['Froakie','Frogadier','Greninja','Ash-Greninja']];
+const djLines=[['Pikachu','Raichu'],['Charmander','Charmeleon','Charizard','Mega Charizard X'],['Ditto'],['Abra','Kadabra','Alakazam'],['Lapras'],['Eevee','Vaporeon']];
+const ids={'Gible':443,'Gabite':444,'Garchomp':445,'Eevee':133,'Umbreon':197,'Riolu':447,'Lucario':448,'Mew':151,'Snivy':495,'Servine':496,'Serperior':497,'Froakie':656,'Frogadier':657,'Greninja':658,'Ash-Greninja':10117,'Pikachu':25,'Raichu':26,'Charmander':4,'Charmeleon':5,'Charizard':6,'Mega Charizard X':10034,'Ditto':132,'Abra':63,'Kadabra':64,'Alakazam':65,'Lapras':131,'Vaporeon':134};
+function imgCandidates(name){const numeric=String(name).match(/^Pokémon #0*(\d+)$/);const id=ids[name]||rivalNameIds[name]||(numeric?+numeric[1]:1);const cdn='https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/';const raw='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';const staticBW=cdn+'versions/generation-v/black-white/'+id+'.png',staticBWRaw=raw+'versions/generation-v/black-white/'+id+'.png',bw=cdn+'versions/generation-v/black-white/animated/'+id+'.gif',bwRaw=raw+'versions/generation-v/black-white/animated/'+id+'.gif',home=cdn+'other/home/'+id+'.png',art=cdn+'other/official-artwork/'+id+'.png';if(name==='Mega Charizard X')return [staticBW,staticBWRaw,bw,bwRaw,cdn+'other/home/10034.png',art,LOCAL_ASSETS.placeholder];if(name==='Ash-Greninja')return [staticBW,staticBWRaw,bw,bwRaw,cdn+'other/home/10117.png',art,LOCAL_ASSETS.placeholder];return [staticBW,staticBWRaw,bw,bwRaw,home,art,LOCAL_ASSETS.placeholder]}
+function imgTag(name,cls=''){const c=imgCandidates(name);return `<img class="pokemon-sprite ${cls}" src="${c[0]}" alt="${esc(name)}" data-fallback="1" onerror='fallbackImg(this,${JSON.stringify(c)})'>`}
+function rivalImgTag(dexId,name,cls=''){const id=Number(dexId)||1;const c=[`https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/versions/generation-v/black-white/${id}.png`,`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/${id}.png`,`https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/versions/generation-v/black-white/animated/${id}.gif`,`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${id}.gif`,POKE_BASE+'other/home/'+id+'.png',LOCAL_ASSETS.placeholder];return `<img class="pokemon-sprite ${cls}" src="${c[0]}" alt="${esc(name)}" data-fallback="1" onerror='fallbackImg(this,${JSON.stringify(c)})'>`}
+function fallbackImg(el,c){let i=+(el.dataset.fallback||1);if(i<c.length){el.dataset.fallback=i+1;el.src=c[i]}else{el.onerror=null;el.src=LOCAL_ASSETS.placeholder}}
+function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
+function renderCurrentView(){
+  const active=document.querySelector('.page.active')?.id||'dashboard';
+  try{ renderPage(active); renderNav(); }catch(e){ console.error('League OS live render:',e); toast('Display update failed. Your save is still intact.'); }
+}
+function saveLocal(){
+  if(!Array.isArray(state.quests)||state.quests.length===0)state.quests=structuredClone(defaultQuests);
+  ensureAllRivalTeams();
+  try{localStorage.setItem('leagueOS',JSON.stringify(state));}catch(e){console.error('League OS save failed:',e);}
+  renderCurrentView();
+  queuePush();
+}
+function commitAndRender(){saveLocal();}
+function levelFromXp(xp){return Math.max(1,Math.floor(Math.sqrt(xp/100))+1)}
+function recalc(){state.trainer.level=levelFromXp(state.trainer.xp);}
+function evo(line,lvl){if(line.length===1)return line[0]; if(line.length===2)return lvl>=20?line[1]:line[0]; if(line.length===3)return lvl>=20?line[2]:lvl>=10?line[1]:line[0]; return lvl>=30?line[3]:lvl>=20?line[2]:lvl>=10?line[1]:line[0]}
+function rivalLevel(){return Math.max(1,state.trainer.level + ((Math.floor(state.trainer.xp/150)%5)-2))}
+function getDjXp(){let l=rivalLevel();return Math.max(0,(l-1)*(l-1)*100)}
+function friendLevel(f){if(typeof f.xp==='number')return Math.max(1,levelFromXp(f.xp));return Math.max(1,state.trainer.level + (f.offset||0))}
+function friendXpForLevel(l){return Math.max(0,(l-1)*(l-1)*100)}
+let taskbarCollapsed=localStorage.getItem('leagueTaskbarCollapsed')==='1';
+function applyTaskbar(){const el=document.getElementById('taskbar');if(!el)return;el.classList.toggle('collapsed',taskbarCollapsed);const b=document.getElementById('taskToggle');if(b)b.textContent=taskbarCollapsed?'▶':'◀';}
+function toggleTaskbar(){taskbarCollapsed=!taskbarCollapsed;localStorage.setItem('leagueTaskbarCollapsed',taskbarCollapsed?'1':'0');applyTaskbar()}
+function renderNav(){const id=document.querySelector('.page.active')?.id;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.querySelectorAll('.mobile-nav .mnav').forEach(b=>b.classList.toggle('active',b.dataset.page===id));}
+function showPage(id){if(!document.getElementById(id))id='dashboard';document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));renderNav();try{renderPage(id)}catch(e){console.error('League OS page render:',id,e);toast('Page failed to render.')}}
+function renderPage(id){if(id==='dashboard')return renderDashboard();if(id==='quests'){renderBadgeChecks();return renderQuests()}if(id==='monthly')return renderGoals();if(id==='pokemon')return renderPokemon();if(id==='pokedex')return renderPokedex();if(id==='badges')return renderBadges();if(id==='journal')return renderJournal();if(id==='rewards')return renderRewards();if(id==='friends')return renderFriends();if(id==='calculator')return calcRender();if(id==='sync')return fillCfg()}
+function statRows(){return badges.map((b,i)=>{let xp=state.trainer.badgeXp[i]||0,lv=Math.max(1,Math.floor(Math.sqrt(xp/100))+1),pct=xp%(lv*lv*100||100);return `<div class="stat"><div class="numbers"><strong>${b[0]}</strong><span>LV ${lv}</span></div><div class="bar"><i style="width:${Math.min(100,(xp%100))}%"></i></div><div class="tiny">${xp} XP</div></div>`}).join('')}
+let dashCalDate=new Date();
+function renderDashboard(){
+  recalc();
+  const $=id=>document.getElementById(id);
+  const xp=Number(state.trainer.xp)||0,lvl=Number(state.trainer.level)||1;
+  const next=lvl*lvl*100,prev=(lvl-1)*(lvl-1)*100,pct=Math.max(0,Math.min(100,((xp-prev)/Math.max(1,next-prev))*100));
+  if($('dashGreeting'))$('dashGreeting').textContent=`THE TRAINER • LEVEL ${lvl}`;
+  if($('dashXpLine'))$('dashXpLine').textContent=`${xp} / ${next} XP`;
+  if($('dashXpBar'))$('dashXpBar').style.width=pct+'%';
+  const month=plannerKey().slice(0,7),goals=state.goals.filter(g=>g.month===month),doneGoals=goals.filter(g=>g.done).length;
+  if($('dashGoalCount'))$('dashGoalCount').textContent=`${doneGoals}/${goals.length}`;
+  if($('dashGoalBar'))$('dashGoalBar').style.width=(goals.length?doneGoals/goals.length*100:0)+'%';
+  const rank=lvl>=30?'ELITE':lvl>=20?'GOLD':lvl>=10?'SILVER':'ROOKIE';
+  if($('dashRank'))$('dashRank').textContent=rank;if($('dashBadgeRank'))$('dashBadgeRank').textContent=rank;if($('dashLevel'))$('dashLevel').textContent='LEVEL '+lvl;
+  if($('dashHeroXp'))$('dashHeroXp').textContent=xp;
+  if($('dashHeroBadges'))$('dashHeroBadges').textContent=state.trainer.badgeXp.filter(x=>x>0).length;
+  if($('dashHeroJournal'))$('dashHeroJournal').textContent=state.journal.length;
+  if($('dashHeroItems'))$('dashHeroItems').textContent=state.rewards.length;
+  const open=state.quests.filter(q=>!q.done);
+  if($('dashObjectives'))$('dashObjectives').innerHTML=open.slice(0,5).map(q=>`<div class="row"><div><strong>${esc(q.title)}</strong><span class="tiny">${esc(q.desc)}</span></div><button class="btn green" onclick="completeQuest('${q.id}')">+${q.xp}</button></div>`).join('')||'<div class="empty-state">No active objectives filed.</div>';
+  if($('dashTeam'))$('dashTeam').innerHTML=playerLines.map(line=>{const n=evo(line,lvl);return `<div class="dash-mon"><div class="dash-mon-sprite">${imgTag(n)}</div><span>${esc(n)}</span><small>LV ${lvl}</small></div>`}).join('');
+  if($('dashBadgeMini'))$('dashBadgeMini').innerHTML=badges.map((b,i)=>`<img src="${LOCAL_ASSETS.badges[i]}" alt="${esc(b[0])} badge" title="${esc(b[0])}" onerror="this.onerror=null;this.src='assets/badge-1.svg'">`).join('');
+  let recent=[];state.quests.filter(q=>q.done).slice(0,3).forEach(q=>recent.push(`<div class="row"><div><strong>QUEST CLEAR</strong><span class="tiny">${esc(q.title)} • +${q.xp} XP</span></div></div>`));state.journal.slice(0,2).forEach(j=>recent.push(`<div class="row"><div><strong>JOURNAL FILED</strong><span class="tiny">${esc(j.title)}</span></div></div>`));if($('dashRecent'))$('dashRecent').innerHTML=recent.join('')||'<div class="empty-state">No recent activity.</div>';
+  if($('dashMilestone'))$('dashMilestone').textContent=`${Math.max(0,next-xp)} XP to level ${lvl+1}.`;
+  const badgeLevels=state.trainer.badgeXp.map(x=>Math.max(1,Math.floor(Math.sqrt(x/100))+1));const avg=Math.round(badgeLevels.reduce((a,b)=>a+b,0)/badgeLevels.length);if($('dashBadgeAvg'))$('dashBadgeAvg').textContent='LV '+avg;if($('dashBadgeLine'))$('dashBadgeLine').textContent=badgeLevels.join(' • ');
+  const active=getActiveRival(),rl=active?friendLevel(active):rivalLevel();
+  if($('dashRivalLevel'))$('dashRivalLevel').textContent='LEVEL '+rl;if($('dashRivalLine'))$('dashRivalLine').textContent=active?(rl>lvl?active.name+' is ahead':rl<lvl?active.name+' is behind':active.name+' is level'):(rivalLevel()>lvl?'DJ is ahead':rivalLevel()<lvl?'DJ is behind':'DJ is level');
+  const rivalImg=$('dashRivalImg');if(rivalImg){rivalImg.onerror=function(){this.onerror=null;this.src=LOCAL_ASSETS.djSheet};rivalImg.src=active?friendSprite(active):LOCAL_ASSETS.dj;}
+  if($('dashRivalName'))$('dashRivalName').textContent=active?active.name:'DJ';if($('dashRivalHeader'))$('dashRivalHeader').textContent=(active?active.name:'DJ')+' // RIVAL';
+  if($('dashQuestCount'))$('dashQuestCount').textContent=open.length;
+  const configured=!!(getCfg().url&&getCfg().key);if($('dashCloudDot'))$('dashCloudDot').className='dot '+(navigator.onLine?'online':'');if($('dashCloudText'))$('dashCloudText').textContent=navigator.onLine?'ONLINE':'OFFLINE';if($('dashCloudLine'))$('dashCloudLine').textContent=configured?'Cloud configured • auto sync enabled':'Local save active • configure cloud sync';
+  const rivalTeam=getLockedRivalTeam(active),rivalNames=loadDexNames();if($('dashDjTeam'))$('dashDjTeam').innerHTML=rivalTeam.map(x=>{const n=rivalNames[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return rivalImgTag(x.__dexId,n)}).join('');
+  const fg=$('dashFriends');if(fg)fg.innerHTML=state.friends.map(f=>`<div class="dash-friend-mini${state.activeRivalId===f.id?' active-rival':''}"><img src="${friendSprite(f)}" alt="${esc(f.name)}" onerror="this.onerror=null;this.src='assets/friend-guy.svg'"><span>${esc(f.name)}</span><small>RIVAL • LV ${friendLevel(f)}</small></div>`).join('')||'<div class="empty-state" style="grid-column:1/-1">No friend journeys started yet.</div>';
+  renderDashCalendar();
+}
+function renderDashCalendar(){const y=dashCalDate.getFullYear(),m=dashCalDate.getMonth();document.getElementById('dashCalTitle').textContent=new Intl.DateTimeFormat('en',{month:'long',year:'numeric'}).format(dashCalDate);const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),today=new Date();let h=['M','T','W','T','F','S','S'].map(x=>`<div class="hd">${x}</div>`).join('');let offset=(first+6)%7;for(let i=0;i<offset;i++)h+='<div></div>';for(let d=1;d<=days;d++){let cls='';if(y===today.getFullYear()&&m===today.getMonth()&&d===today.getDate())cls+=' today';let key=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;let dayKey=key,items=state.daily.filter(x=>x.date===dayKey),completed=items.filter(x=>x.done).length;let has=state.goals.some(g=>g.month===key.slice(0,7)&&g.done);if(has||completed)cls+=' done';h+=`<div class="${cls}"><b>${d}</b>${items.length?`<small>${completed}/${items.length}</small>`:''}</div>`}document.getElementById('dashCalendar').innerHTML=h;let streak=0;for(let i=0;i<30;i++){let dt=new Date();dt.setDate(dt.getDate()-i);let key=dt.toISOString().slice(0,10);if(state.journal.some(j=>j.date?.slice(0,10)===key)||state.quests.some(q=>q.done&&q.created?.slice(0,10)===key)||state.goals.some(g=>g.done&&g.month===key.slice(0,7))){streak++}else if(i>0)break}document.getElementById('dashStreak').textContent=streak+' DAYS'}
+function dashShiftMonth(n){dashCalDate.setMonth(dashCalDate.getMonth()+n);renderDashCalendar()}
+function renderBadgeChecks(){document.getElementById('badgeChecks').innerHTML=badges.map((b,i)=>`<label class="tag"><input class="badgeCheck" type="checkbox" value="${i}"> ${b[0]}</label>`).join('')}
+function addQuest(){let title=qTitle.value.trim(),desc=qDesc.value.trim(),xp=Math.max(1,+qXp.value||1),inds=[...document.querySelectorAll('.badgeCheck:checked')].map(x=>+x.value);if(!title||!inds.length)return toast('Give the quest a title and at least one badge.');state.quests.unshift({id:uid(),title,desc:desc||'Complete the stated objective with a clear, observable result.',xp,badges:inds,done:false,created:new Date().toISOString()});qTitle.value='';qDesc.value='';saveLocal();toast('Objective added to the League log.')}
+function completeQuest(id){let q=state.quests.find(x=>x.id===id);if(!q||q.done)return;q.done=true;state.trainer.xp+=q.xp;state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>v+(q.badges.includes(i)?q.xp:0));recalc();saveLocal();toast(`Quest complete. +${q.xp} trainer XP.`)}
+function deleteQuest(id){state.quests=state.quests.filter(q=>q.id!==id);saveLocal()}
+function renderQuests(){const el=document.getElementById('questList');if(!el)return;el.innerHTML=state.quests.map(q=>`<div class="row"><div><strong>${q.done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i][0]).join(', ')}</span></div><div class="actions">${!q.done?`<button class="btn green" onclick="completeQuest('${q.id}')">COMPLETE</button>`:''}<button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`).join('')||'<div class="tiny">No quests filed.</div>'}
+function addGoal(){let title=goalTitle.value.trim();if(!title)return toast('Give the monthly goal a title.');let month=monthPicker.value||new Date().toISOString().slice(0,7);state.goals.unshift({id:uid(),month,title,desc:goalDesc.value.trim(),done:false});goalTitle.value='';goalDesc.value='';saveLocal()}
+function plannerKey(d=new Date()){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function plannerMonth(){const mp=document.getElementById('monthPicker');return mp?.value||plannerKey().slice(0,7)}
+function shiftPlannerMonth(n){const mp=document.getElementById('monthPicker');if(!mp)return;let [y,m]=mp.value.split('-').map(Number);const d=new Date(y,m-1+n,1);mp.value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;renderGoals()}
+function renderGoals(){const mp=document.getElementById('monthPicker'),goalEl=document.getElementById('goalList');if(!goalEl)return;const m=(mp?.value)||plannerKey().slice(0,7);if(mp&&!mp.value)mp.value=m;const goals=state.goals.filter(g=>g.month===m),doneGoals=goals.filter(g=>g.done).length;const gs=document.getElementById('monthlyGoalSummary');if(gs)gs.textContent=`${doneGoals} / ${goals.length}`;const monthDaily=state.daily.filter(x=>x.date?.slice(0,7)===m),monthDailyDone=monthDaily.filter(x=>x.done).length;const snap=document.getElementById('monthlyDailySnapshot');if(snap)snap.textContent=`DAILY COMPLETIONS • ${monthDailyDone} / ${monthDaily.length}`;goalEl.innerHTML=goals.map(g=>`<div class="row"><div><strong>${esc(g.title)}</strong><span class="tiny">${esc(g.desc||'Monthly milestone')}</span></div><div class="actions"><label><input class="check" type="checkbox" ${g.done?'checked':''} onchange="toggleGoal('${g.id}',this.checked)"> done</label><button class="btn danger" onclick="deleteGoal('${g.id}')">X</button></div></div>`).join('')||'<div class="tiny">No goals for this month. Add as many as you need.</div>';renderMonthlyCalendar(m);renderDailyPlanner(m)}
+function renderMonthlyCalendar(m){const el=document.getElementById('monthlyCalendar');if(!el)return;const [y,mo]=m.split('-').map(Number),days=new Date(y,mo,0).getDate(),first=new Date(y,mo-1,1).getDay(),offset=(first+6)%7,today=plannerKey();let h=['MON','TUE','WED','THU','FRI','SAT','SUN'].map(x=>`<div class="mc-head">${x}</div>`).join('');for(let i=0;i<offset;i++)h+='<div class="mc-empty"></div>';for(let d=1;d<=days;d++){const key=`${m}-${String(d).padStart(2,'0')}`,items=state.daily.filter(x=>x.date===key),completed=items.filter(x=>x.done).length,goalsDone=state.goals.filter(x=>x.month===m&&x.done).length;let cls=key===today?' today':'';if(items.length&&completed===items.length)cls+=' all-done';else if(completed)cls+=' partial';h+=`<button class="mc-day${cls}" onclick="selectPlannerDay('${key}')"><span>${d}</span><strong>${completed}/${items.length}</strong><small>${goalsDone}G</small></button>`}el.innerHTML=h}
+function selectPlannerDay(key){const d=document.getElementById('dailyDate');if(d)d.value=key;renderDailyPlanner(plannerMonth())}
+function addDailyObjective(){const date=document.getElementById('dailyDate')?.value||plannerKey(),title=document.getElementById('dailyTitle')?.value.trim(),xp=Math.max(1,Number(document.getElementById('dailyXp')?.value||20));if(!title)return toast('Give the daily objective a title.');state.daily.push({id:uid(),date,title,xp,done:false});document.getElementById('dailyTitle').value='';saveLocal();toast('Daily objective added.')}
+function renderDailyPlanner(m){const el=document.getElementById('dailyList');if(!el)return;const dateEl=document.getElementById('dailyDate');if(dateEl&&!dateEl.value)dateEl.value=plannerKey();const items=state.daily.filter(x=>x.date?.slice(0,7)===m).sort((a,b)=>a.date.localeCompare(b.date));const done=items.filter(x=>x.done).length;const ds=document.getElementById('dailySummary');if(ds)ds.textContent=`${done} / ${items.length}`;el.innerHTML=items.map(x=>`<div class="daily-row"><div><b>${esc(x.title)}</b><span>${esc(x.date)} • +${x.xp} XP</span></div><label><input class="check" type="checkbox" ${x.done?'checked':''} onchange="toggleDaily('${x.id}',this.checked)"> DONE</label><button class="btn danger" onclick="deleteDaily('${x.id}')">X</button></div>`).join('')||'<div class="tiny">No daily objectives filed for this month.</div>'}
+function toggleDaily(id,v){const d=state.daily.find(x=>x.id===id);if(!d)return;if(v&&!d.done)state.trainer.xp+=Number(d.xp)||0;if(!v&&d.done)state.trainer.xp=Math.max(0,state.trainer.xp-(Number(d.xp)||0));d.done=v;saveLocal();toast(v?`Daily clear. +${d.xp} XP.`:'Daily objective reopened.')}
+function deleteDaily(id){state.daily=state.daily.filter(x=>x.id!==id);saveLocal()}
+function toggleGoal(id,v){let g=state.goals.find(x=>x.id===id);if(g){if(v&&!g.done){state.trainer.xp+=40;state.trainer.badgeXp=state.trainer.badgeXp.map((x,i)=>x+(i===0?20:0))}g.done=v;saveLocal();toast(v?'Monthly goal cleared. +40 XP.':'Goal reopened.')}}function deleteGoal(id){state.goals=state.goals.filter(g=>g.id!==id);saveLocal()}
+function renderPokemon(){recalc();const pt=document.getElementById('playerTeam'),rt=document.getElementById('rivalTeam');if(pt)pt.innerHTML=playerLines.map((line,i)=>pokeCard(evo(line,state.trainer.level),line,state.trainer.level,'player-'+i)).join('');let ar=getActiveRival(),lines=getRivalLines(ar),dl=ar?friendLevel(ar):rivalLevel();if(rt){const team=getLockedRivalTeam(ar);const names=loadDexNames();rt.innerHTML=team.map((x,i)=>{const n=names[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return `<article class="poke"><span class="lvl">LV ${dl}</span>${rivalImgTag(x.__dexId,n)}<h3>${esc(n)}</h3><div class="evo">RIVAL ROSTER // DEX #${String(x.__dexId).padStart(3,'0')}</div></article>`}).join('')}const title=document.getElementById('rivalPartyTitle');if(title)title.textContent=(ar?ar.name:'DJ')+' // RIVAL PARTY';renderAllRivalTeams()}
+let rivalNameHydrationRunning=false;async function hydrateAndRenderRivalNames(){if(rivalNameHydrationRunning)return;rivalNameHydrationRunning=true;try{const rivals=[{name:'DJ',id:null,team:getLockedRivalTeam(null),level:rivalLevel()},...state.friends.map(f=>({name:f.name,id:f.id,team:getLockedRivalTeam(f),level:friendLevel(f)}))];for(const r of rivals)await hydrateRivalNames(r.team);renderAllRivalTeams()}finally{rivalNameHydrationRunning=false}}
+function renderAllRivalTeams(){const el=document.getElementById('allRivalTeams');if(!el)return;const active=state.activeRivalId;const names=loadDexNames();const rivals=[{name:'DJ',id:null,team:getLockedRivalTeam(null),level:rivalLevel()},...state.friends.map(f=>({name:f.name,id:f.id,team:getLockedRivalTeam(f),level:friendLevel(f)}))];el.innerHTML=rivals.map(r=>{const isActive=r.id===null?active===null:active===r.id;return `<div class="rival-roster ${isActive?'active-rival':''}"><div class="rival-roster-head"><strong>${esc(r.name)}${isActive?' • ACTIVE RIVAL':''}</strong><span class="tag">LEVEL ${r.level} • TEAM LOCKED</span></div><div class="rival-roster-team">${r.team.map(x=>{const n=names[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return `<div class="rival-mini">${rivalImgTag(x.__dexId,n)}<span>${esc(n)}</span></div>`}).join('')}</div></div>`}).join('')||'<div class="tiny">No rival teams yet.</div>';if(rivals.some(r=>r.team.some(x=>!names[x.__dexId])))hydrateAndRenderRivalNames()}
+function imgUrl(name){const c=imgCandidates(name);return c[0]}
+function pokeCard(name,line,lvl,key){return `<article class="poke"><span class="lvl">LV ${lvl}</span>${imgTag(name)}<h3>${esc(name)}</h3><div class="evo">${line.map((x,j)=>j<line.length-1?esc(x)+' → ':esc(x)).join('')}</div></article>`}
+function dexFlavor(id,name){const n=String(name||'Pokémon');const h=(id*9301+49297)%233280;const archetypes=[
+['Watcher','It is said to notice tiny changes in its surroundings long before other Pokémon do. Trainers who earn its trust often find it waiting exactly where they need it.'],
+['Wayfarer','This Pokémon rarely follows the obvious path. Old field notes describe it appearing in places thought impossible to reach.'],
+['Spark','Its energy builds quietly until the moment it acts. A single burst from this Pokémon can turn a losing battle into a legend.'],
+['Guardian','Stories from remote towns describe it protecting its territory without hesitation, especially when smaller Pokémon are threatened.'],
+['Hunter','Patient and calculating, it studies its target before making a move. Once it commits, very little can distract it.'],
+['Dreamer','Researchers still debate what it sees while resting. Its behavior suggests that dreams may be another way it explores the world.'],
+['Trickster','Nobody agrees on how many of its strange habits are genuine and how many are deliberate misdirection. That uncertainty may be the point.'],
+['Titan','Its strength is often underestimated because it does not waste movement. When it finally exerts itself, the ground tends to remember.'],
+['Nomad','It can adapt to unfamiliar territory with remarkable speed. Some trainers believe it carries a mental map of every place it has survived.'],
+['Mystic','Ancient records give this Pokémon names that translate roughly to omen, guide, and warning. Modern researchers still cannot agree which is correct.'],
+['Rival','It thrives when challenged. Encounters with stronger opponents seem to sharpen its instincts rather than discourage it.'],
+['Survivor','It has endured environments that should be impossible for its species. Its greatest ability may simply be refusing to quit.']
+];
+const a=archetypes[h%archetypes.length];
+const hooks=['Field researchers have repeatedly recorded the same unusual behavior.','Travellers in Unova have passed down remarkably similar stories about it.','Its behavior becomes especially noticeable when it is under pressure.','Even experienced Trainers tend to remember their first encounter with it.','Its habits have inspired more theories than confirmed answers.','Old League records describe it as an unusually difficult species to predict.'];
+const hook=hooks[(Math.floor(h/17))%hooks.length];
+return `<b>${a[0]} SPECIES</b> — ${hook} ${a[1]} <em>${esc(n)}</em> is most dangerous when underestimated.`;}
+function renderPokedex(){const el=document.getElementById('pokedexGrid');if(!el)return;const q=(document.getElementById('dexSearch')?.value||'').trim().toLowerCase();const names=loadDexNames();let html='';for(let i=1;i<=NATIONAL_DEX_SIZE;i++){const n=names[i]||`Pokémon #${String(i).padStart(3,'0')}`;if(q && !(n.toLowerCase().includes(q)||String(i).includes(q)))continue;html+=`<article class="dex-card"><span class="tiny">#${String(i).padStart(3,'0')}</span>${rivalImgTag(i,n)}<strong>${esc(n)}</strong><span class="tiny">NATIONAL DEX</span><p class="dex-entry">${dexFlavor(i,n)}</p></article>`}el.innerHTML=html||'<div class="tiny">No Pokémon matched that search.</div>';if(!q && Object.keys(names).length<Math.min(NATIONAL_DEX_SIZE,30))hydratePokedexNames()}async function hydratePokedexNames(){const names=loadDexNames();const ids=[];for(let i=1;i<=NATIONAL_DEX_SIZE&&ids.length<30;i++)if(!names[i])ids.push(i);if(!ids.length)return;try{const results=await Promise.all(ids.map(async id=>{const r=await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);if(!r.ok)throw Error('dex');const d=await r.json();return [id,d.name.replace(/(^|-)([a-z])/g,(_,a,b)=>a+b.toUpperCase())]}));results.forEach(([id,n])=>names[id]=n);saveDexNames(names);renderPokedex()}catch{}}
+function renderBadges(){const bg=document.getElementById('badgeGrid');if(!bg)return;bg.innerHTML=badges.map((b,i)=>{let xp=state.trainer.badgeXp[i]||0,lv=Math.max(1,Math.floor(Math.sqrt(xp/100))+1),prev=(lv-1)*(lv-1)*100,next=lv*lv*100,pct=next>prev?Math.max(0,Math.min(100,(xp-prev)/(next-prev)*100)):0;return `<div class="badge"><img src="./assets/badge-${i+1}.svg" alt="${esc(b[0])} badge"><strong>${esc(b[0])}</strong><div class="tiny">${esc(b[1])}</div><div class="bar"><i style="width:${pct}%"></i></div><div class="tiny">LV ${lv} • ${xp} XP</div><div class="tiny">${Math.max(0,next-xp)} XP to LV ${lv+1}</div></div>`}).join('')}
+function addJournal(){const titleEl=document.getElementById('jTitle'),textEl=document.getElementById('jText');const title=String(titleEl?.value||'').trim(),text=String(textEl?.value||'').trim();if(!title){toast('Give the journal entry a title.');titleEl?.focus();return false}if(!text){toast('Write something in the journal entry first.');textEl?.focus();return false}const entry={id:uid(),title,text,date:new Date().toISOString()};if(!Array.isArray(state.journal))state.journal=[];state.journal.unshift(entry);if(titleEl)titleEl.value='';if(textEl)textEl.value='';saveLocal();toast('Journal entry filed.');return false}function renderJournal(){const el=document.getElementById('journalList');if(!el)return;el.innerHTML=state.journal.map(j=>`<div class="row"><div><strong>${esc(j.title)}</strong><span class="tiny">${new Date(j.date).toLocaleString()}</span><p style="margin:4px 0;white-space:pre-wrap">${esc(j.text)}</p></div><button class="btn danger" onclick="deleteJournal('${j.id}')">DELETE</button></div>`).join('')||'<div class="tiny">Your journal is empty.</div>'}function deleteJournal(id){state.journal=state.journal.filter(j=>j.id!==id);saveLocal();toast('Journal entry deleted.')}
+function addItem(){let n=itemName.value.trim();if(!n)return toast('Name the item.');state.inventory.unshift({id:uid(),name:n,qty:Math.max(1,+itemQty.value||1),desc:itemDesc.value.trim()});itemName.value='';itemDesc.value='';saveLocal()}
+function renderInventory(){inventoryList.innerHTML=state.inventory.map(x=>`<div class="row"><div><strong>${esc(x.name)} ×${x.qty}</strong><span class="tiny">${esc(x.desc||'League item')}</span></div><div class="actions"><button class="btn" onclick="changeItem('${x.id}',1)">+</button><button class="btn" onclick="changeItem('${x.id}',-1)">−</button><button class="btn danger" onclick="deleteItem('${x.id}')">X</button></div></div>`).join('')||'<div class="tiny">Item box empty.</div>'}function changeItem(id,d){let x=state.inventory.find(i=>i.id===id);if(x){x.qty+=d;if(x.qty<=0)state.inventory=state.inventory.filter(i=>i.id!==id);saveLocal()}}function deleteItem(id){state.inventory=state.inventory.filter(i=>i.id!==id);saveLocal()}
+function addReward(){let n=rewardName.value.trim(),cost=Math.max(1,+rewardCost.value||1);if(!n)return toast('Name the reward.');state.rewards.push({id:uid(),name:n,cost,desc:rewardDesc.value.trim()});rewardName.value='';rewardDesc.value='';saveLocal()}
+function renderRewards(){const el=document.getElementById('rewardList');if(!el)return;el.innerHTML=`<div class="row"><strong>AVAILABLE XP</strong><strong>${state.trainer.xp} XP</strong></div>`+state.rewards.map(r=>`<div class="row"><div><strong>${esc(r.name)} • ${r.cost} XP</strong><span class="tiny">${esc(r.desc||'Reward')}</span></div><div class="actions"><button class="btn green" ${state.trainer.xp<r.cost?'disabled':''} onclick="redeem('${r.id}')">REDEEM</button><button class="btn danger" onclick="deleteReward('${r.id}')">X</button></div></div>`).join('')}
+function redeem(id){let r=state.rewards.find(x=>x.id===id);if(!r||state.trainer.xp<r.cost)return toast('Not enough XP. The League accountant remains unmoved.');state.trainer.xp-=r.cost;saveLocal();toast(`Reward redeemed: ${r.name}`)}function deleteReward(id){state.rewards=state.rewards.filter(r=>r.id!==id);saveLocal()}
+function autoTeam(words){let w=words.toLowerCase().split(/[, ]+/).filter(Boolean).slice(0,3).join(' ');let maps=[[/dark|night|myster|quiet|cool/,[['Eevee','Umbreon'],['Froakie','Greninja'],['Riolu','Lucario'],['Mew'],['Gible','Garchomp'],['Snivy','Serperior']]],[/fire|bold|loud|brave/,[['Charmander','Charizard'],['Gible','Garchomp'],['Riolu','Lucario'],['Froakie','Greninja'],['Mew'],['Eevee','Umbreon']]],[/water|calm|chill|blue/,[['Froakie','Greninja'],['Eevee','Vaporeon'],['Mew'],['Gible','Garchomp'],['Snivy','Serperior'],['Riolu','Lucario']]]];for(let [re,team] of maps)if(re.test(w))return team;return [['Gible','Gabite','Garchomp'],['Eevee','Umbreon'],['Riolu','Lucario'],['Mew'],['Snivy','Serperior'],['Froakie','Greninja']]}
+function addFriend(){let name=fName.value.trim(),gender=fGender.value,words=fWords.value.trim();if(!name||!words)return toast('Give your friend a name and three descriptive words.');let team=autoTeam(words),file=fSprite.files[0],baseLevel=state.trainer.level;let f={id:uid(),name,gender,words,team,rivalTeam:null,rivalTeamLocked:false,offset:0,sprite:null,xp:friendXpForLevel(baseLevel),_journeyV:1};const finish=()=>{state.friends.unshift(f);getLockedRivalTeam(f);saveLocal();clearFriendForm();showPage('friends');toast(`${f.name} has started their League journey.`)};if(file){let reader=new FileReader();reader.onload=()=>{f.sprite=reader.result;finish()};reader.readAsDataURL(file)}else finish()}
+function clearFriendForm(){fName.value='';fWords.value='';fSprite.value=''}function friendSprite(f){return f.sprite||(f.gender==='girl'?LOCAL_ASSETS.friendGirl:LOCAL_ASSETS.friendGuy)}
+const NATIONAL_DEX_SIZE=1025;
+const nationalNameCacheKey='leagueNationalDexNamesV1';const rivalNameIds={};
+function rivalSeed(){return Date.now()+Math.random()*1e9}
+function currentPlayerIds(){return playerLines.flatMap(line=>line.map(n=>ids[n]||0)).filter(Boolean)}
+function allAssignedRivalIds(){
+  const used=new Set(currentPlayerIds());
+  if(Array.isArray(state.djRivalTeam)) state.djRivalTeam.forEach(x=>{if(x&&x.__dexId)used.add(+x.__dexId)});
+  (state.friends||[]).forEach(f=>(f.rivalTeam||[]).forEach(x=>{if(x&&x.__dexId)used.add(+x.__dexId)}));
+  return [...used];
+}
+function normaliseRivalTeam(team){
+  if(!Array.isArray(team)||team.length!==6)return null;
+  const out=team.map(x=>{
+    if(x&&typeof x==='object'&&Number.isInteger(x.__dexId))return {__dexId:x.__dexId};
+    if(Array.isArray(x)&&x[0]&&ids[x[0]])return {__dexId:ids[x[0]]};
+    if(typeof x==='string'&&ids[x])return {__dexId:ids[x]};
+    return null;
+  });
+  if(out.some(x=>!x||x.__dexId<1||x.__dexId>NATIONAL_DEX_SIZE))return null;
+  if(new Set(out.map(x=>x.__dexId)).size!==6)return null;
+  return out;
+}
+function rivalTeamConflictsWithPlayer(team){
+  const valid=normaliseRivalTeam(team); if(!valid)return true;
+  const playerIds=new Set(currentPlayerIds());
+  return valid.some(x=>playerIds.has(x.__dexId));
+}
+function rivalTeamConflictsWithAssigned(team,ignoreRival=null){
+  const valid=normaliseRivalTeam(team); if(!valid)return true;
+  const idsSet=new Set(currentPlayerIds());
+  if(ignoreRival!==state.djRivalTeam && Array.isArray(state.djRivalTeam)) state.djRivalTeam.forEach(x=>idsSet.add(+x.__dexId));
+  (state.friends||[]).forEach(f=>{
+    if(ignoreRival===f.rivalTeam)return;
+    (f.rivalTeam||[]).forEach(x=>idsSet.add(+x.__dexId));
+  });
+  return valid.some(x=>idsSet.has(x.__dexId));
+}
+function randomDexIds(exclude=[]){
+  const blocked=new Set(exclude.filter(Boolean).map(Number));
+  const pool=[];
+  for(let i=1;i<=NATIONAL_DEX_SIZE;i++)if(!blocked.has(i))pool.push(i);
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+  return pool.slice(0,6);
+}
+function loadDexNames(){try{return JSON.parse(localStorage.getItem(nationalNameCacheKey)||'{}')}catch{return {}}}
+function saveDexNames(map){try{localStorage.setItem(nationalNameCacheKey,JSON.stringify(map))}catch{}}
+async function hydrateRivalNames(team){
+  const names=loadDexNames();
+  const missing=team.filter(x=>x&&x.__dexId&&!names[x.__dexId]).map(x=>x.__dexId);
+  if(!missing.length)return team.map(x=>[names[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`]);
+  try{
+    const results=await Promise.all(missing.map(async id=>{
+      const r=await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      if(!r.ok)throw Error('dex');
+      const d=await r.json();
+      return [id,d.name.replace(/(^|-)([a-z])/g,(_,a,b)=>a+b.toUpperCase())];
+    }));
+    results.forEach(([id,n])=>names[id]=n); saveDexNames(names);
+  }catch{}
+  return team.map(x=>[names[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`]);
+}
+function makeRandomRivalTeam(){
+  // A rival owns a completely independent six-species roster. Never copy
+  // Russ's party or any already-locked rival roster. This function is called
+  // only when a rival has no valid locked team, so generation happens once.
+  const blocked=allAssignedRivalIds();
+  const idsPicked=randomDexIds(blocked);
+  if(idsPicked.length===6)return idsPicked.map(id=>({__dexId:id}));
+  // Defensive fallback for an exhausted pool. Still guarantee six unique IDs.
+  return randomDexIds(currentPlayerIds()).map(id=>({__dexId:id}));
+}
+function ensureRivalTeam(rival){
+  if(rival){
+    const existing=normaliseRivalTeam(rival.rivalTeam);
+    if(existing && !rivalTeamConflictsWithPlayer(existing) && !rivalTeamConflictsWithAssigned(existing,rival.rivalTeam)){
+      rival.rivalTeam=existing; return existing;
+    }
+    rival.rivalTeam=makeRandomRivalTeam(); return rival.rivalTeam;
+  }
+  const existing=normaliseRivalTeam(state.djRivalTeam);
+  if(existing && !rivalTeamConflictsWithPlayer(existing) && !rivalTeamConflictsWithAssigned(existing,state.djRivalTeam)){
+    state.djRivalTeam=existing; return existing;
+  }
+  state.djRivalTeam=makeRandomRivalTeam(); return state.djRivalTeam;
+}
+function getRivalLines(rival){
+  const team=ensureRivalTeam(rival); const names=loadDexNames();
+  return team.map(x=>{const n=names[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;rivalNameIds[n]=x.__dexId;return [n]});
+}
+
+function refreshApp(){
+  const active=document.querySelector('.page.active')?.id||'dashboard';
+  const y=window.scrollY;
+  try{
+    ensureAllRivalTeams();
+    localStorage.setItem('leagueOS',JSON.stringify(state));
+    updateAll();
+    document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===active));
+    renderPage(active);
+    renderNav();
+    requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:'auto'}));
+    toast('League OS refreshed.');
+  }catch(e){console.error('League OS refresh failed:',e);toast('Refresh failed. Your saved data was not cleared.')}
+}
+function getActiveRival(){return state.friends.find(f=>f.id===state.activeRivalId)||null}
+function setRival(id){if(id==='DJ'){state.activeRivalId=null;ensureRivalTeam(null);saveLocal();renderFriends();renderPokemon();renderDashboard();toast('DJ is now your active rival.');return}const f=state.friends.find(x=>x.id===id);if(!f)return;state.activeRivalId=id;ensureRivalTeam(f);saveLocal();renderFriends();renderPokemon();renderDashboard();toast(`${f.name} is now your active rival.`)}
+function clearRival(){setRival('DJ')}
+function changeFriendXp(id,delta){let f=state.friends.find(x=>x.id===id);if(!f)return;f.xp=Math.max(0,(typeof f.xp==='number'?f.xp:friendXpForLevel(friendLevel(f)))+delta);saveLocal();toast(`${f.name} journey updated.`)}
+function renderFriends(){const el=document.getElementById('friendList');if(!el)return;const djActive=state.activeRivalId===null;ensureRivalTeam(null);const djLevel=rivalLevel();const djCard=`<article class="friend${djActive?' active-rival-card':''}"><div class="friend-topline"><span class="tag">MALE</span><span class="tag rival-tag">RIVAL</span>${djActive?'<span class="tag active-tag">ACTIVE</span>':''}</div><img src="assets/dj-trainer.png" alt="DJ" onerror="this.onerror=null;this.src='assets/friend-guy.png'"><h2>DJ</h2><div class="friend-meta">LEVEL ${djLevel}</div><div class="friend-tags"><span class="tag">DEFAULT RIVAL</span><span class="tag">RIVAL TEAM LOCKED</span></div><div class="friend-team">${getLockedRivalTeam(null).map(x=>{let n=loadDexNames()[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return `<div class="friend-poke">${rivalImgTag(x.__dexId,n)}<span>${esc(n)}</span></div>`}).join('')}</div><div class="friend-actions"><div class="tiny">DJ remains in the League even when another rival is selected.</div><div class="actions"><button class="btn ${djActive?'green':''}" onclick="${djActive?`toast('DJ is already your active rival.')`:`setRival('DJ')`}">${djActive?'ACTIVE RIVAL':'SET AS RIVAL'}</button></div></div></article>`;const friendCards=state.friends.map(f=>{let lvl=friendLevel(f),xp=typeof f.xp==='number'?f.xp:friendXpForLevel(lvl),next=lvl*lvl*100,prev=(lvl-1)*(lvl-1)*100,pct=next>prev?Math.max(0,Math.min(100,(xp-prev)/(next-prev)*100)):0,isRival=state.activeRivalId===f.id;ensureRivalTeam(f);return `<article class="friend${isRival?' active-rival-card':''}"><div class="friend-topline"><span class="tag">${esc(f.gender)}</span><span class="tag rival-tag">RIVAL</span>${isRival?'<span class="tag active-tag">ACTIVE</span>':''}</div><img src="${friendSprite(f)}" alt="${esc(f.name)}" onerror="this.onerror=null;this.src='assets/friend-guy.png'"><h2>${esc(f.name)}</h2><div class="friend-meta">LEVEL ${lvl}</div><div class="friend-tags">${f.words.split(/[, ]+/).filter(Boolean).slice(0,3).map(x=>`<span class="tag">${esc(x)}</span>`).join('')}<span class="tag">RIVAL TEAM LOCKED</span></div><div class="friend-team">${getLockedRivalTeam(f).map(x=>{let n=loadDexNames()[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return `<div class="friend-poke">${rivalImgTag(x.__dexId,n)}<span>${esc(n)}</span></div>`}).join('')}</div><div class="friend-actions"><div class="tiny">${xp} XP • ${Math.max(0,next-xp)} XP to next level</div><div class="friend-progress"><i style="width:${pct}%"></i></div><div class="actions"><button class="btn ${isRival?'green':''}" onclick="${isRival?`setRival('DJ')`:`setRival('${f.id}')`}">${isRival?'RETURN TO DJ':'SET AS RIVAL'}</button><button class="btn" onclick="changeFriendXp('${f.id}',100)">+100 XP</button><button class="btn" onclick="changeFriendXp('${f.id}',-100)">−100 XP</button><button class="btn" onclick="editFriend('${f.id}')">EDIT</button><button class="btn danger" onclick="deleteFriend('${f.id}')">DELETE</button></div></div></article>`}).join('');el.innerHTML=djCard+friendCards||'<div class="empty-state" style="grid-column:1/-1">No friend journeys started yet.</div>'}
+function editFriend(id){let f=state.friends.find(x=>x.id===id);if(!f)return;let n=prompt('Friend name',f.name),w=prompt('Three words',f.words);if(n===null||w===null)return;f.name=n.trim()||f.name;f.words=w.trim()||f.words;f.team=autoTeam(f.words);saveLocal()}
+function deleteFriend(id){const f=state.friends.find(x=>x.id===id);if(!f)return;if(state.activeRivalId===id)state.activeRivalId=null;state.friends=state.friends.filter(x=>x.id!==id);saveLocal();toast(`${f.name} removed from the League.`)} 
+let pushTimer=null;function queuePush(){clearTimeout(pushTimer);if(getCfg().url&&getCfg().key)pushTimer=setTimeout(()=>pushCloud(false),1200)}
+function getCfg(){return {url:localStorage.getItem('sbUrl')||'',key:localStorage.getItem('sbKey')||'',id:localStorage.getItem('trainerId')||'russ'}}
+function cloudHeaders(extra={}){const c=getCfg();const h=Object.assign({apikey:c.key},extra);if(c.key&&!c.key.startsWith('sb_publishable_'))h.Authorization='Bearer '+c.key;return h}
+let syncPollTimer=null;function startSyncPolling(){clearInterval(syncPollTimer);if(!getCfg().url||!getCfg().key)return;syncPollTimer=setInterval(()=>{if(document.visibilityState!=='hidden')pullCloud(false)},15000)}
+async function saveConnection(){const url=sbUrl.value.trim().replace(/\/$/,'');const key=sbKey.value.trim();const id=trainerId.value.trim()||'russ';if(!/^https:\/\/[^\s]+\.supabase\.co$/.test(url)){syncStatus.textContent='Project URL should look like https://xxxxxxxx.supabase.co';return}if(!key){syncStatus.textContent='Paste your Supabase publishable key.';return}localStorage.setItem('sbUrl',url);localStorage.setItem('sbKey',key);localStorage.setItem('trainerId',id);await testCloud(true);startSyncPolling()}
+async function testCloud(initial=false){const c=getCfg(),status=document.getElementById('syncStatus');if(!c.url||!c.key){if(status)status.textContent='Enter your Supabase URL, publishable/anon key and Trainer ID.';setOnline(false,'LOCAL');return false}try{const r=await fetch(c.url+'/rest/v1/trainer_saves?id=eq.'+encodeURIComponent(c.id)+'&select=id,updated_at',{headers:cloudHeaders()});if(!r.ok)throw Error(await r.text());const rows=await r.json();setOnline(true,'ONLINE');if(status)status.textContent='Cloud link verified. Auto sync is active.';startSyncPolling();if(rows.length===0){await pushCloud(true,'initial')}else{await pullCloud(false)}return true}catch(e){setOnline(false,'OFFLINE');if(status)status.textContent='Cloud check failed: '+e.message;return false}}
+async function pushCloud(manual=false,reason='manual'){const c=getCfg();if(!c.url||!c.key){if(manual)toast('Configure Supabase first.');return false}try{const body={id:c.id,data:state,updated_at:new Date().toISOString()};const r=await fetch(c.url+'/rest/v1/trainer_saves?on_conflict=id',{method:'POST',headers:cloudHeaders({'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify(body)});if(!r.ok)throw Error(await r.text());state.lastSync=body.updated_at;localStorage.setItem('leagueOS',JSON.stringify(state));setOnline(true,'ONLINE');const st=document.getElementById('syncStatus');if(st)st.textContent='Cloud synced • '+new Date().toLocaleTimeString();if(manual)toast(reason==='initial'?'First local save uploaded to cloud.':'Local save pushed to cloud.');return true}catch(e){setOnline(false,'OFFLINE');const st=document.getElementById('syncStatus');if(st)st.textContent='Upload failed: '+e.message;if(manual)toast('Cloud upload failed. Check the Sync Center.');return false}}
+async function pullCloud(manual){const c=getCfg();if(!c.url||!c.key){if(manual)toast('Configure Supabase first.');return false}try{const r=await fetch(c.url+'/rest/v1/trainer_saves?id=eq.'+encodeURIComponent(c.id)+'&select=data,updated_at',{headers:cloudHeaders()});if(!r.ok)throw Error(await r.text());const rows=await r.json();if(rows[0]?.data){const remote=rows[0].data;if(!state.lastSync||new Date(rows[0].updated_at)>new Date(state.lastSync)){state=Object.assign({},data,remote);localStorage.setItem('leagueOS',JSON.stringify(state));updateAll();toast('Cloud save pulled.')}}setOnline(true,'ONLINE');const st=document.getElementById('syncStatus');if(st)st.textContent='Cloud checked • '+new Date().toLocaleTimeString();if(manual)toast('Cloud save pulled.');return true}catch(e){setOnline(false,'OFFLINE');const st=document.getElementById('syncStatus');if(st)st.textContent='Download failed: '+e.message;if(manual)toast('Cloud download failed. Check the Sync Center.');return false}}
+// Pocket calculator state and controls
+let calcState={display:'0',stored:null,operator:null,waiting:false};
+function calcRender(){const el=document.getElementById('calcScreen');if(el)el.value=calcState.display;}
+function calcDigit(d){if(calcState.waiting){calcState.display=d;calcState.waiting=false}else if(d==='.'&&calcState.display.includes('.'))return;else if(calcState.display==='0'&&d!=='.')calcState.display=d;else if(calcState.display.length<18)calcState.display+=d;calcRender()}
+function calcClear(){calcState={display:'0',stored:null,operator:null,waiting:false};calcRender()}
+function calcBack(){if(calcState.waiting)return;calcState.display=calcState.display.length>1?calcState.display.slice(0,-1):'0';if(calcState.display==='-'||calcState.display==='')calcState.display='0';calcRender()}
+function calcOp(op){const current=Number(calcState.display);if(!Number.isFinite(current))return calcClear();if(calcState.operator&&calcState.stored!==null&&!calcState.waiting)calcApply(current);else calcState.stored=current;calcState.operator=op;calcState.waiting=true;calcRender()}
+function calcApply(current){let a=Number(calcState.stored),r;switch(calcState.operator){case '+':r=a+current;break;case '-':r=a-current;break;case '*':r=a*current;break;case '/':if(current===0){toast('Cannot divide by zero.');calcClear();return}r=a/current;break;case '%':r=a%current;break;default:r=current}calcState.display=Number.isFinite(r)?String(Number(r.toFixed(12))):'0';calcState.stored=r;}
+function calcEquals(){if(calcState.operator===null||calcState.stored===null)return;const expression=`${calcState.stored} ${calcState.operator} ${calcState.display}`;const current=Number(calcState.display);calcApply(current);calcState.operator=null;calcState.waiting=true;calcRender();const h=document.getElementById('calcHistory');if(h){const row=document.createElement('div');row.className='row';row.innerHTML=`<strong>${esc(expression)} = ${esc(calcState.display)}</strong>`;h.prepend(row)}}
+document.addEventListener('keydown',e=>{if(document.querySelector('#calculator.page.active')){if(/^[0-9.]$/.test(e.key))calcDigit(e.key);else if(['+','-','*','/','%'].includes(e.key))calcOp(e.key);else if(e.key==='Enter'||e.key==='=')calcEquals();else if(e.key==='Backspace')calcBack();else if(e.key==='Escape')calcClear();}});
+
+function setOnline(ok,text){const label=ok?'ONLINE':'OFFLINE';const od=document.getElementById('onlineDot');if(od)od.className='dot '+(ok?'online':'');const ot=document.getElementById('onlineText');if(ot)ot.textContent=label;document.getElementById('taskOnlineDot')?.classList.toggle('online',!!ok);const taskText=document.getElementById('taskOnlineText');if(taskText)taskText.textContent=label;const cloudReady=!!(getCfg().url&&getCfg().key);const dd=document.getElementById('dashCloudDot');if(dd)dd.className='dot '+(cloudReady&&ok?'online':'');const dc=document.getElementById('dashCloudText');if(dc)dc.textContent=cloudReady&&ok?'CLOUD READY':'LOCAL SAVE';const dl=document.getElementById('dashCloudLine');if(dl)dl.textContent=cloudReady&&ok?'Cloud configured • auto sync enabled':cloudReady?'Cloud configured • offline':'Local save active • configure cloud sync';}
+
+function toggleMobileMore(){document.getElementById('mobileMore')?.classList.toggle('show')}
+function updateAll(){recalc();renderDashboard();renderQuests();renderGoals();renderPokemon();renderBadges();renderJournal();renderRewards();renderFriends();renderNav();fillCfg()}
+function fillCfg(){let c=getCfg();if(document.activeElement!==sbUrl)sbUrl.value=c.url;if(document.activeElement!==sbKey)sbKey.value=c.key;if(document.activeElement!==trainerId)trainerId.value=c.id}
+function toast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+document.addEventListener('DOMContentLoaded',()=>{renderNav();applyTaskbar();setOnline(navigator.onLine,'ONLINE');});
+monthPicker.value=new Date().toISOString().slice(0,7);renderBadgeChecks();try{ensureAllRivalTeams();ensureRivalTeam(getActiveRival());updateAll()}catch(e){console.error('League OS bootstrap:',e);renderNav()}applyTaskbar();setOnline(navigator.onLine,'ONLINE');setTimeout(()=>{if(navigator.onLine)setOnline(true,'ONLINE')},250);
+document.addEventListener('DOMContentLoaded',()=>{const jt=document.getElementById('jTitle'),jx=document.getElementById('jText');[jt,jx].forEach(el=>el?.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();addJournal()}}));});window.addEventListener('online',()=>{setOnline(true,'ONLINE');testCloud()});window.addEventListener('offline',()=>setOnline(false,'OFFLINE'));
+setInterval(()=>{if(document.visibilityState==='visible'&&getCfg().url&&getCfg().key)pullCloud(false)},6000);
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body></html>
