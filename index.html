@@ -609,6 +609,142 @@ body{background:#050a0f!important;overflow-x:hidden}.app{width:calc(100vw - 250p
   .v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 </style>
+
+<style id="v43-gimmicky-dashboard">
+/* V43: desktop dashboard composition. The interface is a dashboard, not six postage stamps in a row. */
+.dashboard-v18{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+}
+.dashboard-v18 .dash-box{position:relative;overflow:hidden}
+.dashboard-v18 .dash-box::after{
+  content:"";
+  position:absolute;right:5px;top:5px;width:5px;height:5px;
+  background:#62eaff;box-shadow:-7px 0 0 #ffd34d,0 7px 0 #68f39a;
+  opacity:.75;pointer-events:none;
+}
+.v18-hero{
+  display:grid!important;
+  grid-template-columns:minmax(280px,1.03fr) minmax(430px,1.45fr) minmax(230px,.78fr)!important;
+  gap:10px!important;
+  min-height:285px!important;
+  height:285px!important;
+  width:100%!important;
+}
+.v18-hero>.v18-trainer,
+.v18-hero>.v18-progress,
+.v18-hero>.v18-emblem{grid-area:auto!important;min-width:0!important;height:285px!important}
+.v18-trainer{padding:10px 12px!important;background:linear-gradient(180deg,#0d242b,#071217 75%)!important}
+.v18-trainer-body{grid-template-columns:130px minmax(0,1fr)!important;height:225px!important;gap:10px!important;align-items:center!important}
+.v18-trainer-art,.v18-trainer-art img{height:215px!important}
+.v18-trainer-art img{width:130px!important;object-fit:contain!important;filter:drop-shadow(3px 3px 0 #020609)!important}
+.v18-trainer-copy{min-width:0!important}
+.v18-trainer-copy h1{font-size:31px!important;line-height:1!important;margin:4px 0!important;letter-spacing:2px!important}
+.v18-kicker{font-size:13px!important;color:#69e9ff!important;letter-spacing:1px!important}
+.v18-level{font-size:18px!important}
+.v18-rank{font-size:17px!important;margin-bottom:12px!important}
+.v18-statline{padding:7px 0!important;border-top:1px solid #28545b!important}
+.v18-progress{padding:12px 14px!important;background:linear-gradient(180deg,#102b32,#071317 80%)!important}
+.v18-progress-title{margin:10px 0 5px!important;font-size:14px!important}
+.v18-progress-title b{color:#fff!important}
+.v18-bigbar{height:19px!important;border:2px inset #385b63!important;background:#03090c!important;box-shadow:inset 0 0 0 1px #132a30!important}
+.v18-bigbar i{height:100%!important;background:linear-gradient(90deg,#2cbfd5,#7cf3ff)!important;box-shadow:0 0 8px rgba(98,234,255,.35)!important}
+.v18-bigbar.green i{background:linear-gradient(90deg,#25ad62,#7cffae)!important}
+.v18-milestone{margin:13px 0!important;padding:9px 10px!important;border:2px ridge #416e75!important;background:linear-gradient(90deg,#0b1b20,#10252a)!important;display:flex!important;justify-content:space-between!important;gap:10px!important;align-items:center!important}
+.v18-milestone strong{color:#ffd34d!important;font-family:'Press Start 2P';font-size:10px!important;text-align:right}
+.v18-kpi-row{grid-template-columns:repeat(4,1fr)!important;gap:5px!important;margin-top:9px!important}
+.v18-kpi-row>div{padding:7px 4px!important;border:2px inset #355a62!important;background:#061014!important;text-align:center!important}
+.v18-kpi-row span{font-size:9px!important;color:#7da9ae!important}
+.v18-kpi-row b{font-size:23px!important;color:#efffff!important}
+.v18-emblem{padding:10px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;background:radial-gradient(circle at 50% 45%,#163942,#071216 68%)!important}
+.v18-emblem img{width:165px!important;height:170px!important;object-fit:contain!important;filter:drop-shadow(0 0 10px rgba(98,234,255,.28))!important}
+.v18-emblem-caption{margin-top:4px!important}
+.v18-team{height:185px!important}
+.v18-team-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:7px!important;padding:8px!important;height:146px!important}
+.v18-team-grid .dash-mon{height:130px!important;min-height:130px!important;display:grid!important;grid-template-rows:1fr auto!important;padding:5px!important;background:linear-gradient(180deg,#0b1d23,#050c10)!important;border:2px ridge #3f747b!important}
+.v18-team-grid .dash-mon:hover{transform:translateY(-2px);border-color:#70e9f5!important;box-shadow:0 0 12px rgba(98,234,255,.16)}
+.v18-team-grid .dash-mon-sprite{height:91px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.v18-team-grid .dash-mon img{height:86px!important;width:100%!important;object-fit:contain!important;background:radial-gradient(circle,#173942,#061014)!important;image-rendering:pixelated!important}
+.v18-team-grid .dash-mon span{font-size:9px!important;color:#efffff!important;text-shadow:1px 1px 0 #000!important}
+.v18-team-grid .dash-mon small{font-size:12px!important;color:#65d7e6!important}
+.v18-panel-head{min-height:40px!important;padding:8px 10px!important;display:flex!important;align-items:center!important}
+.v18-panel-head .btn{font-size:10px!important;padding:5px 8px!important}
+.v18-main-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.18fr) minmax(0,1fr) minmax(0,1fr)!important;
+  grid-template-areas:
+    "objectives recent badges"
+    "calendar rival friends"
+    "actions actions actions"!important;
+  gap:10px!important;
+  width:100%!important;
+  align-items:stretch!important;
+}
+.v18-main-grid>.v18-objectives{grid-area:objectives!important;grid-column:auto!important}
+.v18-main-grid>.v18-card:nth-child(2){grid-area:recent!important;grid-column:auto!important}
+.v18-main-grid>.v18-badges{grid-area:badges!important;grid-column:auto!important}
+.v18-main-grid>.v18-card:nth-child(4){grid-area:calendar!important;grid-column:auto!important}
+.v18-main-grid>.v18-rival-card{grid-area:rival!important;grid-column:auto!important}
+.v18-main-grid>.v18-card:nth-child(6){grid-area:friends!important;grid-column:auto!important}
+.v18-main-grid>.v18-actions{grid-area:actions!important;grid-column:auto!important}
+.v18-main-grid>.v18-card{min-width:0!important;min-height:225px!important}
+.v18-list{min-height:178px!important;max-height:205px!important;padding:6px!important}
+.v18-list .row{margin-bottom:5px!important;padding:7px!important}
+.v18-badge-grid{grid-template-columns:repeat(4,1fr)!important;padding:9px!important;gap:5px!important}
+.v18-badge-grid img{height:63px!important;background:#071318!important;border:1px inset #345960!important}
+.v18-badge-meta{padding:0 9px 9px!important}
+.v18-calendar-wrap{padding:8px!important;min-height:174px!important}
+.v18-streak{padding:8px 10px!important}
+.v18-rival-main{padding:8px!important;grid-template-columns:90px minmax(0,1fr)!important}
+.v18-rival-main img{width:90px!important;height:110px!important}
+.v18-rival-team{padding:0 8px 8px!important}
+.v18-rival-team img{height:43px!important}
+.v18-friends-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;padding:7px!important}
+.v18-friends-grid .dash-friend-mini{padding:4px!important}
+.v18-friends-grid .dash-friend-mini img{height:62px!important}
+.v18-actions{min-height:0!important}
+.v18-actions .v18-action-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important;padding:8px!important;gap:6px!important}
+.v18-action-grid .btn{min-height:44px!important;font-size:11px!important}
+.v18-sync-line{padding:6px 9px!important}
+.dash-footerbar{margin-top:0!important}
+/* Small CRT-style decorative touches */
+.v18-section-label{position:relative!important}
+.v18-section-label::before{content:"◆";color:#ffd34d;margin-right:5px;font-size:8px}
+.v18-panel-head span:first-child::before{content:"▸ ";color:#5ee9f7}
+@media(max-width:1250px) and (min-width:901px){
+  .v18-hero{grid-template-columns:minmax(250px,1fr) minmax(360px,1.25fr)!important;height:auto!important}
+  .v18-hero>.v18-trainer,.v18-hero>.v18-progress{height:275px!important}
+  .v18-emblem{display:none!important}
+  .v18-team{height:auto!important}
+  .v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;height:auto!important}
+  .v18-main-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-areas:"objectives recent" "badges calendar" "rival friends" "actions actions"!important}
+  .v18-main-grid>.v18-card{min-height:215px!important}
+  .v18-actions{grid-column:auto!important}
+  .v18-actions .v18-action-grid{grid-template-columns:repeat(3,1fr)!important}
+}
+@media(max-width:900px){
+  .dashboard-v18{display:flex!important;gap:8px!important}
+  .v18-hero{display:grid!important;grid-template-columns:1fr!important;height:auto!important;min-height:0!important}
+  .v18-hero>.v18-trainer,.v18-hero>.v18-progress{height:auto!important;min-height:235px!important}
+  .v18-emblem{display:none!important}
+  .v18-team{height:auto!important}
+  .v18-team-grid{height:auto!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .v18-main-grid{grid-template-columns:1fr!important;grid-template-areas:"objectives" "recent" "badges" "calendar" "rival" "friends" "actions"!important}
+  .v18-main-grid>.v18-card,.v18-main-grid>.v18-actions{grid-column:auto!important;min-height:0!important}
+  .v18-actions .v18-action-grid{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:560px){
+  .v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .v18-trainer-body{grid-template-columns:100px 1fr!important;height:180px!important}
+  .v18-trainer-art,.v18-trainer-art img{height:175px!important}
+  .v18-trainer-art img{width:100px!important}
+  .v18-kpi-row{grid-template-columns:repeat(2,1fr)!important}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -628,7 +764,7 @@ body{background:#050a0f!important;overflow-x:hidden}.app{width:calc(100vw - 250p
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V31</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V43</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
