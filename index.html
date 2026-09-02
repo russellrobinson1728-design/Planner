@@ -1254,7 +1254,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 <body>
 <div id="bootScreen" class="boot-screen" aria-live="polite"><div class="boot-terminal"><div class="boot-pokeball">◉</div><div class="boot-title">LEAGUE OS</div><div class="boot-sub">INITIALIZING TRAINER TERMINAL</div><div class="boot-bar"><i></i></div><div class="boot-status" id="bootStatus">LOADING PROFILE DATA...</div></div></div><div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
 <div class="app">
-<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V63</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
+<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V64</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
 <aside class="taskbar crt" id="taskbar">
   <button class="task-toggle" id="taskToggle" aria-label="Collapse League taskbar" title="Collapse / expand taskbar" onclick="toggleTaskbar()">◀</button>
   <div class="task-brand"><span class="task-pokeball">◉</span><span class="task-brand-text">LEAGUE OS</span></div>
@@ -1270,7 +1270,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V63</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V64</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1478,7 +1478,7 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:61,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null,focusSession:null,focusDurationMin:25,achievementLog:[]};
+const data={version:64,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null,focusSession:null,focusDurationMin:25,achievementLog:[],leagueStartDate:null,leagueResetAt:null,leagueEpochVersion:0};
 let state=loadLocal();
 const hasSavedLeagueState=!!localStorage.getItem('leagueOS');
 if(!hasSavedLeagueState && (!Array.isArray(state.quests)||state.quests.length===0)) state.quests=structuredClone(defaultQuests);
@@ -1517,6 +1517,26 @@ function fallbackImg(el,c){let i=+(el.dataset.fallback||1);if(i<c.length){el.dat
 function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function localDayKey(d=new Date()){const x=new Date(d);return new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function resetLeagueDayOne(out){
+  const today=localDayKey();
+  const stamp=new Date().toISOString();
+  out.leagueStartDate=today;
+  out.leagueResetAt=stamp;
+  out.leagueEpochVersion=1;
+  out.questDay=today;
+  out.focusSession=null;
+  out.quests=(Array.isArray(out.quests)?out.quests:[]).map(q=>Object.assign({},q,{done:false,completedAt:null}));
+  out.localMutationAt=stamp;
+  out.lastSyncedMutationAt=null;
+  out.lastSync=null;
+  return out;
+}
+function leagueDayNumber(){
+  const start=state.leagueStartDate||localDayKey();
+  const a=new Date(start+'T00:00:00');
+  const b=new Date(localDayKey()+'T00:00:00');
+  return Math.max(1,Math.floor((b-a)/86400000)+1);
+}
 function resetDailyQuestsIfNeeded(out){
   const today=localDayKey();
   const last=out.questDay||'';
@@ -1537,7 +1557,9 @@ function ensureRewardState(out){
   out.rewards=out.rewards.filter(r=>!claimed.has(String(r.id)));
   return out;
 }
-function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.goals=out.goals.map(g=>{const days=(g.days&&typeof g.days==='object'&&!Array.isArray(g.days))?g.days:{};if(g.done&&Object.keys(days).length===0&&g.month){const [yy,mm]=g.month.split('-').map(Number),count=new Date(yy,mm,0).getDate();for(let d=1;d<=count;d++)days[`${g.month}-${String(d).padStart(2,'0')}`]=true;}return Object.assign({},g,{days,_bonusAwarded:typeof g._bonusAwarded==='boolean'?g._bonusAwarded:!!g.done})});out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.rewardHistory=Array.isArray(out.rewardHistory)?out.rewardHistory:[];out.claimedRewardIds=Array.isArray(out.claimedRewardIds)?out.claimedRewardIds:[];out.achievementLog=Array.isArray(out.achievementLog)?out.achievementLog:[];out.focusSession=out.focusSession&&typeof out.focusSession==='object'?out.focusSession:null;out.focusDurationMin=Math.max(1,Math.min(180,Number(out.focusDurationMin)||25));resetDailyQuestsIfNeeded(out);ensureRewardState(out);out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;out.localMutationAt=out.localMutationAt||out.lastSync||null;out.lastSyncedMutationAt=out.lastSyncedMutationAt||out.lastSync||null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
+function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.goals=out.goals.map(g=>{const days=(g.days&&typeof g.days==='object'&&!Array.isArray(g.days))?g.days:{};if(g.done&&Object.keys(days).length===0&&g.month){const [yy,mm]=g.month.split('-').map(Number),count=new Date(yy,mm,0).getDate();for(let d=1;d<=count;d++)days[`${g.month}-${String(d).padStart(2,'0')}`]=true;}return Object.assign({},g,{days,_bonusAwarded:typeof g._bonusAwarded==='boolean'?g._bonusAwarded:!!g.done})});out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.rewardHistory=Array.isArray(out.rewardHistory)?out.rewardHistory:[];out.claimedRewardIds=Array.isArray(out.claimedRewardIds)?out.claimedRewardIds:[];out.achievementLog=Array.isArray(out.achievementLog)?out.achievementLog:[];out.focusSession=out.focusSession&&typeof out.focusSession==='object'?out.focusSession:null;out.focusDurationMin=Math.max(1,Math.min(180,Number(out.focusDurationMin)||25));
+    if(Number(out.leagueEpochVersion||0)<1){resetLeagueDayOne(out)}
+    resetDailyQuestsIfNeeded(out);ensureRewardState(out);out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;out.localMutationAt=out.localMutationAt||out.lastSync||null;out.lastSyncedMutationAt=out.lastSyncedMutationAt||out.lastSync||null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
 function renderCurrentView(){
   const active=document.querySelector('.page.active')?.id||'dashboard';
   try{ renderPage(active); renderNav(); }catch(e){ console.error('League OS live render:',e); toast('Display update failed. Your save is still intact.'); }
@@ -2006,12 +2028,17 @@ async function pullCloud(manual){
         const remoteAt=Date.parse(rows[0].updated_at)||0;
         const localMutationAt=Date.parse(state.localMutationAt||'')||0;
         const lastSyncedAt=Date.parse(state.lastSyncedMutationAt||state.lastSync||'')||0;
-        if(localMutationAt>lastSyncedAt && localMutationAt>=remoteAt){
+        const resetAt=Date.parse(state.leagueResetAt||'')||0;
+        if(resetAt>remoteAt){
+          // Day-one reset is newer than the cloud snapshot. Preserve it and publish it instead of resurrecting old dates.
+          await pushCloudCore(false,'day-one-reset');
+        }else if(localMutationAt>lastSyncedAt && localMutationAt>=remoteAt){
           // Local changes, including deletions, have not been acknowledged yet. Never replace them with an older cloud snapshot.
           await pushCloudCore(false,'conflict');
         }else if(remoteAt>Math.max(localMutationAt,lastSyncedAt)){
           const remote=rows[0].data;
           state=Object.assign({},data,remote);
+          if(Number(state.leagueEpochVersion||0)<1){resetLeagueDayOne(state)}
           state.localMutationAt=rows[0].updated_at;
           state.lastSyncedMutationAt=rows[0].updated_at;
           state.lastSync=rows[0].updated_at;
@@ -2056,9 +2083,9 @@ document.addEventListener('DOMContentLoaded',()=>{renderNav();applyTaskbar();set
 monthPicker.value=new Date().toISOString().slice(0,7);renderBadgeChecks();try{ensureAllRivalTeams();ensureRivalTeam(getActiveRival());updateAll();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('TRAINER PROFILE READY.'))}catch(e){console.error('League OS bootstrap:',e);renderNav();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('RECOVERY MODE ENABLED.'))}applyTaskbar();setOnline(navigator.onLine,'ONLINE');setTimeout(()=>{if(navigator.onLine)setOnline(true,'ONLINE');hideBootScreen()},650);
 document.addEventListener('DOMContentLoaded',()=>{const jt=document.getElementById('jTitle'),jx=document.getElementById('jText');[jt,jx].forEach(el=>el?.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();addJournal()}}));});window.addEventListener('online',()=>{setOnline(true,'ONLINE');testCloud()});window.addEventListener('offline',()=>setOnline(false,'OFFLINE'));
 setInterval(()=>{if(document.visibilityState==='visible'&&getCfg().url&&getCfg().key)pullCloud(false)},6000);
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=61').catch(()=>{}));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=64').catch(()=>{}));
 
-/* V63 Trainer Command Center: dynamic briefing, skill matrix, focus timer, league signal, and achievement feed. */
+/* V64 Trainer Command Center: dynamic briefing, skill matrix, focus timer, league signal, and achievement feed. */
 const v61SkillMap=[
   {name:'DISCIPLINE',badges:[0,4],desc:'Planning + sustainable routines',sources:'Mind + Health'},
   {name:'LEARNING',badges:[0,5],desc:'Study + professional growth',sources:'Mind + Career'},
@@ -2096,9 +2123,9 @@ function v61Briefing(){
   const lvl=Number(state.trainer?.level)||1,xp=Number(state.trainer?.xp)||0,next=lvl*lvl*100;
   const streak=v61GetStreak(),skills=v61SkillValues().slice().sort((a,b)=>a.pct-b.pct),weak=skills[0];
   const recent=state.quests.find(q=>q.done&&q.completedAt);
-  if(q)return {tag:'ACTION REQUIRED',html:`<strong>PRIORITY:</strong> ${esc(q.title)}<br><span>+${Number(q.xp)||0} XP on clear. Your best move is to finish the objective before adding more.</span><br><span class="v61-muted">STREAK ${streak} DAYS • LV ${lvl} • ${Math.max(0,next-xp)} XP TO NEXT LEVEL</span>`};
+  if(q)return {tag:'ACTION REQUIRED',html:`<strong>PRIORITY:</strong> ${esc(q.title)}<br><span>+${Number(q.xp)||0} XP on clear. Your best move is to finish the objective before adding more.</span><br><span class="v61-muted">DAY ${leagueDayNumber()} • STREAK ${streak} DAYS • LV ${lvl} • ${Math.max(0,next-xp)} XP TO NEXT LEVEL</span>`};
   if(recent)return {tag:'QUEUE CLEAR',html:`<strong>MISSION CLEAR.</strong><br><span>Your active queue is empty. Add one deliberate objective rather than letting the terminal collect dust.</span><br><span class="v61-muted">STREAK ${streak} DAYS • WEAKEST SKILL ${weak.name} LV ${weak.level}</span>`};
-  return {tag:'INITIALIZED',html:`<strong>LEAGUE ONLINE.</strong><br><span>Start with one measurable quest. The League will turn completed work into XP, badge progress and skill growth.</span><br><span class="v61-muted">LV ${lvl} • ${xp} XP • ${streak} DAY STREAK</span>`};
+  return {tag:'INITIALIZED',html:`<strong>LEAGUE ONLINE.</strong><br><span>Start with one measurable quest. The League will turn completed work into XP, badge progress and skill growth.</span><br><span class="v61-muted">DAY ${leagueDayNumber()} • LV ${lvl} • ${xp} XP • ${streak} DAY STREAK</span>`};
 }
 function v61Signal(){
   const open=(state.quests||[]).filter(q=>!q.done),skills=v61SkillValues(),weak=skills.reduce((a,b)=>a.pct<b.pct?a:b),lvl=Number(state.trainer?.level)||1,xp=Number(state.trainer?.xp)||0,next=lvl*lvl*100;
