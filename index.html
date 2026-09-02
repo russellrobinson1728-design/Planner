@@ -1128,7 +1128,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 }
 </style>
 
-<style id="v52-mobile-sidebar-pokemon">
+<style id="v53-mobile-sidebar-pokemon">
 /* V52: clean collapsible rail, responsive main canvas, and Pokémon training files */
 .app.taskbar-is-collapsed{margin-left:76px!important}
 @media(min-width:901px){
@@ -1215,8 +1215,15 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   .pokemon-evolution-track{display:grid;grid-template-columns:1fr}
   .pokemon-evolution-track>i{transform:rotate(90deg);justify-self:center}
 }
+
+/* V53: quest claim feedback and completed separation */
+.quest-open{transition:opacity .15s ease,transform .15s ease}
+.quest-open .btn.green{min-width:132px}
+.quest-done{opacity:.72;border-color:#31516b}
+.quest-completed-block{margin-top:14px;padding-top:4px;border-top:2px ridge #536985}
+.quest-completed-block .title{color:#67ef95}
 </style>
-</head>
+<style>.quest-summary{border-color:#2d8d9c;background:linear-gradient(90deg,#0c1b24,#0a111b);margin-bottom:8px}.quest-row{transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}.quest-row:hover{transform:translateX(2px);border-color:#6fe8ff;box-shadow:0 0 12px rgba(80,220,255,.12)}</style></head>
 <body>
 <div id="bootScreen" class="boot-screen" aria-live="polite"><div class="boot-terminal"><div class="boot-pokeball">◉</div><div class="boot-title">LEAGUE OS</div><div class="boot-sub">INITIALIZING TRAINER TERMINAL</div><div class="boot-bar"><i></i></div><div class="boot-status" id="bootStatus">LOADING PROFILE DATA...</div></div></div><div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
 <div class="app">
@@ -1236,7 +1243,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V52</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V53</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1433,7 +1440,7 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:52,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
+const data={version:53,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
 let state=loadLocal();
 if(!Array.isArray(state.quests)||state.quests.length===0) state.quests=structuredClone(defaultQuests);
 function rivalTeamIds(team){return (normaliseRivalTeam(team)||[]).map(x=>+x.__dexId)}
@@ -1535,9 +1542,26 @@ function renderDashCalendar(){const y=dashCalDate.getFullYear(),m=dashCalDate.ge
 function dashShiftMonth(n){dashCalDate.setMonth(dashCalDate.getMonth()+n);renderDashCalendar()}
 function renderBadgeChecks(){document.getElementById('badgeChecks').innerHTML=badges.map((b,i)=>`<label class="tag"><input class="badgeCheck" type="checkbox" value="${i}"> ${b[0]}</label>`).join('')}
 function addQuest(){let title=qTitle.value.trim(),desc=qDesc.value.trim(),xp=Math.max(1,+qXp.value||1),inds=[...document.querySelectorAll('.badgeCheck:checked')].map(x=>+x.value);if(!title||!inds.length)return toast('Give the quest a title and at least one badge.');state.quests.unshift({id:uid(),title,desc:desc||'Complete the stated objective with a clear, observable result.',xp,badges:inds,done:false,created:new Date().toISOString()});qTitle.value='';qDesc.value='';saveLocal();toast('Objective added to the League log.')}
-function completeQuest(id){let q=state.quests.find(x=>x.id===id);if(!q||q.done)return;q.done=true;state.trainer.xp+=q.xp;state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>v+(q.badges.includes(i)?q.xp:0));recalc();saveLocal();toast(`Quest complete. +${q.xp} trainer XP.`)}
+function completeQuest(id){
+  const q=state.quests.find(x=>x.id===id);
+  if(!q||q.done)return;
+  q.done=true;
+  q.completedAt=new Date().toISOString();
+  const xp=Number(q.xp)||0;
+  state.trainer.xp+=xp;
+  state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>v+(q.badges.includes(i)?xp:0));
+  recalc();
+  saveLocal();
+  toast(`Quest claimed. +${xp} trainer XP • +${xp} badge XP.`);
+}
 function deleteQuest(id){state.quests=state.quests.filter(q=>q.id!==id);saveLocal()}
-function renderQuests(){const el=document.getElementById('questList');if(!el)return;el.innerHTML=state.quests.map(q=>`<div class="row"><div><strong>${q.done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i][0]).join(', ')}</span></div><div class="actions">${!q.done?`<button class="btn green" onclick="completeQuest('${q.id}')">COMPLETE</button>`:''}<button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`).join('')||'<div class="tiny">No quests filed.</div>'}
+function renderQuests(){
+  const el=document.getElementById('questList');if(!el)return;
+  const open=state.quests.filter(q=>!q.done);
+  const completed=state.quests.filter(q=>q.done).length;
+  const head=`<div class="row quest-summary"><div><strong>ACTIVE QUESTS</strong><span class="tiny">${open.length} remaining • ${completed} claimed</span></div><strong>${state.trainer.xp} XP</strong></div>`;
+  el.innerHTML=head+(open.map(q=>`<div class="row quest-row"><div><strong>${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i][0]).join(', ')}</span></div><div class="actions"><button class="btn green" onclick="completeQuest('${q.id}')">CLAIM +${q.xp} XP</button><button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`).join('')||'<div class="tiny">All current quests claimed. New objectives can be added above.</div>');
+}
 function addGoal(){let title=goalTitle.value.trim();if(!title)return toast('Give the monthly quest a title.');let month=monthPicker.value||new Date().toISOString().slice(0,7);state.goals.unshift({id:uid(),month,title,desc:goalDesc.value.trim(),done:false,days:{},_bonusAwarded:false});goalTitle.value='';goalDesc.value='';saveLocal();renderGoals();toast('Monthly quest added. Press each day to clear it.')} 
 function plannerKey(d=new Date()){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 function plannerMonth(){const mp=document.getElementById('monthPicker');return mp?.value||plannerKey().slice(0,7)}
