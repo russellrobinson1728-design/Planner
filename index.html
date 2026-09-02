@@ -1223,7 +1223,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 .quest-completed-block{margin-top:14px;padding-top:4px;border-top:2px ridge #536985}
 .quest-completed-block .title{color:#67ef95}
 </style>
-<style>.quest-summary{border-color:#2d8d9c;background:linear-gradient(90deg,#0c1b24,#0a111b);margin-bottom:8px}.quest-row{transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}.quest-row:hover{transform:translateX(2px);border-color:#6fe8ff;box-shadow:0 0 12px rgba(80,220,255,.12)}</style>
+<style>.quest-summary{border-color:#2d8d9c;background:linear-gradient(90deg,#0c1b24,#0a111b);margin-bottom:8px}.quest-row{transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}.quest-row:hover{transform:translateX(2px);border-color:#6fe8ff;box-shadow:0 0 12px rgba(80,220,255,.12)}.quest-row.quest-completed{border-color:#2e7658;background:linear-gradient(90deg,#071a16,#071318);opacity:.92}.quest-row.quest-completed strong{text-decoration:line-through;text-decoration-thickness:2px;color:#83e5a5}.quest-state{display:inline-flex;align-items:center;gap:6px;margin-top:4px;color:#73f29b;font-family:'Press Start 2P';font-size:9px}.quest-state.pending{color:#7fd8ff}.quest-toggle{min-width:118px}.dash-objective-completed{border-color:#2e7658!important;background:#071a16!important}.dash-objective-completed strong{text-decoration:line-through;color:#83e5a5}.quest-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.quest-check{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:#83e5a5;white-space:nowrap}.quest-check input{accent-color:#35d77a}</style>
 <style id="v61-command-center">
 .v61-muted{color:#8194b5;font-size:14px}.v61-skill-detail{color:#8194b5;font-size:12px;margin-top:3px}.v61-matrix-note{margin-top:8px;padding-top:7px;border-top:1px solid rgba(120,150,190,.25);color:#68dfff;font-size:12px;line-height:1.35}.v61-ach{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid rgba(120,150,190,.18)}.v61-ach:last-child{border-bottom:0}.v61-ach strong{display:block;color:#f4f7ff;font-size:13px}.v61-ach span{display:block;color:#8fa1bd;font-size:13px;margin-top:2px}.v61-ach time{font-family:'Press Start 2P';font-size:7px;color:#68dfff;white-space:nowrap;padding-top:2px}.v59-focus-state{font-family:'Press Start 2P';font-size:9px;color:#71f19b;letter-spacing:.3px}.v61-focus-note{font-size:13px;color:#8194b5;margin-top:8px;line-height:1.25}.v61-focus-controls{display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:center;margin-top:9px}.v61-duration-row{display:flex;align-items:center;gap:6px}.v61-focus-controls label{font-family:'Press Start 2P';font-size:7px;color:#8fa1bd;white-space:nowrap}.v61-focus-minutes{width:76px;padding:7px 6px;border:2px inset #596b84;background:#071019;color:#f3f7ff;font-family:'Press Start 2P';font-size:10px;text-align:center}.v61-presets{display:flex;gap:5px;min-width:0}.v61-focus-preset{padding:6px 7px!important;font-size:9px!important;min-width:46px;flex:1}.v61-focus-launch{grid-column:1/-1;width:100%;min-height:38px}.dash-mon-clickable{position:relative;z-index:4;pointer-events:auto}.v61-focus-minutes:disabled{opacity:.55}.dash-mon-clickable{cursor:pointer!important;transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}.dash-mon-clickable:hover{transform:translateY(-2px);border-color:#78eaff!important;box-shadow:0 0 0 1px rgba(120,234,255,.2),3px 3px 0 #020305}.dash-mon-clickable:focus-visible{outline:2px solid #ffd34d;outline-offset:2px}.dash-mon-clickable small{color:#68dfff!important}
 </style>
@@ -1254,7 +1254,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 <body>
 <div id="bootScreen" class="boot-screen" aria-live="polite"><div class="boot-terminal"><div class="boot-pokeball">◉</div><div class="boot-title">LEAGUE OS</div><div class="boot-sub">INITIALIZING TRAINER TERMINAL</div><div class="boot-bar"><i></i></div><div class="boot-status" id="bootStatus">LOADING PROFILE DATA...</div></div></div><div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
 <div class="app">
-<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V64</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
+<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V65</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
 <aside class="taskbar crt" id="taskbar">
   <button class="task-toggle" id="taskToggle" aria-label="Collapse League taskbar" title="Collapse / expand taskbar" onclick="toggleTaskbar()">◀</button>
   <div class="task-brand"><span class="task-pokeball">◉</span><span class="task-brand-text">LEAGUE OS</span></div>
@@ -1270,7 +1270,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V64</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V65</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1478,7 +1478,7 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:64,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null,focusSession:null,focusDurationMin:25,achievementLog:[],leagueStartDate:null,leagueResetAt:null,leagueEpochVersion:0};
+const data={version:65,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null,focusSession:null,focusDurationMin:25,achievementLog:[],leagueStartDate:null,leagueResetAt:null,leagueEpochVersion:0};
 let state=loadLocal();
 const hasSavedLeagueState=!!localStorage.getItem('leagueOS');
 if(!hasSavedLeagueState && (!Array.isArray(state.quests)||state.quests.length===0)) state.quests=structuredClone(defaultQuests);
@@ -1616,7 +1616,7 @@ function renderDashboard(){
   if($('dashHeroJournal'))$('dashHeroJournal').textContent=state.journal.length;
   if($('dashHeroItems'))$('dashHeroItems').textContent=state.rewards.length;
   const open=state.quests.filter(q=>!q.done);
-  if($('dashObjectives'))$('dashObjectives').innerHTML=open.slice(0,5).map(q=>`<div class="row"><div><strong>${esc(q.title)}</strong><span class="tiny">${esc(q.desc)}</span></div><button class="btn green" onclick="completeQuest('${q.id}')">+${q.xp}</button></div>`).join('')||'<div class="empty-state">No active objectives filed.</div>';
+  if($('dashObjectives'))$('dashObjectives').innerHTML=state.quests.slice(0,8).map(q=>`<div class="row ${q.done?'dash-objective-completed':''}"><div><strong>${q.done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.done?'COMPLETED':'ACTIVE'} • +${q.xp} XP</span></div><button class="btn ${q.done?'':'green'}" onclick="toggleQuestCompletion('${q.id}')">${q.done?'UNSELECT':'+'+q.xp}</button></div>`).join('')||'<div class="empty-state">No objectives filed.</div>';
   if($('dashTeam'))$('dashTeam').innerHTML=playerLines.map(line=>{const n=evo(line,lvl),safe=esc(n);return `<div class="dash-mon dash-mon-clickable" role="button" tabindex="0" title="Open ${safe} training profile" data-pokemon="${safe}"><div class="dash-mon-sprite">${imgTag(n)}</div><span>${safe}</span><small>LV ${lvl} • VIEW PROFILE</small></div>`}).join('');
   bindDashboardPokemonClicks();
   if($('dashBadgeMini'))$('dashBadgeMini').innerHTML=badges.map((b,i)=>`<img src="${LOCAL_ASSETS.badges[i]}" alt="${esc(b[0])} badge" title="${esc(b[0])}" onerror="this.onerror=null;this.src='assets/badge-1.svg'">`).join('');
@@ -1637,33 +1637,51 @@ function renderDashCalendar(){const y=dashCalDate.getFullYear(),m=dashCalDate.ge
 function dashShiftMonth(n){dashCalDate.setMonth(dashCalDate.getMonth()+n);renderDashCalendar()}
 function renderBadgeChecks(){document.getElementById('badgeChecks').innerHTML=badges.map((b,i)=>`<label class="tag"><input class="badgeCheck" type="checkbox" value="${i}"> ${b[0]}</label>`).join('')}
 function addQuest(){let title=qTitle.value.trim(),desc=qDesc.value.trim(),xp=Math.max(1,+qXp.value||1),inds=[...document.querySelectorAll('.badgeCheck:checked')].map(x=>+x.value);if(!title||!inds.length)return toast('Give the quest a title and at least one badge.');state.quests.unshift({id:uid(),title,desc:desc||'Complete the stated objective with a clear, observable result.',xp,badges:inds,done:false,created:new Date().toISOString()});qTitle.value='';qDesc.value='';saveLocal();toast('Objective added to the League log.')}
-function completeQuest(id){
-  const q=state.quests.find(x=>String(x.id)===String(id));
-  if(!q||q.done)return;
-  q.done=true;
-  q.completedAt=new Date().toISOString();
-  const oldLevel=Number(state.trainer?.level)||1;
-  if(typeof v61AddAchievement==='function')v61AddAchievement('QUEST','QUEST CLEAR',`${q.title} • +${Number(q.xp)||0} XP`);
-  const xp=Math.max(0,Number(q.xp)||0);
-  state.trainer.xp+=xp;
-  if(!Array.isArray(state.trainer.badgeXp))state.trainer.badgeXp=Array(8).fill(0);
-  state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>Number(v||0)+(Array.isArray(q.badges)&&q.badges.includes(i)?xp:0));
-  recalc();
-  if(state.trainer.level>oldLevel&&typeof v61AddAchievement==='function')v61AddAchievement('LEVEL','TRAINER LEVEL UP',`LV ${state.trainer.level} reached`);
-  state.questDay=localDayKey();
-  saveLocal();
-  // Re-render explicitly after persistence so the claimed item cannot remain in a stale DOM node.
-  renderQuests();
-  renderDashboard();
-  toast(`Quest claimed. +${xp} trainer XP • +${xp} badge XP.`);
+function removeQuestAchievement(q){
+  if(!Array.isArray(state.achievementLog))return;
+  const title=String(q?.title||'');
+  state.achievementLog=state.achievementLog.filter(e=>!(e.type==='QUEST'&&e.title==='QUEST CLEAR'&&String(e.detail||'').startsWith(title+' •')));
 }
-function deleteQuest(id){state.quests=state.quests.filter(q=>q.id!==id);saveLocal()}
+function toggleQuestCompletion(id){
+  const q=state.quests.find(x=>String(x.id)===String(id));
+  if(!q)return;
+  const xp=Math.max(0,Number(q.xp)||0);
+  if(!q.done){
+    q.done=true;
+    q.completedAt=new Date().toISOString();
+    const oldLevel=Number(state.trainer?.level)||1;
+    if(typeof v61AddAchievement==='function')v61AddAchievement('QUEST','QUEST CLEAR',`${q.title} • +${xp} XP`);
+    state.trainer.xp+=xp;
+    if(!Array.isArray(state.trainer.badgeXp))state.trainer.badgeXp=Array(8).fill(0);
+    state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>Number(v||0)+(Array.isArray(q.badges)&&q.badges.includes(i)?xp:0));
+    recalc();
+    if(state.trainer.level>oldLevel&&typeof v61AddAchievement==='function')v61AddAchievement('LEVEL','TRAINER LEVEL UP',`LV ${state.trainer.level} reached`);
+    state.questDay=localDayKey();
+    saveLocal();
+    renderQuests();renderDashboard();
+    toast(`Quest completed. +${xp} trainer XP • +${xp} badge XP.`);
+  }else{
+    q.done=false;
+    q.completedAt=null;
+    state.trainer.xp=Math.max(0,(Number(state.trainer.xp)||0)-xp);
+    if(!Array.isArray(state.trainer.badgeXp))state.trainer.badgeXp=Array(8).fill(0);
+    state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>Math.max(0,Number(v||0)-(Array.isArray(q.badges)&&q.badges.includes(i)?xp:0)));
+    removeQuestAchievement(q);
+    recalc();
+    saveLocal();
+    renderQuests();renderDashboard();
+    toast(`Quest unselected. −${xp} trainer XP • −${xp} badge XP.`);
+  }
+}
+function completeQuest(id){toggleQuestCompletion(id)}
+function deleteQuest(id){state.quests=state.quests.filter(q=>String(q.id)!==String(id));saveLocal();renderQuests();renderDashboard()}
 function renderQuests(){
   const el=document.getElementById('questList');if(!el)return;
-  const open=state.quests.filter(q=>!q.done);
+  const open=state.quests.filter(q=>!q.done).length;
   const completed=state.quests.filter(q=>q.done).length;
-  const head=`<div class="row quest-summary"><div><strong>ACTIVE QUESTS</strong><span class="tiny">${open.length} remaining • ${completed} claimed</span></div><strong>${state.trainer.xp} XP</strong></div>`;
-  el.innerHTML=head+(open.map(q=>`<div class="row quest-row"><div><strong>${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i][0]).join(', ')}</span></div><div class="actions"><button class="btn green" onclick="completeQuest('${q.id}')">CLAIM +${q.xp} XP</button><button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`).join('')||'<div class="tiny">All current quests claimed. New objectives can be added above.</div>');
+  const head=`<div class="row quest-summary"><div><strong>QUEST LOG</strong><span class="tiny">${open} active • ${completed} completed • completed quests stay filed until you unselect them</span></div><strong>${state.trainer.xp} XP</strong></div>`;
+  const rows=state.quests.map(q=>{const done=!!q.done;return `<div class="row quest-row${done?' quest-completed':''}"><div><strong>${done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i]?.[0]||'BADGE').join(', ')}</span><span class="quest-state ${done?'':'pending'}">${done?'COMPLETED • XP EARNED':'ACTIVE • XP AVAILABLE'}</span></div><div class="quest-actions"><button class="btn ${done?'':'green'} quest-toggle" onclick="toggleQuestCompletion('${q.id}')">${done?'UNSELECT':'COMPLETE'}${done?'':' +'+q.xp+' XP'}</button><button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`}).join('');
+  el.innerHTML=head+(rows||'<div class="tiny">No quests filed. Add an objective above.</div>');
 }
 function addGoal(){let title=goalTitle.value.trim();if(!title)return toast('Give the monthly quest a title.');let month=monthPicker.value||new Date().toISOString().slice(0,7);state.goals.unshift({id:uid(),month,title,desc:goalDesc.value.trim(),done:false,days:{},_bonusAwarded:false});goalTitle.value='';goalDesc.value='';saveLocal();renderGoals();toast('Monthly quest added. Press each day to clear it.')} 
 function plannerKey(d=new Date()){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
@@ -2083,7 +2101,7 @@ document.addEventListener('DOMContentLoaded',()=>{renderNav();applyTaskbar();set
 monthPicker.value=new Date().toISOString().slice(0,7);renderBadgeChecks();try{ensureAllRivalTeams();ensureRivalTeam(getActiveRival());updateAll();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('TRAINER PROFILE READY.'))}catch(e){console.error('League OS bootstrap:',e);renderNav();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('RECOVERY MODE ENABLED.'))}applyTaskbar();setOnline(navigator.onLine,'ONLINE');setTimeout(()=>{if(navigator.onLine)setOnline(true,'ONLINE');hideBootScreen()},650);
 document.addEventListener('DOMContentLoaded',()=>{const jt=document.getElementById('jTitle'),jx=document.getElementById('jText');[jt,jx].forEach(el=>el?.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();addJournal()}}));});window.addEventListener('online',()=>{setOnline(true,'ONLINE');testCloud()});window.addEventListener('offline',()=>setOnline(false,'OFFLINE'));
 setInterval(()=>{if(document.visibilityState==='visible'&&getCfg().url&&getCfg().key)pullCloud(false)},6000);
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=64').catch(()=>{}));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=65').catch(()=>{}));
 
 /* V64 Trainer Command Center: dynamic briefing, skill matrix, focus timer, league signal, and achievement feed. */
 const v61SkillMap=[
