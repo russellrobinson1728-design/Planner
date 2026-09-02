@@ -1224,6 +1224,9 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 .quest-completed-block .title{color:#67ef95}
 </style>
 <style>.quest-summary{border-color:#2d8d9c;background:linear-gradient(90deg,#0c1b24,#0a111b);margin-bottom:8px}.quest-row{transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}.quest-row:hover{transform:translateX(2px);border-color:#6fe8ff;box-shadow:0 0 12px rgba(80,220,255,.12)}</style>
+<style id="v61-command-center">
+.v61-muted{color:#8194b5;font-size:14px}.v61-skill-detail{color:#8194b5;font-size:12px;margin-top:3px}.v61-matrix-note{margin-top:8px;padding-top:7px;border-top:1px solid rgba(120,150,190,.25);color:#68dfff;font-size:12px;line-height:1.35}.v61-ach{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid rgba(120,150,190,.18)}.v61-ach:last-child{border-bottom:0}.v61-ach strong{display:block;color:#f4f7ff;font-size:13px}.v61-ach span{display:block;color:#8fa1bd;font-size:13px;margin-top:2px}.v61-ach time{font-family:'Press Start 2P';font-size:7px;color:#68dfff;white-space:nowrap;padding-top:2px}.v59-focus-state{font-family:'Press Start 2P';font-size:9px;color:#71f19b;letter-spacing:.3px}.v61-focus-note{font-size:13px;color:#8194b5;margin-top:6px}
+</style>
 <style id="v60-command-center">
 .v60-command-center{grid-column:1/-1!important;width:100%;min-width:0;position:relative;z-index:3;margin:0!important}
 .v60-command-center .v59-command-grid{width:100%;margin:0!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -1250,7 +1253,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 <body>
 <div id="bootScreen" class="boot-screen" aria-live="polite"><div class="boot-terminal"><div class="boot-pokeball">◉</div><div class="boot-title">LEAGUE OS</div><div class="boot-sub">INITIALIZING TRAINER TERMINAL</div><div class="boot-bar"><i></i></div><div class="boot-status" id="bootStatus">LOADING PROFILE DATA...</div></div></div><div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
 <div class="app">
-<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V60</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
+<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V61</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
 <aside class="taskbar crt" id="taskbar">
   <button class="task-toggle" id="taskToggle" aria-label="Collapse League taskbar" title="Collapse / expand taskbar" onclick="toggleTaskbar()">◀</button>
   <div class="task-brand"><span class="task-pokeball">◉</span><span class="task-brand-text">LEAGUE OS</span></div>
@@ -1266,7 +1269,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V60</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V61</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1332,9 +1335,9 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
       <div class="v59-panel"><div class="v59-head"><span>TRAINER BRIEFING</span><small id="v59BriefTag">TODAY</small></div><div class="v59-body"><div class="v59-brief" id="v59Brief">Initializing League briefing...</div></div></div>
       <div class="v59-panel"><div class="v59-head"><span>SKILL MATRIX</span><small>UPSKILL</small></div><div class="v59-body" id="v59Skills"></div></div>
       <div class="v59-panel"><div class="v59-head"><span>LEAGUE DIAGNOSTICS</span><small>SYS</small></div><div class="v59-body"><div class="v59-diagnostics"><div class="v59-diag"><span>LOCAL SAVE</span><b id="v59Local">READY</b></div><div class="v59-diag"><span>NETWORK</span><b id="v59Network">CHECKING</b></div><div class="v59-diag"><span>CLOUD</span><b id="v59Cloud">NOT CONFIGURED</b></div><div class="v59-diag"><span>TRAINER LEVEL</span><b id="v59DiagLevel">LV 1</b></div><button class="btn green v59-sync-test" type="button" onclick="v59SyncTest()">RUN SYNC TEST</button></div></div></div>
-      <div class="v59-panel"><div class="v59-head"><span>FOCUS PROTOCOL</span><small>25 MIN</small></div><div class="v59-body"><div class="v59-focus"><div><div class="v59-focus-title">NEXT TRAINING TARGET</div><div class="v59-focus-task" id="v59FocusTask">No active quest.</div><div class="v59-focus-xp" id="v59FocusXp">+0 XP</div></div><button class="btn" type="button" onclick="v59StartFocus()">START FOCUS</button></div></div></div>
+      <div class="v59-panel"><div class="v59-head"><span>FOCUS PROTOCOL</span><small>25 MIN • QUEST</small></div><div class="v59-body"><div class="v59-focus"><div><div class="v59-focus-title">NEXT TRAINING TARGET</div><div class="v59-focus-task" id="v59FocusTask">No active quest.</div><div class="v59-focus-xp" id="v59FocusXp">+0 XP</div><div class="v61-focus-note">25 minutes on the active quest. XP is awarded only when the session is completed.</div></div><button class="btn" id="v61FocusLaunch" type="button" onclick="v61StartFocus()">START FOCUS</button></div></div></div>
       <div class="v59-panel"><div class="v59-head"><span>LEAGUE SIGNAL</span><small id="v59Signal">READY</small></div><div class="v59-body"><div class="v59-brief" id="v59SignalText">Your League is waiting.</div></div></div>
-      <div class="v59-panel"><div class="v59-head"><span>ACHIEVEMENT FEED</span><small>LOG</small></div><div class="v59-body"><div class="v59-brief" id="v59Achievement">No milestones recorded yet.</div></div></div>
+      <div class="v59-panel"><div class="v59-head"><span>ACHIEVEMENT FEED</span><small>LIVE LOG</small></div><div class="v59-body"><div class="v59-brief" id="v59Achievement">No milestones recorded yet.</div></div></div>
     </div>
   </section>
 
@@ -1474,7 +1477,7 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:57,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null};
+const data={version:61,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null,focusSession:null,achievementLog:[]};
 let state=loadLocal();
 const hasSavedLeagueState=!!localStorage.getItem('leagueOS');
 if(!hasSavedLeagueState && (!Array.isArray(state.quests)||state.quests.length===0)) state.quests=structuredClone(defaultQuests);
@@ -1533,7 +1536,7 @@ function ensureRewardState(out){
   out.rewards=out.rewards.filter(r=>!claimed.has(String(r.id)));
   return out;
 }
-function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.goals=out.goals.map(g=>{const days=(g.days&&typeof g.days==='object'&&!Array.isArray(g.days))?g.days:{};if(g.done&&Object.keys(days).length===0&&g.month){const [yy,mm]=g.month.split('-').map(Number),count=new Date(yy,mm,0).getDate();for(let d=1;d<=count;d++)days[`${g.month}-${String(d).padStart(2,'0')}`]=true;}return Object.assign({},g,{days,_bonusAwarded:typeof g._bonusAwarded==='boolean'?g._bonusAwarded:!!g.done})});out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.rewardHistory=Array.isArray(out.rewardHistory)?out.rewardHistory:[];out.claimedRewardIds=Array.isArray(out.claimedRewardIds)?out.claimedRewardIds:[];resetDailyQuestsIfNeeded(out);ensureRewardState(out);out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;out.localMutationAt=out.localMutationAt||out.lastSync||null;out.lastSyncedMutationAt=out.lastSyncedMutationAt||out.lastSync||null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
+function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.goals=out.goals.map(g=>{const days=(g.days&&typeof g.days==='object'&&!Array.isArray(g.days))?g.days:{};if(g.done&&Object.keys(days).length===0&&g.month){const [yy,mm]=g.month.split('-').map(Number),count=new Date(yy,mm,0).getDate();for(let d=1;d<=count;d++)days[`${g.month}-${String(d).padStart(2,'0')}`]=true;}return Object.assign({},g,{days,_bonusAwarded:typeof g._bonusAwarded==='boolean'?g._bonusAwarded:!!g.done})});out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.rewardHistory=Array.isArray(out.rewardHistory)?out.rewardHistory:[];out.claimedRewardIds=Array.isArray(out.claimedRewardIds)?out.claimedRewardIds:[];out.achievementLog=Array.isArray(out.achievementLog)?out.achievementLog:[];out.focusSession=out.focusSession&&typeof out.focusSession==='object'?out.focusSession:null;resetDailyQuestsIfNeeded(out);ensureRewardState(out);out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;out.localMutationAt=out.localMutationAt||out.lastSync||null;out.lastSyncedMutationAt=out.lastSyncedMutationAt||out.lastSync||null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
 function renderCurrentView(){
   const active=document.querySelector('.page.active')?.id||'dashboard';
   try{ renderPage(active); renderNav(); }catch(e){ console.error('League OS live render:',e); toast('Display update failed. Your save is still intact.'); }
@@ -1605,11 +1608,14 @@ function completeQuest(id){
   if(!q||q.done)return;
   q.done=true;
   q.completedAt=new Date().toISOString();
+  const oldLevel=Number(state.trainer?.level)||1;
+  if(typeof v61AddAchievement==='function')v61AddAchievement('QUEST','QUEST CLEAR',`${q.title} • +${Number(q.xp)||0} XP`);
   const xp=Math.max(0,Number(q.xp)||0);
   state.trainer.xp+=xp;
   if(!Array.isArray(state.trainer.badgeXp))state.trainer.badgeXp=Array(8).fill(0);
   state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>Number(v||0)+(Array.isArray(q.badges)&&q.badges.includes(i)?xp:0));
   recalc();
+  if(state.trainer.level>oldLevel&&typeof v61AddAchievement==='function')v61AddAchievement('LEVEL','TRAINER LEVEL UP',`LV ${state.trainer.level} reached`);
   state.questDay=localDayKey();
   saveLocal();
   // Re-render explicitly after persistence so the claimed item cannot remain in a stale DOM node.
@@ -1633,15 +1639,15 @@ function monthDayCount(m){const [y,mo]=m.split('-').map(Number);return new Date(
 function ensureGoalDays(g){if(!g.days||typeof g.days!=='object'||Array.isArray(g.days))g.days={};if(typeof g._bonusAwarded!=='boolean')g._bonusAwarded=!!g.done;return g.days}
 function goalDayKey(m,d){return `${m}-${String(d).padStart(2,'0')}`}
 function goalCompletedDays(g,m){const days=ensureGoalDays(g);const total=monthDayCount(m);let n=0;for(let d=1;d<=total;d++)if(days[goalDayKey(m,d)])n++;return n}
-function toggleGoalDay(id,m,d){const g=state.goals.find(x=>x.id===id);if(!g)return;ensureGoalDays(g);const key=goalDayKey(m,d);g.days[key]=!g.days[key];const total=monthDayCount(m),completed=goalCompletedDays(g,m);const wasDone=!!g.done;g.done=completed===total;if(g.done&&!g._bonusAwarded&&!wasDone){state.trainer.xp+=40;g._bonusAwarded=true;toast('Monthly quest cleared. +40 XP.')}else if(!g.done&&g._bonusAwarded&&wasDone){state.trainer.xp=Math.max(0,state.trainer.xp-40);g._bonusAwarded=false;toast('Monthly quest reopened.')}else{toast(g.days[key]?'Day cleared.':'Day reopened.')}saveLocal();renderGoals()}
+function toggleGoalDay(id,m,d){const g=state.goals.find(x=>x.id===id);if(!g)return;ensureGoalDays(g);const key=goalDayKey(m,d);g.days[key]=!g.days[key];const total=monthDayCount(m),completed=goalCompletedDays(g,m);const wasDone=!!g.done;g.done=completed===total;if(g.done&&!g._bonusAwarded&&!wasDone){state.trainer.xp+=40;g._bonusAwarded=true;if(typeof v61AddAchievement==='function')v61AddAchievement('MONTHLY','MONTHLY QUEST CLEAR',g.title);toast('Monthly quest cleared. +40 XP.')}else if(!g.done&&g._bonusAwarded&&wasDone){state.trainer.xp=Math.max(0,state.trainer.xp-40);g._bonusAwarded=false;toast('Monthly quest reopened.')}else{toast(g.days[key]?'Day cleared.':'Day reopened.')}saveLocal();renderGoals()}
 function renderGoals(){const mp=document.getElementById('monthPicker'),goalEl=document.getElementById('goalList');if(!goalEl)return;const m=(mp?.value)||plannerKey().slice(0,7);if(mp&&!mp.value)mp.value=m;const goals=state.goals.filter(g=>g.month===m),doneGoals=goals.filter(g=>g.done).length;goals.forEach(g=>{ensureGoalDays(g);});const gs=document.getElementById('monthlyGoalSummary');if(gs)gs.textContent=`${doneGoals} / ${goals.length}`;const monthDaily=state.daily.filter(x=>x.date?.slice(0,7)===m),monthDailyDone=monthDaily.filter(x=>x.done).length;const snap=document.getElementById('monthlyDailySnapshot');if(snap)snap.textContent=`DAILY COMPLETIONS • ${monthDailyDone} / ${monthDaily.length}`;const [yy,mm]=m.split('-').map(Number),days=monthDayCount(m),today=plannerKey();goalEl.innerHTML=goals.map(g=>{const completed=goalCompletedDays(g,m),pct=days?Math.round(completed/days*100):0;let buttons='';for(let d=1;d<=days;d++){const key=goalDayKey(m,d),done=!!g.days[key],todayCls=key===today?' today':'';buttons+=`<button type="button" class="monthly-day-btn${done?' done':''}${todayCls}" aria-label="${esc(g.title)} day ${d}" title="${key}${done?' • completed':''}" onclick="toggleGoalDay('${g.id}','${m}',${d})">${d}</button>`}return `<div class="monthly-goal-card${g.done?' completed':''}"><div class="monthly-goal-top"><div class="monthly-goal-title"><strong>${g.done?'✓ ':''}${esc(g.title)}</strong><span class="tiny">${esc(g.desc||'Press each day when the task is complete.')}</span></div><div class="monthly-goal-actions"><span class="monthly-goal-progress">${completed}/${days} • ${pct}%</span><button class="btn danger" onclick="deleteGoal('${g.id}')">X</button></div></div><div class="monthly-day-grid">${buttons}</div>${g.done?'<div class="monthly-goal-complete" style="margin-top:6px">MONTHLY QUEST COMPLETE</div>':''}</div>`}).join('')||'<div class="tiny">No monthly quests for this month. Add as many as you need.</div>';renderMonthlyCalendar(m);renderDailyPlanner(m)}
 function renderMonthlyCalendar(m){const el=document.getElementById('monthlyCalendar');if(!el)return;const [y,mo]=m.split('-').map(Number),days=new Date(y,mo,0).getDate(),first=new Date(y,mo-1,1).getDay(),offset=(first+6)%7,today=plannerKey();let h=['MON','TUE','WED','THU','FRI','SAT','SUN'].map(x=>`<div class="mc-head">${x}</div>`).join('');for(let i=0;i<offset;i++)h+='<div class="mc-empty"></div>';for(let d=1;d<=days;d++){const key=`${m}-${String(d).padStart(2,'0')}`,items=state.daily.filter(x=>x.date===key),completed=items.filter(x=>x.done).length,goalsDone=state.goals.filter(x=>x.month===m&&x.done).length;let cls=key===today?' today':'';if(items.length&&completed===items.length)cls+=' all-done';else if(completed)cls+=' partial';h+=`<button class="mc-day${cls}" onclick="selectPlannerDay('${key}')"><span>${d}</span><strong>${completed}/${items.length}</strong><small>${goalsDone}G</small></button>`}el.innerHTML=h}
 function selectPlannerDay(key){const d=document.getElementById('dailyDate');if(d)d.value=key;renderDailyPlanner(plannerMonth())}
 function addDailyObjective(){const date=document.getElementById('dailyDate')?.value||plannerKey(),title=document.getElementById('dailyTitle')?.value.trim(),xp=Math.max(1,Number(document.getElementById('dailyXp')?.value||20));if(!title)return toast('Give the daily objective a title.');state.daily.push({id:uid(),date,title,xp,done:false});document.getElementById('dailyTitle').value='';saveLocal();toast('Daily objective added.')}
 function renderDailyPlanner(m){const el=document.getElementById('dailyList');if(!el)return;const dateEl=document.getElementById('dailyDate');if(dateEl&&!dateEl.value)dateEl.value=plannerKey();const items=state.daily.filter(x=>x.date?.slice(0,7)===m).sort((a,b)=>a.date.localeCompare(b.date));const done=items.filter(x=>x.done).length;const ds=document.getElementById('dailySummary');if(ds)ds.textContent=`${done} / ${items.length}`;el.innerHTML=items.map(x=>`<div class="daily-row"><div><b>${esc(x.title)}</b><span>${esc(x.date)} • +${x.xp} XP</span></div><label><input class="check" type="checkbox" ${x.done?'checked':''} onchange="toggleDaily('${x.id}',this.checked)"> DONE</label><button class="btn danger" onclick="deleteDaily('${x.id}')">X</button></div>`).join('')||'<div class="tiny">No daily objectives filed for this month.</div>'}
-function toggleDaily(id,v){const d=state.daily.find(x=>x.id===id);if(!d)return;if(v&&!d.done)state.trainer.xp+=Number(d.xp)||0;if(!v&&d.done)state.trainer.xp=Math.max(0,state.trainer.xp-(Number(d.xp)||0));d.done=v;saveLocal();toast(v?`Daily clear. +${d.xp} XP.`:'Daily objective reopened.')}
+function toggleDaily(id,v){const d=state.daily.find(x=>x.id===id);if(!d)return;if(v&&!d.done){state.trainer.xp+=Number(d.xp)||0;if(typeof v61AddAchievement==='function')v61AddAchievement('DAILY','DAILY OBJECTIVE CLEAR',`${d.title} • +${Number(d.xp)||0} XP`)}if(!v&&d.done)state.trainer.xp=Math.max(0,state.trainer.xp-(Number(d.xp)||0));d.done=v;saveLocal();toast(v?`Daily clear. +${d.xp} XP.`:'Daily objective reopened.')}
 function deleteDaily(id){state.daily=state.daily.filter(x=>x.id!==id);saveLocal()}
-function toggleGoal(id,v){let g=state.goals.find(x=>x.id===id);if(!g)return;const m=g.month||plannerMonth();ensureGoalDays(g);const days=monthDayCount(m);for(let d=1;d<=days;d++)g.days[goalDayKey(m,d)]=!!v;g.done=!!v;g._bonusAwarded=!!v;if(v){state.trainer.xp+=40;toast('Monthly quest cleared. +40 XP.')}else{state.trainer.xp=Math.max(0,state.trainer.xp-40);toast('Monthly quest reopened.')}saveLocal();renderGoals()}function deleteGoal(id){state.goals=state.goals.filter(g=>g.id!==id);saveLocal();renderGoals()}
+function toggleGoal(id,v){let g=state.goals.find(x=>x.id===id);if(!g)return;const m=g.month||plannerMonth();ensureGoalDays(g);const days=monthDayCount(m);for(let d=1;d<=days;d++)g.days[goalDayKey(m,d)]=!!v;g.done=!!v;g._bonusAwarded=!!v;if(v){state.trainer.xp+=40;if(typeof v61AddAchievement==='function')v61AddAchievement('MONTHLY','MONTHLY QUEST CLEAR',g.title);toast('Monthly quest cleared. +40 XP.')}else{state.trainer.xp=Math.max(0,state.trainer.xp-40);toast('Monthly quest reopened.')}saveLocal();renderGoals()}function deleteGoal(id){state.goals=state.goals.filter(g=>g.id!==id);saveLocal();renderGoals()}
 
 const pokemonTrainingProfiles={
   Gible:{role:'POWER + COURAGE',quirk:'Starts small, thinks big. Gible rewards deliberate effort and stubborn follow-through.',stats:['Focus','Discipline','Courage','Consistency'],base:[62,48,70,58],growth:['Mind','Adventure','Resilience'],advice:'Use focused study blocks, uncomfortable-but-useful tasks, and a short daily reset when plans go sideways.'},
@@ -1744,7 +1750,7 @@ const hook=hooks[(Math.floor(h/17))%hooks.length];
 return `<b>${a[0]} SPECIES</b> — ${hook} ${a[1]} <em>${esc(n)}</em> is most dangerous when underestimated.`;}
 function renderPokedex(){const el=document.getElementById('pokedexGrid');if(!el)return;const q=(document.getElementById('dexSearch')?.value||'').trim().toLowerCase();const names=loadDexNames();let html='';for(let i=1;i<=NATIONAL_DEX_SIZE;i++){const n=names[i]||`Pokémon #${String(i).padStart(3,'0')}`;if(q && !(n.toLowerCase().includes(q)||String(i).includes(q)))continue;html+=`<article class="dex-card"><span class="tiny">#${String(i).padStart(3,'0')}</span>${rivalImgTag(i,n)}<strong>${esc(n)}</strong><span class="tiny">NATIONAL DEX</span><p class="dex-entry">${dexFlavor(i,n)}</p></article>`}el.innerHTML=html||'<div class="tiny">No Pokémon matched that search.</div>';if(!q && Object.keys(names).length<Math.min(NATIONAL_DEX_SIZE,30))hydratePokedexNames()}async function hydratePokedexNames(){const names=loadDexNames();const ids=[];for(let i=1;i<=NATIONAL_DEX_SIZE&&ids.length<30;i++)if(!names[i])ids.push(i);if(!ids.length)return;try{const results=await Promise.all(ids.map(async id=>{const r=await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);if(!r.ok)throw Error('dex');const d=await r.json();return [id,d.name.replace(/(^|-)([a-z])/g,(_,a,b)=>a+b.toUpperCase())]}));results.forEach(([id,n])=>names[id]=n);saveDexNames(names);renderPokedex()}catch{}}
 function renderBadges(){const bg=document.getElementById('badgeGrid');if(!bg)return;bg.innerHTML=badges.map((b,i)=>{let xp=state.trainer.badgeXp[i]||0,lv=Math.max(1,Math.floor(Math.sqrt(xp/100))+1),prev=(lv-1)*(lv-1)*100,next=lv*lv*100,pct=next>prev?Math.max(0,Math.min(100,(xp-prev)/(next-prev)*100)):0;return `<div class="badge"><img src="./assets/badge-${i+1}.svg" alt="${esc(b[0])} badge"><strong>${esc(b[0])}</strong><div class="tiny">${esc(b[1])}</div><div class="bar"><i style="width:${pct}%"></i></div><div class="tiny">LV ${lv} • ${xp} XP</div><div class="tiny">${Math.max(0,next-xp)} XP to LV ${lv+1}</div></div>`}).join('')}
-function addJournal(){const titleEl=document.getElementById('jTitle'),textEl=document.getElementById('jText');const title=String(titleEl?.value||'').trim(),text=String(textEl?.value||'').trim();if(!title){toast('Give the journal entry a title.');titleEl?.focus();return false}if(!text){toast('Write something in the journal entry first.');textEl?.focus();return false}const entry={id:uid(),title,text,date:new Date().toISOString()};if(!Array.isArray(state.journal))state.journal=[];state.journal.unshift(entry);if(titleEl)titleEl.value='';if(textEl)textEl.value='';saveLocal();toast('Journal entry filed.');return false}function renderJournal(){const el=document.getElementById('journalList');if(!el)return;el.innerHTML=state.journal.map(j=>`<div class="row"><div><strong>${esc(j.title)}</strong><span class="tiny">${new Date(j.date).toLocaleString()}</span><p style="margin:4px 0;white-space:pre-wrap">${esc(j.text)}</p></div><button class="btn danger" onclick="deleteJournal('${j.id}')">DELETE</button></div>`).join('')||'<div class="tiny">Your journal is empty.</div>'}function deleteJournal(id){state.journal=state.journal.filter(j=>j.id!==id);saveLocal();toast('Journal entry deleted.')}
+function addJournal(){const titleEl=document.getElementById('jTitle'),textEl=document.getElementById('jText');const title=String(titleEl?.value||'').trim(),text=String(textEl?.value||'').trim();if(!title){toast('Give the journal entry a title.');titleEl?.focus();return false}if(!text){toast('Write something in the journal entry first.');textEl?.focus();return false}const entry={id:uid(),title,text,date:new Date().toISOString()};if(!Array.isArray(state.journal))state.journal=[];state.journal.unshift(entry);if(typeof v61AddAchievement==='function')v61AddAchievement('JOURNAL','JOURNAL FILED',title);if(titleEl)titleEl.value='';if(textEl)textEl.value='';saveLocal();toast('Journal entry filed.');return false}function renderJournal(){const el=document.getElementById('journalList');if(!el)return;el.innerHTML=state.journal.map(j=>`<div class="row"><div><strong>${esc(j.title)}</strong><span class="tiny">${new Date(j.date).toLocaleString()}</span><p style="margin:4px 0;white-space:pre-wrap">${esc(j.text)}</p></div><button class="btn danger" onclick="deleteJournal('${j.id}')">DELETE</button></div>`).join('')||'<div class="tiny">Your journal is empty.</div>'}function deleteJournal(id){state.journal=state.journal.filter(j=>j.id!==id);saveLocal();toast('Journal entry deleted.')}
 function addItem(){let n=itemName.value.trim();if(!n)return toast('Name the item.');state.inventory.unshift({id:uid(),name:n,qty:Math.max(1,+itemQty.value||1),desc:itemDesc.value.trim()});itemName.value='';itemDesc.value='';saveLocal()}
 function renderInventory(){inventoryList.innerHTML=state.inventory.map(x=>`<div class="row"><div><strong>${esc(x.name)} ×${x.qty}</strong><span class="tiny">${esc(x.desc||'League item')}</span></div><div class="actions"><button class="btn" onclick="changeItem('${x.id}',1)">+</button><button class="btn" onclick="changeItem('${x.id}',-1)">−</button><button class="btn danger" onclick="deleteItem('${x.id}')">X</button></div></div>`).join('')||'<div class="tiny">Item box empty.</div>'}function changeItem(id,d){let x=state.inventory.find(i=>i.id===id);if(x){x.qty+=d;if(x.qty<=0)state.inventory=state.inventory.filter(i=>i.id!==id);saveLocal()}}function deleteItem(id){state.inventory=state.inventory.filter(i=>i.id!==id);saveLocal()}
 function addReward(){let n=rewardName.value.trim(),cost=Math.max(1,+rewardCost.value||1);if(!n)return toast('Name the reward.');if(!Array.isArray(state.claimedRewardIds))state.claimedRewardIds=[];state.rewards.push({id:uid(),name:n,cost,desc:rewardDesc.value.trim()});rewardName.value='';rewardDesc.value='';saveLocal()}
@@ -1778,7 +1784,7 @@ function redeem(id){
     if(!Array.isArray(state.rewardHistory))state.rewardHistory=[];
     if(!Array.isArray(state.claimedRewardIds))state.claimedRewardIds=[];
     const now=new Date().toISOString();
-    state.rewardHistory.unshift({id:uid(),rewardId:r.id,name:r.name,cost,desc:r.desc||'',redeemedAt:now});
+    state.rewardHistory.unshift({id:uid(),rewardId:r.id,name:r.name,cost,desc:r.desc||'',redeemedAt:now});if(typeof v61AddAchievement==='function')v61AddAchievement('REWARD','REWARD REDEEMED',`${r.name} • −${cost} XP`);
     state.claimedRewardIds.push(String(r.id));
     state.rewards.splice(idx,1);
     ensureRewardState(state);
@@ -2038,40 +2044,129 @@ document.addEventListener('DOMContentLoaded',()=>{renderNav();applyTaskbar();set
 monthPicker.value=new Date().toISOString().slice(0,7);renderBadgeChecks();try{ensureAllRivalTeams();ensureRivalTeam(getActiveRival());updateAll();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('TRAINER PROFILE READY.'))}catch(e){console.error('League OS bootstrap:',e);renderNav();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('RECOVERY MODE ENABLED.'))}applyTaskbar();setOnline(navigator.onLine,'ONLINE');setTimeout(()=>{if(navigator.onLine)setOnline(true,'ONLINE');hideBootScreen()},650);
 document.addEventListener('DOMContentLoaded',()=>{const jt=document.getElementById('jTitle'),jx=document.getElementById('jText');[jt,jx].forEach(el=>el?.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();addJournal()}}));});window.addEventListener('online',()=>{setOnline(true,'ONLINE');testCloud()});window.addEventListener('offline',()=>setOnline(false,'OFFLINE'));
 setInterval(()=>{if(document.visibilityState==='visible'&&getCfg().url&&getCfg().key)pullCloud(false)},6000);
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=60').catch(()=>{}));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=61').catch(()=>{}));
 
-/* V59 additive Trainer Command Center. Existing systems remain untouched. */
-function v59EnsurePanel(){
-  const dash=document.getElementById('dashboard');
-  if(!dash)return;
-  if(document.getElementById('v59FocusMode'))return;
-  const modal=document.createElement('div');modal.id='v59FocusMode';modal.className='v59-focus-mode';modal.innerHTML=`<div class="v59-focus-card"><div class="kicker">LEAGUE OS // FOCUS PROTOCOL</div><h2 id="v59FocusModalTitle">TRAINING SESSION</h2><p id="v59FocusModalTask">Complete your selected training objective.</p><div class="v59-focus-timer" id="v59FocusTimer">25:00</div><div class="v59-focus-actions"><button class="btn green" onclick="v59FinishFocus()">COMPLETE SESSION</button><button class="btn danger" onclick="v59CloseFocus()">ABORT</button></div></div></div>`;document.body.appendChild(modal);
+/* V61 Trainer Command Center: dynamic briefing, skill matrix, focus timer, league signal, and achievement feed. */
+const v61SkillMap=[
+  {name:'DISCIPLINE',badges:[0,4],desc:'Planning + sustainable routines',sources:'Mind + Health'},
+  {name:'LEARNING',badges:[0,5],desc:'Study + professional growth',sources:'Mind + Career'},
+  {name:'CREATIVITY',badges:[2,6],desc:'Making + experimentation',sources:'Craft + Adventure'},
+  {name:'CONSISTENCY',badges:[1,3,7],desc:'Movement + relationships + resilience',sources:'Body + Social + Resilience'}
+];
+let v61FocusTick=null;
+function v61Now(){return Date.now()}
+function v61AddAchievement(type,title,detail){
+  if(!Array.isArray(state.achievementLog))state.achievementLog=[];
+  state.achievementLog.unshift({id:uid(),type,title,detail:detail||'',at:new Date().toISOString()});
+  state.achievementLog=state.achievementLog.slice(0,60);
 }
-
-let v59FocusInterval=null,v59FocusSeconds=1500;
-function v59Render(){
-  v59EnsurePanel();
-  const lvl=Number(state.trainer?.level)||1,xp=Number(state.trainer?.xp)||0;
-  const open=(state.quests||[]).filter(q=>!q.done);const q=open[0];
-  const brief=document.getElementById('v59Brief');
-  if(brief){const streak=document.getElementById('dashStreak')?.textContent||'0 DAYS';brief.innerHTML=q?`<strong>Priority:</strong> ${esc(q.title)}<br><span>Clear this objective to earn <strong>+${Number(q.xp)||0} XP</strong>. Current streak: <strong>${esc(streak)}</strong>.</span>`:`<strong>All clear.</strong><br><span>Your active quest queue is empty. Use the Quest Terminal to set your next target.</span>`}
-  const skills=document.getElementById('v59Skills');
-  if(skills){const names=['DISCIPLINE','LEARNING','CREATIVITY','CONSISTENCY'];const vals=names.map((n,i)=>{const raw=Number(state.trainer?.badgeXp?.[i]||0);return Math.min(100,Math.round((raw%100))||Math.min(100,raw/10));});skills.innerHTML=names.map((n,i)=>`<div class="v59-skill"><div class="v59-skill-top"><span>${n}</span><b>${vals[i]}%</b></div><div class="v59-skill-bar"><i style="width:${vals[i]}%"></i></div></div>`).join('')}
-  const ft=document.getElementById('v59FocusTask');if(ft)ft.textContent=q?q.title:'No active quest. Add one from Quests.';const fx=document.getElementById('v59FocusXp');if(fx)fx.textContent=q?`+${Number(q.xp)||0} XP`:'+0 XP';
+function v61SkillValues(){
+  const bx=Array.isArray(state.trainer?.badgeXp)?state.trainer.badgeXp:[];
+  return v61SkillMap.map(skill=>{
+    const xp=skill.badges.reduce((sum,i)=>sum+Number(bx[i]||0),0);
+    const level=Math.max(1,Math.floor(Math.sqrt(xp/100))+1);
+    const next=level*level*100,prev=(level-1)*(level-1)*100;
+    const pct=Math.max(0,Math.min(100,((xp-prev)/Math.max(1,next-prev))*100));
+    return {...skill,xp,level,pct};
+  });
+}
+function v61GetStreak(){
+  let streak=0;
+  for(let i=0;i<90;i++){
+    const d=new Date();d.setDate(d.getDate()-i);const key=localDayKey(d);
+    const active=state.journal.some(j=>j.date?.slice(0,10)===key)||state.quests.some(q=>q.done&&(q.completedAt||q.created)?.slice(0,10)===key)||state.daily.some(x=>x.done&&x.date===key)||state.goals.some(g=>g.days?.[key]);
+    if(active)streak++;else if(i>0)break;
+  }
+  return streak;
+}
+function v61Briefing(){
+  const open=(state.quests||[]).filter(q=>!q.done),q=open[0];
+  const lvl=Number(state.trainer?.level)||1,xp=Number(state.trainer?.xp)||0,next=lvl*lvl*100;
+  const streak=v61GetStreak(),skills=v61SkillValues().slice().sort((a,b)=>a.pct-b.pct),weak=skills[0];
+  const recent=state.quests.find(q=>q.done&&q.completedAt);
+  if(q)return {tag:'ACTION REQUIRED',html:`<strong>PRIORITY:</strong> ${esc(q.title)}<br><span>+${Number(q.xp)||0} XP on clear. Your best move is to finish the objective before adding more.</span><br><span class="v61-muted">STREAK ${streak} DAYS • LV ${lvl} • ${Math.max(0,next-xp)} XP TO NEXT LEVEL</span>`};
+  if(recent)return {tag:'QUEUE CLEAR',html:`<strong>MISSION CLEAR.</strong><br><span>Your active queue is empty. Add one deliberate objective rather than letting the terminal collect dust.</span><br><span class="v61-muted">STREAK ${streak} DAYS • WEAKEST SKILL ${weak.name} LV ${weak.level}</span>`};
+  return {tag:'INITIALIZED',html:`<strong>LEAGUE ONLINE.</strong><br><span>Start with one measurable quest. The League will turn completed work into XP, badge progress and skill growth.</span><br><span class="v61-muted">LV ${lvl} • ${xp} XP • ${streak} DAY STREAK</span>`};
+}
+function v61Signal(){
+  const open=(state.quests||[]).filter(q=>!q.done),skills=v61SkillValues(),weak=skills.reduce((a,b)=>a.pct<b.pct?a:b),lvl=Number(state.trainer?.level)||1,xp=Number(state.trainer?.xp)||0,next=lvl*lvl*100;
+  if(open.length)return {tag:'MISSION',text:`PRIORITY: ${open[0].title}. ${open.length} active quest${open.length===1?'':'s'} in queue.`,sub:`${Math.max(0,next-xp)} XP to level ${lvl+1} • strengthen ${weak.name} next.`};
+  if(weak.pct<25)return {tag:'TRAIN',text:`${weak.name} is undertrained. File a quest that contributes to ${weak.name}.`,sub:`Current skill progress: ${Math.round(weak.pct)}% • ${weak.desc}.`};
+  return {tag:'READY',text:'Queue clear. The League is ready for your next measurable objective.',sub:`Lowest skill: ${weak.name} at ${Math.round(weak.pct)}% • Trainer LV ${lvl}.`};
+}
+function v61Achievements(){
+  const events=[];
+  (state.achievementLog||[]).forEach(e=>events.push(e));
+  state.quests.filter(q=>q.done&&q.completedAt).forEach(q=>events.push({id:'q'+q.id,type:'QUEST',title:'QUEST CLEAR',detail:`${q.title} • +${Number(q.xp)||0} XP`,at:q.completedAt}));
+  state.journal.forEach(j=>events.push({id:'j'+j.id,type:'JOURNAL',title:'JOURNAL FILED',detail:j.title,at:j.date}));
+  (state.rewardHistory||[]).forEach(r=>events.push({id:'r'+r.id,type:'REWARD',title:'REWARD REDEEMED',detail:`${r.name} • −${r.cost} XP`,at:r.redeemedAt}));
+  const seen=new Set();return events.filter(e=>{const key=e.id||`${e.type}|${e.title}|${e.at}`;if(seen.has(key))return false;seen.add(key);return true}).sort((a,b)=>new Date(b.at)-new Date(a.at)).slice(0,6);
+}
+function v61RenderSkills(){
+  const el=document.getElementById('v59Skills');if(!el)return;
+  el.innerHTML=v61SkillValues().map(s=>`<div class="v59-skill"><div class="v59-skill-top"><span>${s.name}</span><b>LV ${s.level} • ${Math.round(s.pct)}%</b></div><div class="v59-skill-bar"><i style="width:${s.pct}%"></i></div><div class="v61-skill-detail">${s.desc} • ${s.sources} • ${s.xp} XP</div></div>`).join('')+`<div class="v61-matrix-note">QUESTS TRAIN SKILLS THROUGH THEIR BADGE TAGS. COMPLETE WORK TO MOVE THE BARS.</div>`;
+}
+function v61RenderAchievements(){
+  const el=document.getElementById('v59Achievement');if(!el)return;const events=v61Achievements();
+  el.innerHTML=events.length?events.map(e=>`<div class="v61-ach"><div><strong>${esc(e.title)}</strong><span>${esc(e.detail||'')}</span></div><time>${new Date(e.at).toLocaleDateString(undefined,{day:'2-digit',month:'short'})}</time></div>`).join(''):'<div class="tiny">No achievements logged yet. Clear a quest, file a journal entry, or redeem a reward to populate this feed.</div>';
+}
+function v61EnsurePanel(){
+  const dash=document.getElementById('dashboard');if(!dash)return;
+  if(document.getElementById('v59FocusMode'))return;
+  const modal=document.createElement('div');modal.id='v59FocusMode';modal.className='v59-focus-mode';modal.innerHTML=`<div class="v59-focus-card"><div class="kicker">LEAGUE OS // FOCUS PROTOCOL</div><h2 id="v59FocusModalTitle">TRAINING SESSION</h2><p id="v59FocusModalTask">Complete your selected training objective.</p><div class="v59-focus-timer" id="v59FocusTimer">25:00</div><div class="v59-focus-state" id="v61FocusState">SESSION READY</div><div class="v59-focus-actions"><button class="btn green" id="v61FocusComplete" onclick="v61FinishFocus()" disabled>COMPLETE SESSION</button><button class="btn" id="v61FocusEnd" onclick="v61CloseFocus()">END SESSION</button></div></div></div>`;document.body.appendChild(modal);
+}
+function v61FocusRemaining(){const f=state.focusSession;if(!f)return 0;return Math.max(0,Number(f.endsAt||0)-v61Now());}
+function v61RenderFocus(){
+  const modal=document.getElementById('v59FocusMode');if(!modal)return;
+  const f=state.focusSession,q=f&&(state.quests||[]).find(x=>String(x.id)===String(f.questId)&&!x.done);
+  const open=(state.quests||[]).find(x=>!x.done);if(!f||!q){if(modal.classList.contains('show'))modal.classList.remove('show');return;}
+  const rem=v61FocusRemaining(),done=rem<=0;
+  const secs=Math.ceil(rem/1000),m=Math.floor(secs/60),s=secs%60;
+  const timer=document.getElementById('v59FocusTimer');if(timer)timer.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const st=document.getElementById('v61FocusState');if(st)st.textContent=done?'SESSION COMPLETE • CLAIM XP':'SESSION ACTIVE • STAY ON TARGET';
+  const complete=document.getElementById('v61FocusComplete');if(complete){complete.disabled=!done;complete.textContent=done?'COMPLETE SESSION':'LOCKED UNTIL 00:00';}
+  const title=document.getElementById('v59FocusModalTitle');if(title)title.textContent=`TRAINING // +${Number(q.xp)||0} XP`;
+  const task=document.getElementById('v59FocusModalTask');if(task)task.textContent=q.title+(q.desc?' • '+q.desc:'');
+  if(done&&v61FocusTick){clearInterval(v61FocusTick);v61FocusTick=null;}
+}
+function v61StartFocus(){
+  const active=(state.quests||[]).find(x=>!x.done);if(!active){toast('No active quest to focus on.');return;}
+  v61EnsurePanel();
+  const existing=state.focusSession;
+  if(existing&&String(existing.questId)===String(active.id)&&v61FocusRemaining()>0){document.getElementById('v59FocusMode')?.classList.add('show');v61RenderFocus();return;}
+  state.focusSession={questId:active.id,startedAt:new Date().toISOString(),endsAt:v61Now()+25*60*1000};
+  saveLocal();
+  document.getElementById('v59FocusMode')?.classList.add('show');
+  clearInterval(v61FocusTick);v61FocusTick=setInterval(v61RenderFocus,250);v61RenderFocus();
+  toast(`FOCUS STARTED • ${active.title} • 25 MIN`);
+}
+function v61CloseFocus(){document.getElementById('v59FocusMode')?.classList.remove('show');if(v61FocusTick){clearInterval(v61FocusTick);v61FocusTick=null;}v61Render();}
+function v61FinishFocus(){
+  const f=state.focusSession;if(!f)return;const q=(state.quests||[]).find(x=>String(x.id)===String(f.questId)&&!x.done);
+  if(v61FocusRemaining()>0){toast('FOCUS STILL RUNNING • COMPLETE THE 25 MIN SESSION FIRST');return;}
+  state.focusSession=null;if(q){v61AddAchievement('FOCUS','FOCUS SESSION COMPLETE',q.title);completeQuest(q.id);}else saveLocal();
+  v61Render();
+}
+function v61Render(){
+  v61EnsurePanel();
+  const lvl=Number(state.trainer?.level)||1,xp=Number(state.trainer?.xp)||0,next=lvl*lvl*100;
+  const open=(state.quests||[]).filter(q=>!q.done),q=open[0];
+  const brief=document.getElementById('v59Brief'),b=v61Briefing();if(brief){brief.innerHTML=b.html;document.getElementById('v59BriefTag')?.replaceChildren(document.createTextNode(b.tag));}
+  v61RenderSkills();
+  const ft=document.getElementById('v59FocusTask');if(ft)ft.textContent=q?q.title:'No active quest. Add one from Quests.';const fx=document.getElementById('v59FocusXp');if(fx)fx.textContent=q?`+${Number(q.xp)||0} XP`:'+0 XP';const launch=document.getElementById('v61FocusLaunch');if(launch)launch.textContent=(state.focusSession&&v61FocusRemaining()>0)?'RESUME FOCUS':(state.focusSession?'SESSION COMPLETE':'START FOCUS');
   const lc=document.getElementById('v59Local');if(lc)lc.textContent=localStorage.getItem('leagueOS')?'READY':'EMPTY';const nw=document.getElementById('v59Network');if(nw)nw.textContent=navigator.onLine?'ONLINE':'OFFLINE';const cfg=getCfg();const cl=document.getElementById('v59Cloud');if(cl)cl.textContent=cfg.url&&cfg.key?'CONFIGURED':'NOT CONFIGURED';const dl=document.getElementById('v59DiagLevel');if(dl)dl.textContent='LV '+lvl;
-  const sig=document.getElementById('v59SignalText');if(sig)sig.textContent=q?`Your strongest move right now is simple: finish “${q.title}” and convert intention into measurable progress.`:`No active mission. Your next move is to file a new objective.`;
-  const ach=document.getElementById('v59Achievement');if(ach){const a=[];if(lvl>1)a.push(`TRAINER LEVEL ${lvl}`);const bc=(state.trainer?.badgeXp||[]).filter(x=>Number(x)>0).length;if(bc)a.push(`${bc} BADGES IN PROGRESS`);if((state.journal||[]).length)a.push(`${state.journal.length} JOURNAL ENTRIES`);ach.innerHTML=a.length?a.map(x=>`<div style=\"padding:5px 0;border-bottom:1px solid rgba(120,150,190,.18)\">▸ ${esc(x)}</div>`).join(''):'Your first milestone is waiting. Start a quest and build the record.';}
+  const sig=v61Signal(),sigText=document.getElementById('v59SignalText');if(sigText)sigText.innerHTML=`<strong>${esc(sig.text)}</strong><br><span class="v61-muted">${esc(sig.sub)}</span>`;document.getElementById('v59Signal')?.replaceChildren(document.createTextNode(sig.tag));
+  v61RenderAchievements();v61RenderFocus();
 }
 async function v59SyncTest(){
   const b=document.querySelector('.v59-sync-test');if(b){b.disabled=true;b.textContent='TESTING...';}
-  try{const ok=await testCloud(true);toast(ok?'SYNC TEST PASSED • CLOUD REACHABLE':'SYNC TEST FAILED • CHECK SYNC CENTER')}catch(e){toast('SYNC TEST FAILED')}finally{if(b){b.disabled=false;b.textContent='RUN SYNC TEST'}v59Render();}
+  try{const ok=await testCloud(true);toast(ok?'SYNC TEST PASSED • CLOUD REACHABLE':'SYNC TEST FAILED • CHECK SYNC CENTER')}catch(e){toast('SYNC TEST FAILED')}finally{if(b){b.disabled=false;b.textContent='RUN SYNC TEST'}v61Render();}
 }
-function v59StartFocus(){
-  const q=(state.quests||[]).find(x=>!x.done);if(!q){toast('No active quest to focus on.');return}
-  const modal=document.getElementById('v59FocusMode');if(!modal)return;document.getElementById('v59FocusModalTitle').textContent='TRAINING // '+String(q.xp||0)+' XP';document.getElementById('v59FocusModalTask').textContent=q.title+(q.desc?' • '+q.desc:'');v59FocusSeconds=1500;document.getElementById('v59FocusTimer').textContent='25:00';modal.classList.add('show');clearInterval(v59FocusInterval);v59FocusInterval=setInterval(()=>{v59FocusSeconds--;const m=Math.floor(v59FocusSeconds/60),s=v59FocusSeconds%60;document.getElementById('v59FocusTimer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;if(v59FocusSeconds<=0){clearInterval(v59FocusInterval);toast('FOCUS SESSION COMPLETE • CLAIM YOUR QUEST XP');}},1000);
-}
-function v59CloseFocus(){clearInterval(v59FocusInterval);document.getElementById('v59FocusMode')?.classList.remove('show')}
-function v59FinishFocus(){const q=(state.quests||[]).find(x=>!x.done);v59CloseFocus();if(q){completeQuest(q.id);v59Render();}}
-const v59OldRenderDashboard=renderDashboard;renderDashboard=function(){v59OldRenderDashboard();v59Render()};
+function v59StartFocus(){return v61StartFocus()}
+function v59CloseFocus(){return v61CloseFocus()}
+function v59FinishFocus(){return v61FinishFocus()}
+const v59OldRenderDashboard=renderDashboard;renderDashboard=function(){v59OldRenderDashboard();v61Render()};
+setInterval(()=>{if(document.visibilityState==='visible')v61Render();},1000);
+window.addEventListener('online',()=>setTimeout(v61Render,0));window.addEventListener('offline',()=>setTimeout(v61Render,0));
 </script>
 </body></html>
