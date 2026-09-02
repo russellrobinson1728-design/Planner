@@ -1216,7 +1216,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   .pokemon-evolution-track>i{transform:rotate(90deg);justify-self:center}
 }
 
-/* V56: quest claim feedback and completed separation */
+/* V57: quest claim feedback and completed separation */
 .quest-open{transition:opacity .15s ease,transform .15s ease}
 .quest-open .btn.green{min-width:132px}
 .quest-done{opacity:.72;border-color:#31516b}
@@ -1243,7 +1243,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V56</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V57</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1440,7 +1440,7 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:56,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null};
+const data={version:57,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null};
 let state=loadLocal();
 const hasSavedLeagueState=!!localStorage.getItem('leagueOS');
 if(!hasSavedLeagueState && (!Array.isArray(state.quests)||state.quests.length===0)) state.quests=structuredClone(defaultQuests);
@@ -1721,35 +1721,40 @@ function renderRewards(){
   const available=(state.rewards||[]).filter(r=>!claimed.has(String(r.id)));
   const history=(state.rewardHistory||[]);
   el.innerHTML=`<div class="row"><strong>AVAILABLE XP</strong><strong>${state.trainer.xp} XP</strong></div>`+
-    (available.map(r=>`<div class="row reward-row" data-reward-row="${esc(String(r.id))}"><div><strong>${esc(r.name)} • ${r.cost} XP</strong><span class="tiny">${esc(r.desc||'Reward')}</span></div><div class="actions"><button type="button" class="btn green reward-redeem-btn" data-reward-id="${esc(String(r.id))}" ${state.trainer.xp<r.cost?'disabled':''}>REDEEM</button><button type="button" class="btn danger reward-delete-btn" data-reward-id="${esc(String(r.id))}">X</button></div></div>`).join('')||'<div class="tiny">No rewards currently available.</div>')+
+    (available.map(r=>`<div class="row reward-row" data-reward-row="${esc(String(r.id))}"><div><strong>${esc(r.name)} • ${r.cost} XP</strong><span class="tiny">${esc(r.desc||'Reward')}</span></div><div class="actions"><button type="button" class="btn green reward-redeem-btn" data-reward-id="${esc(String(r.id))}">REDEEM</button><button type="button" class="btn danger reward-delete-btn" data-reward-id="${esc(String(r.id))}">X</button></div></div>`).join('')||'<div class="tiny">No rewards currently available.</div>')+
     `<div class="panel-subtitle" style="margin-top:12px">REWARD HISTORY</div>`+
     (history.map(h=>`<div class="row"><div><strong>${esc(h.name)}</strong><span class="tiny">Redeemed ${new Date(h.redeemedAt).toLocaleString()} • −${h.cost} XP</span></div><span class="tag">CLAIMED</span></div>`).join('')||'<div class="tiny">No rewards claimed yet.</div>');
-  el.querySelectorAll('.reward-redeem-btn').forEach(btn=>btn.addEventListener('click',()=>redeem(btn.dataset.rewardId)));
-  el.querySelectorAll('.reward-delete-btn').forEach(btn=>btn.addEventListener('click',()=>deleteReward(btn.dataset.rewardId)));
+  el.querySelectorAll('.reward-redeem-btn').forEach(btn=>btn.onclick=(ev)=>{ev.preventDefault();ev.stopPropagation();redeem(btn.getAttribute('data-reward-id'));});
+  el.querySelectorAll('.reward-delete-btn').forEach(btn=>btn.onclick=(ev)=>{ev.preventDefault();ev.stopPropagation();deleteReward(btn.getAttribute('data-reward-id'));});
 }
 function redeem(id){
-  const key=String(id);
-  if(state._rewardBusy)return;
-  const idx=(state.rewards||[]).findIndex(x=>String(x.id)===key);
-  const r=idx>=0?state.rewards[idx]:null;
-  if(!r)return toast('That reward is no longer available.');
-  const cost=Math.max(0,Number(r.cost)||0);
-  if(state.trainer.xp<cost)return toast('Not enough XP.');
+  const key=String(id||'').trim();
+  if(!key || state._rewardBusy)return false;
+  if(!Array.isArray(state.rewards))state.rewards=[];
+  const idx=state.rewards.findIndex(x=>String(x.id)===key);
+  if(idx<0){renderRewards();toast('That reward is no longer available.');return false;}
+  const r=state.rewards[idx];
+  const cost=Math.max(0,Math.floor(Number(r.cost)||0));
+  const currentXp=Math.max(0,Math.floor(Number(state.trainer?.xp)||0));
+  if(currentXp<cost){toast(`NOT ENOUGH XP • ${cost-currentXp} XP NEEDED`);return false;}
   state._rewardBusy=true;
   try{
-    state.trainer.xp-=cost;
+    state.trainer.xp=currentXp-cost;
+    state.trainer.level=levelFromXp(state.trainer.xp);
     if(!Array.isArray(state.rewardHistory))state.rewardHistory=[];
     if(!Array.isArray(state.claimedRewardIds))state.claimedRewardIds=[];
-    state.rewardHistory.unshift({id:uid(),rewardId:r.id,name:r.name,cost,desc:r.desc||'',redeemedAt:new Date().toISOString()});
-    if(!state.claimedRewardIds.some(x=>String(x)===key))state.claimedRewardIds.push(r.id);
+    const now=new Date().toISOString();
+    state.rewardHistory.unshift({id:uid(),rewardId:r.id,name:r.name,cost,desc:r.desc||'',redeemedAt:now});
+    state.claimedRewardIds.push(String(r.id));
     state.rewards.splice(idx,1);
     ensureRewardState(state);
-    recalc();
     saveLocal();
     renderRewards();
     renderDashboard();
     toast(`REWARD REDEEMED: ${r.name} • −${cost} XP`);
-  }finally{state._rewardBusy=false;}
+    return true;
+  }catch(e){console.error('Reward redemption failed',e);toast('REWARD ERROR • YOUR SAVE WAS NOT CLEARED');return false;}
+  finally{state._rewardBusy=false;}
 }
 function deleteReward(id){state.rewards=state.rewards.filter(r=>r.id!==id);saveLocal()}
 function autoTeam(words){let w=words.toLowerCase().split(/[, ]+/).filter(Boolean).slice(0,3).join(' ');let maps=[[/dark|night|myster|quiet|cool/,[['Eevee','Umbreon'],['Froakie','Greninja'],['Riolu','Lucario'],['Mew'],['Gible','Garchomp'],['Snivy','Serperior']]],[/fire|bold|loud|brave/,[['Charmander','Charizard'],['Gible','Garchomp'],['Riolu','Lucario'],['Froakie','Greninja'],['Mew'],['Eevee','Umbreon']]],[/water|calm|chill|blue/,[['Froakie','Greninja'],['Eevee','Vaporeon'],['Mew'],['Gible','Garchomp'],['Snivy','Serperior'],['Riolu','Lucario']]]];for(let [re,team] of maps)if(re.test(w))return team;return [['Gible','Gabite','Garchomp'],['Eevee','Umbreon'],['Riolu','Lucario'],['Mew'],['Snivy','Serperior'],['Froakie','Greninja']]}
