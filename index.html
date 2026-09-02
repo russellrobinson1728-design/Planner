@@ -971,6 +971,129 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 @media(max-width:900px){
   .dashboard-v18>.v18-main-grid{display:grid!important;width:100%!important;grid-template-columns:1fr!important;grid-template-areas:"objectives" "recent" "badges" "calendar" "rival" "friends" "actions"!important}
 }
+
+/* V47 RIVAL PANEL REDESIGN */
+.v18-rival-card{
+  position:relative!important;
+  background:
+    linear-gradient(180deg,rgba(20,42,49,.96),rgba(5,12,17,.98))!important;
+  border:2px ridge #4f858c!important;
+  box-shadow:inset 0 0 28px rgba(42,176,194,.07),0 0 0 1px #071114!important;
+  min-height:250px!important;
+}
+.v18-rival-card::before{
+  content:"RIVAL // BATTLE DATA";
+  position:absolute;right:10px;top:9px;
+  font:10px 'Press Start 2P';color:#5ecbd1;letter-spacing:.5px;opacity:.72;
+  pointer-events:none;
+}
+.v18-rival-card .v18-panel-head{
+  min-height:48px!important;padding:8px 12px!important;
+  background:linear-gradient(180deg,#16333a,#0b1a20)!important;
+  border-bottom:2px ridge #4f858c!important;
+}
+.v18-rival-card .v18-panel-head::before{content:"◆";color:#ffcf45;margin-right:7px}
+.v18-rival-main{
+  display:grid!important;
+  grid-template-columns:128px minmax(0,1fr)!important;
+  gap:14px!important;
+  align-items:center!important;
+  padding:12px!important;
+  min-height:145px!important;
+  background:linear-gradient(90deg,rgba(8,23,29,.9),rgba(7,14,19,.45))!important;
+}
+.v18-rival-main img{
+  width:128px!important;height:132px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  background:radial-gradient(circle at 50% 65%,#203b48 0,#0a141a 62%,#060c10 100%)!important;
+  border:2px ridge #557d84!important;
+  padding:4px!important;
+  filter:drop-shadow(3px 3px 0 #020506)!important;
+}
+.v18-rival-main>div{min-width:0!important;padding-right:4px}
+.v18-rival-kicker{
+  font:12px 'VT323'!important;color:#77bfc5!important;
+  letter-spacing:1px!important;text-transform:uppercase;
+}
+.v18-rival-main h2{
+  font:22px 'Press Start 2P'!important;color:#ff78b6!important;
+  margin:7px 0!important;text-shadow:2px 2px 0 #2b1020!important;
+}
+.v18-rival-main strong{
+  display:inline-block!important;font:11px 'Press Start 2P'!important;
+  color:#ffd34d!important;background:#151b16;padding:5px 7px!important;
+  border:1px solid #705f29!important;
+}
+.v18-rival-main p{
+  margin:8px 0 0!important;color:#b3c5c8!important;font-size:16px!important;
+  padding-left:9px;border-left:3px solid #ff78b6;min-height:20px;
+}
+.v18-rival-team{
+  display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:6px!important;padding:7px 10px 11px!important;
+  border-top:1px solid #25464d!important;
+  background:#061015!important;
+}
+.v18-rival-team .rival-mini,
+.v18-rival-team>div{
+  min-width:0!important;position:relative!important;
+}
+.v18-rival-team img{
+  width:100%!important;height:62px!important;
+  object-fit:contain!important;background:radial-gradient(circle,#152b36,#071015)!important;
+  border:1px solid #355960!important;padding:3px!important;
+  image-rendering:pixelated!important;display:block!important;
+}
+.v18-rival-team img:hover{border-color:#ff78b6!important;box-shadow:0 0 8px rgba(255,120,182,.22)!important}
+.v18-rival-team .rival-mini span,
+.v18-rival-team>div span{
+  display:block!important;text-align:center!important;white-space:nowrap!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;
+  font:8px 'Press Start 2P'!important;color:#a9c4c8!important;margin-top:4px!important;
+}
+.v18-rival-team::before{
+  content:"TEAM // 06";position:absolute;margin-top:-2px;transform:translateY(-19px);
+  font:8px 'Press Start 2P';color:#557d84;letter-spacing:.5px;
+}
+.v18-rival-card .v18-panel-head .btn{position:relative;z-index:2}
+@media(max-width:1180px){
+ .v18-rival-main{grid-template-columns:110px minmax(0,1fr)!important}
+ .v18-rival-main img{width:110px!important;height:120px!important}
+ .v18-rival-team{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:700px){
+ .v18-rival-main{grid-template-columns:95px minmax(0,1fr)!important;gap:9px!important}
+ .v18-rival-main img{width:95px!important;height:112px!important}
+ .v18-rival-main h2{font-size:17px!important}
+ .v18-rival-team{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+
+/* V47+ ACTIVE RIVAL CARD */
+.v18-rival-card{min-height:300px!important;overflow:hidden!important}
+.v18-rival-main{grid-template-columns:132px minmax(0,1fr)!important;gap:15px!important;padding:12px!important;min-height:158px!important;align-items:center!important}
+.v18-rival-portrait{position:relative;width:132px;height:140px;display:flex;align-items:center;justify-content:center}
+.v18-rival-portrait img{width:124px!important;height:134px!important;padding:5px!important;object-fit:contain!important;background:radial-gradient(circle at 50% 70%,#1e3a47 0,#0b171d 65%,#060d11 100%)!important;border:2px ridge #5a8d93!important}
+.v18-rival-status{position:absolute;z-index:2;left:4px;top:2px;padding:3px 5px;background:#092016;border:1px solid #4fae78;color:#6ef0a0;font:7px 'Press Start 2P';letter-spacing:.4px}
+.v18-rival-copy{min-width:0}
+.v18-rival-kicker{font-size:11px!important;color:#72b9c0!important;letter-spacing:1px!important}
+.v18-rival-main h2{font-size:23px!important;margin:6px 0!important}
+.v18-rival-levelrow{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.v18-rival-levelrow strong{font-size:10px!important}
+.v18-rival-chip{font:7px 'Press Start 2P';padding:5px 6px;border:1px solid #405f68;color:#83a6ad;background:#0a1519}
+.v18-rival-main p{margin:8px 0 7px!important;font-size:15px!important;color:#b6c8cb!important}
+.v18-rival-meter{display:flex;align-items:center;gap:7px;color:#5d858b;font:7px 'Press Start 2P'}
+.v18-rival-meter i{height:6px;flex:1;background:linear-gradient(90deg,#ff6fae 0 62%,#18252a 62%);border:1px solid #38535a;display:block}
+.v18-rival-team{position:relative!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:6px!important;padding:24px 10px 10px!important;background:linear-gradient(180deg,#071217,#050b0f)!important;border-top:2px ridge #315e65!important}
+.v18-rival-team::before{content:"RIVAL PARTY // 06 POKÉMON"!important;position:absolute!important;left:10px!important;top:7px!important;transform:none!important;margin:0!important;font:7px 'Press Start 2P'!important;color:#5ea8af!important;letter-spacing:.6px!important}
+.v18-rival-team .rival-mini{min-width:0!important;text-align:center!important}
+.v18-rival-team .rival-slot{height:66px!important;border:1px solid #2f555c!important;background:radial-gradient(circle,#18323b,#071116)!important;display:flex;align-items:center;justify-content:center;transition:.12s ease}
+.v18-rival-team .rival-mini:hover .rival-slot{border-color:#ff78b6!important;box-shadow:0 0 10px rgba(255,120,182,.2);transform:translateY(-2px)}
+.v18-rival-team .rival-slot img{width:100%!important;height:62px!important;border:0!important;background:transparent!important;padding:2px!important}
+.v18-rival-team .rival-mini span{display:block!important;margin-top:4px!important;font:7px 'Press Start 2P'!important;color:#c2d7da!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v18-rival-team .rival-mini small{display:block!important;margin-top:2px!important;color:#567a80!important;font:10px 'VT323'!important}
+@media(max-width:1180px){.v18-rival-main{grid-template-columns:105px minmax(0,1fr)!important}.v18-rival-portrait{width:105px}.v18-rival-portrait img{width:100px!important}.v18-rival-team{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:700px){.v18-rival-main{grid-template-columns:90px minmax(0,1fr)!important;gap:9px!important}.v18-rival-portrait{width:90px}.v18-rival-portrait img{width:88px!important}.v18-rival-team{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 </style>
 </head>
 <body>
@@ -991,7 +1114,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V46</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V47</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1077,7 +1200,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 
     <section class="dash-box v18-card v18-rival-card">
       <div class="v18-panel-head"><span>ACTIVE RIVAL</span><button class="btn" onclick="showPage('friends')">MANAGE</button></div>
-      <div class="v18-rival-main"><img id="dashRivalImg" src="assets/dj-trainer.png" alt="DJ rival" onerror="this.onerror=null;this.src='assets/dj-source-sheet.png'"><div><div class="v18-rival-kicker">LEAGUE TRAINER</div><h2 id="dashRivalName">DJ</h2><strong id="dashRivalLevel">LEVEL 1</strong><p id="dashRivalLine">parallel run</p></div></div>
+      <div class="v18-rival-main"><div class="v18-rival-portrait"><span class="v18-rival-status">● ACTIVE</span><img id="dashRivalImg" src="assets/dj-trainer.png" alt="DJ rival" onerror="this.onerror=null;this.src='assets/dj-source-sheet.png'"></div><div class="v18-rival-copy"><div class="v18-rival-kicker">LEAGUE TRAINER // RIVAL</div><h2 id="dashRivalName">DJ</h2><div class="v18-rival-levelrow"><strong id="dashRivalLevel">LEVEL 1</strong><span class="v18-rival-chip">TEAM LOCKED</span></div><p id="dashRivalLine">parallel run</p><div class="v18-rival-meter"><span>RIVAL SYNC</span><i></i></div></div></div>
       <div id="dashDjTeam" class="v18-rival-team"></div>
     </section>
 
@@ -1271,7 +1394,7 @@ function renderDashboard(){
   if($('dashRivalName'))$('dashRivalName').textContent=active?active.name:'DJ';if($('dashRivalHeader'))$('dashRivalHeader').textContent=(active?active.name:'DJ')+' // RIVAL';
   if($('dashQuestCount'))$('dashQuestCount').textContent=open.length;
   const configured=!!(getCfg().url&&getCfg().key);if($('dashCloudDot'))$('dashCloudDot').className='dot '+(navigator.onLine?'online':'');if($('dashCloudText'))$('dashCloudText').textContent=navigator.onLine?'ONLINE':'OFFLINE';if($('dashCloudLine'))$('dashCloudLine').textContent=configured?'Cloud configured • auto sync enabled':'Local save active • configure cloud sync';
-  const rivalTeam=getLockedRivalTeam(active),rivalNames=loadDexNames();if($('dashDjTeam'))$('dashDjTeam').innerHTML=rivalTeam.map(x=>{const n=rivalNames[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return rivalImgTag(x.__dexId,n)}).join('');
+  const rivalTeam=getLockedRivalTeam(active),rivalNames=loadDexNames();if($('dashDjTeam'))$('dashDjTeam').innerHTML=rivalTeam.map((x,i)=>{const n=rivalNames[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return `<div class="rival-mini"><div class="rival-slot">${rivalImgTag(x.__dexId,n)}</div><span>${esc(n)}</span><small>DEX #${String(x.__dexId).padStart(3,'0')}</small></div>`}).join('');
   const fg=$('dashFriends');if(fg)fg.innerHTML=state.friends.map(f=>`<div class="dash-friend-mini${state.activeRivalId===f.id?' active-rival':''}"><img src="${friendSprite(f)}" alt="${esc(f.name)}" onerror="this.onerror=null;this.src='assets/friend-guy.png'"><span>${esc(f.name)}</span><small>RIVAL • LV ${friendLevel(f)}</small></div>`).join('')||'<div class="empty-state" style="grid-column:1/-1">No friend journeys started yet.</div>';
   renderDashCalendar();
 }
