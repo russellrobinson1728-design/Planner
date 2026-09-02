@@ -1128,7 +1128,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 }
 </style>
 
-<style id="v52-mobile-sidebar-pokemon">
+<style id="v53-mobile-sidebar-pokemon">
 /* V52: clean collapsible rail, responsive main canvas, and Pokémon training files */
 .app.taskbar-is-collapsed{margin-left:76px!important}
 @media(min-width:901px){
@@ -1215,8 +1215,15 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   .pokemon-evolution-track{display:grid;grid-template-columns:1fr}
   .pokemon-evolution-track>i{transform:rotate(90deg);justify-self:center}
 }
+
+/* V55: quest claim feedback and completed separation */
+.quest-open{transition:opacity .15s ease,transform .15s ease}
+.quest-open .btn.green{min-width:132px}
+.quest-done{opacity:.72;border-color:#31516b}
+.quest-completed-block{margin-top:14px;padding-top:4px;border-top:2px ridge #536985}
+.quest-completed-block .title{color:#67ef95}
 </style>
-</head>
+<style>.quest-summary{border-color:#2d8d9c;background:linear-gradient(90deg,#0c1b24,#0a111b);margin-bottom:8px}.quest-row{transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}.quest-row:hover{transform:translateX(2px);border-color:#6fe8ff;box-shadow:0 0 12px rgba(80,220,255,.12)}</style></head>
 <body>
 <div id="bootScreen" class="boot-screen" aria-live="polite"><div class="boot-terminal"><div class="boot-pokeball">◉</div><div class="boot-title">LEAGUE OS</div><div class="boot-sub">INITIALIZING TRAINER TERMINAL</div><div class="boot-bar"><i></i></div><div class="boot-status" id="bootStatus">LOADING PROFILE DATA...</div></div></div><div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
 <div class="app">
@@ -1236,7 +1243,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V52</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V55</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1433,9 +1440,12 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:52,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
+const data={version:55,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null};
 let state=loadLocal();
-if(!Array.isArray(state.quests)||state.quests.length===0) state.quests=structuredClone(defaultQuests);
+const hasSavedLeagueState=!!localStorage.getItem('leagueOS');
+if(!hasSavedLeagueState && (!Array.isArray(state.quests)||state.quests.length===0)) state.quests=structuredClone(defaultQuests);
+if(!state.questDay)state.questDay=localDayKey();
+ensureRewardState(state);
 function rivalTeamIds(team){return (normaliseRivalTeam(team)||[]).map(x=>+x.__dexId)}
 function rivalTeamIsUsable(team,blocked){const t=normaliseRivalTeam(team);if(!t)return false;const b=new Set((blocked||[]).map(Number));return !!t&&t.every(x=>!b.has(+x.__dexId))}
 function rivalTeamOverlapsOther(team,ownerId){const ids=new Set(rivalTeamIds(team));if(ownerId!=='DJ'&&state.djRivalTeamLocked===true&&rivalTeamIds(state.djRivalTeam).some(id=>ids.has(id)))return true;return state.friends.some(f=>f.id!==ownerId&&f.rivalTeamLocked===true&&rivalTeamIds(f.rivalTeam).some(id=>ids.has(id)))}
@@ -1468,13 +1478,34 @@ function rivalImgTag(dexId,name,cls=''){const id=Number(dexId)||1;const c=[`http
 function fallbackImg(el,c){let i=+(el.dataset.fallback||1);if(i<c.length){el.dataset.fallback=i+1;el.src=c[i]}else{el.onerror=null;el.src=LOCAL_ASSETS.placeholder}}
 function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.goals=out.goals.map(g=>{const days=(g.days&&typeof g.days==='object'&&!Array.isArray(g.days))?g.days:{};if(g.done&&Object.keys(days).length===0&&g.month){const [yy,mm]=g.month.split('-').map(Number),count=new Date(yy,mm,0).getDate();for(let d=1;d<=count;d++)days[`${g.month}-${String(d).padStart(2,'0')}`]=true;}return Object.assign({},g,{days,_bonusAwarded:typeof g._bonusAwarded==='boolean'?g._bonusAwarded:!!g.done})});out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;out.localMutationAt=out.localMutationAt||out.lastSync||null;out.lastSyncedMutationAt=out.lastSyncedMutationAt||out.lastSync||null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
+function localDayKey(d=new Date()){const x=new Date(d);return new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function resetDailyQuestsIfNeeded(out){
+  const today=localDayKey();
+  const last=out.questDay||'';
+  if(!last){out.questDay=today;return out;}
+  if(last===today)return out;
+  // A new League day starts: reopen every quest without refunding or removing XP already earned.
+  // Completion history remains in the journal/activity system through completedAt timestamps.
+  out.quests=(Array.isArray(out.quests)?out.quests:[]).map(q=>Object.assign({},q,{done:false,completedAt:null,created:q.created||new Date().toISOString()}));
+  out.questDay=today;
+  return out;
+}
+function ensureRewardState(out){
+  out.rewards=Array.isArray(out.rewards)?out.rewards:[];
+  out.rewardHistory=Array.isArray(out.rewardHistory)?out.rewardHistory:[];
+  out.claimedRewardIds=Array.isArray(out.claimedRewardIds)?out.claimedRewardIds:[];
+  // Keep redeemed rewards out of the available shop even if an older cloud/local snapshot still contains them.
+  const claimed=new Set(out.claimedRewardIds.map(String));
+  out.rewards=out.rewards.filter(r=>!claimed.has(String(r.id)));
+  return out;
+}
+function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.goals=out.goals.map(g=>{const days=(g.days&&typeof g.days==='object'&&!Array.isArray(g.days))?g.days:{};if(g.done&&Object.keys(days).length===0&&g.month){const [yy,mm]=g.month.split('-').map(Number),count=new Date(yy,mm,0).getDate();for(let d=1;d<=count;d++)days[`${g.month}-${String(d).padStart(2,'0')}`]=true;}return Object.assign({},g,{days,_bonusAwarded:typeof g._bonusAwarded==='boolean'?g._bonusAwarded:!!g.done})});out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.rewardHistory=Array.isArray(out.rewardHistory)?out.rewardHistory:[];out.claimedRewardIds=Array.isArray(out.claimedRewardIds)?out.claimedRewardIds:[];resetDailyQuestsIfNeeded(out);ensureRewardState(out);out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;out.localMutationAt=out.localMutationAt||out.lastSync||null;out.lastSyncedMutationAt=out.lastSyncedMutationAt||out.lastSync||null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
 function renderCurrentView(){
   const active=document.querySelector('.page.active')?.id||'dashboard';
   try{ renderPage(active); renderNav(); }catch(e){ console.error('League OS live render:',e); toast('Display update failed. Your save is still intact.'); }
 }
 function saveLocal(){
-  if(!Array.isArray(state.quests)||state.quests.length===0)state.quests=structuredClone(defaultQuests);
+  // Never repopulate an intentionally emptied quest list. Defaults are only created for a brand-new save.
   ensureAllRivalTeams();
   state.localMutationAt=new Date().toISOString();
   try{localStorage.setItem('leagueOS',JSON.stringify(state));}catch(e){console.error('League OS save failed:',e);}
@@ -1535,9 +1566,31 @@ function renderDashCalendar(){const y=dashCalDate.getFullYear(),m=dashCalDate.ge
 function dashShiftMonth(n){dashCalDate.setMonth(dashCalDate.getMonth()+n);renderDashCalendar()}
 function renderBadgeChecks(){document.getElementById('badgeChecks').innerHTML=badges.map((b,i)=>`<label class="tag"><input class="badgeCheck" type="checkbox" value="${i}"> ${b[0]}</label>`).join('')}
 function addQuest(){let title=qTitle.value.trim(),desc=qDesc.value.trim(),xp=Math.max(1,+qXp.value||1),inds=[...document.querySelectorAll('.badgeCheck:checked')].map(x=>+x.value);if(!title||!inds.length)return toast('Give the quest a title and at least one badge.');state.quests.unshift({id:uid(),title,desc:desc||'Complete the stated objective with a clear, observable result.',xp,badges:inds,done:false,created:new Date().toISOString()});qTitle.value='';qDesc.value='';saveLocal();toast('Objective added to the League log.')}
-function completeQuest(id){let q=state.quests.find(x=>x.id===id);if(!q||q.done)return;q.done=true;state.trainer.xp+=q.xp;state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>v+(q.badges.includes(i)?q.xp:0));recalc();saveLocal();toast(`Quest complete. +${q.xp} trainer XP.`)}
+function completeQuest(id){
+  const q=state.quests.find(x=>String(x.id)===String(id));
+  if(!q||q.done)return;
+  q.done=true;
+  q.completedAt=new Date().toISOString();
+  const xp=Math.max(0,Number(q.xp)||0);
+  state.trainer.xp+=xp;
+  if(!Array.isArray(state.trainer.badgeXp))state.trainer.badgeXp=Array(8).fill(0);
+  state.trainer.badgeXp=state.trainer.badgeXp.map((v,i)=>Number(v||0)+(Array.isArray(q.badges)&&q.badges.includes(i)?xp:0));
+  recalc();
+  state.questDay=localDayKey();
+  saveLocal();
+  // Re-render explicitly after persistence so the claimed item cannot remain in a stale DOM node.
+  renderQuests();
+  renderDashboard();
+  toast(`Quest claimed. +${xp} trainer XP • +${xp} badge XP.`);
+}
 function deleteQuest(id){state.quests=state.quests.filter(q=>q.id!==id);saveLocal()}
-function renderQuests(){const el=document.getElementById('questList');if(!el)return;el.innerHTML=state.quests.map(q=>`<div class="row"><div><strong>${q.done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i][0]).join(', ')}</span></div><div class="actions">${!q.done?`<button class="btn green" onclick="completeQuest('${q.id}')">COMPLETE</button>`:''}<button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`).join('')||'<div class="tiny">No quests filed.</div>'}
+function renderQuests(){
+  const el=document.getElementById('questList');if(!el)return;
+  const open=state.quests.filter(q=>!q.done);
+  const completed=state.quests.filter(q=>q.done).length;
+  const head=`<div class="row quest-summary"><div><strong>ACTIVE QUESTS</strong><span class="tiny">${open.length} remaining • ${completed} claimed</span></div><strong>${state.trainer.xp} XP</strong></div>`;
+  el.innerHTML=head+(open.map(q=>`<div class="row quest-row"><div><strong>${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i][0]).join(', ')}</span></div><div class="actions"><button class="btn green" onclick="completeQuest('${q.id}')">CLAIM +${q.xp} XP</button><button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`).join('')||'<div class="tiny">All current quests claimed. New objectives can be added above.</div>');
+}
 function addGoal(){let title=goalTitle.value.trim();if(!title)return toast('Give the monthly quest a title.');let month=monthPicker.value||new Date().toISOString().slice(0,7);state.goals.unshift({id:uid(),month,title,desc:goalDesc.value.trim(),done:false,days:{},_bonusAwarded:false});goalTitle.value='';goalDesc.value='';saveLocal();renderGoals();toast('Monthly quest added. Press each day to clear it.')} 
 function plannerKey(d=new Date()){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 function plannerMonth(){const mp=document.getElementById('monthPicker');return mp?.value||plannerKey().slice(0,7)}
@@ -1660,9 +1713,38 @@ function renderBadges(){const bg=document.getElementById('badgeGrid');if(!bg)ret
 function addJournal(){const titleEl=document.getElementById('jTitle'),textEl=document.getElementById('jText');const title=String(titleEl?.value||'').trim(),text=String(textEl?.value||'').trim();if(!title){toast('Give the journal entry a title.');titleEl?.focus();return false}if(!text){toast('Write something in the journal entry first.');textEl?.focus();return false}const entry={id:uid(),title,text,date:new Date().toISOString()};if(!Array.isArray(state.journal))state.journal=[];state.journal.unshift(entry);if(titleEl)titleEl.value='';if(textEl)textEl.value='';saveLocal();toast('Journal entry filed.');return false}function renderJournal(){const el=document.getElementById('journalList');if(!el)return;el.innerHTML=state.journal.map(j=>`<div class="row"><div><strong>${esc(j.title)}</strong><span class="tiny">${new Date(j.date).toLocaleString()}</span><p style="margin:4px 0;white-space:pre-wrap">${esc(j.text)}</p></div><button class="btn danger" onclick="deleteJournal('${j.id}')">DELETE</button></div>`).join('')||'<div class="tiny">Your journal is empty.</div>'}function deleteJournal(id){state.journal=state.journal.filter(j=>j.id!==id);saveLocal();toast('Journal entry deleted.')}
 function addItem(){let n=itemName.value.trim();if(!n)return toast('Name the item.');state.inventory.unshift({id:uid(),name:n,qty:Math.max(1,+itemQty.value||1),desc:itemDesc.value.trim()});itemName.value='';itemDesc.value='';saveLocal()}
 function renderInventory(){inventoryList.innerHTML=state.inventory.map(x=>`<div class="row"><div><strong>${esc(x.name)} ×${x.qty}</strong><span class="tiny">${esc(x.desc||'League item')}</span></div><div class="actions"><button class="btn" onclick="changeItem('${x.id}',1)">+</button><button class="btn" onclick="changeItem('${x.id}',-1)">−</button><button class="btn danger" onclick="deleteItem('${x.id}')">X</button></div></div>`).join('')||'<div class="tiny">Item box empty.</div>'}function changeItem(id,d){let x=state.inventory.find(i=>i.id===id);if(x){x.qty+=d;if(x.qty<=0)state.inventory=state.inventory.filter(i=>i.id!==id);saveLocal()}}function deleteItem(id){state.inventory=state.inventory.filter(i=>i.id!==id);saveLocal()}
-function addReward(){let n=rewardName.value.trim(),cost=Math.max(1,+rewardCost.value||1);if(!n)return toast('Name the reward.');state.rewards.push({id:uid(),name:n,cost,desc:rewardDesc.value.trim()});rewardName.value='';rewardDesc.value='';saveLocal()}
-function renderRewards(){const el=document.getElementById('rewardList');if(!el)return;el.innerHTML=`<div class="row"><strong>AVAILABLE XP</strong><strong>${state.trainer.xp} XP</strong></div>`+state.rewards.map(r=>`<div class="row"><div><strong>${esc(r.name)} • ${r.cost} XP</strong><span class="tiny">${esc(r.desc||'Reward')}</span></div><div class="actions"><button class="btn green" ${state.trainer.xp<r.cost?'disabled':''} onclick="redeem('${r.id}')">REDEEM</button><button class="btn danger" onclick="deleteReward('${r.id}')">X</button></div></div>`).join('')}
-function redeem(id){let r=state.rewards.find(x=>x.id===id);if(!r||state.trainer.xp<r.cost)return toast('Not enough XP. The League accountant remains unmoved.');state.trainer.xp-=r.cost;saveLocal();toast(`Reward redeemed: ${r.name}`)}function deleteReward(id){state.rewards=state.rewards.filter(r=>r.id!==id);saveLocal()}
+function addReward(){let n=rewardName.value.trim(),cost=Math.max(1,+rewardCost.value||1);if(!n)return toast('Name the reward.');if(!Array.isArray(state.claimedRewardIds))state.claimedRewardIds=[];state.rewards.push({id:uid(),name:n,cost,desc:rewardDesc.value.trim()});rewardName.value='';rewardDesc.value='';saveLocal()}
+function renderRewards(){
+  const el=document.getElementById('rewardList');if(!el)return;
+  ensureRewardState(state);
+  const claimed=new Set((state.claimedRewardIds||[]).map(String));
+  const available=(state.rewards||[]).filter(r=>!claimed.has(String(r.id)));
+  const history=(state.rewardHistory||[]);
+  el.innerHTML=`<div class="row"><strong>AVAILABLE XP</strong><strong>${state.trainer.xp} XP</strong></div>`+
+    (available.map(r=>`<div class="row"><div><strong>${esc(r.name)} • ${r.cost} XP</strong><span class="tiny">${esc(r.desc||'Reward')}</span></div><div class="actions"><button type="button" class="btn green" ${state.trainer.xp<r.cost?'disabled':''} onclick="redeem(${JSON.stringify(String(r.id))})">REDEEM</button><button type="button" class="btn danger" onclick="deleteReward(${JSON.stringify(String(r.id))})">X</button></div></div>`).join('')||'<div class="tiny">No rewards currently available.</div>')+
+    `<div class="panel-subtitle" style="margin-top:12px">REWARD HISTORY</div>`+
+    (history.map(h=>`<div class="row"><div><strong>${esc(h.name)}</strong><span class="tiny">Redeemed ${new Date(h.redeemedAt).toLocaleString()} • −${h.cost} XP</span></div><span class="tag">CLAIMED</span></div>`).join('')||'<div class="tiny">No rewards claimed yet.</div>');
+}
+function redeem(id){
+  const key=String(id);
+  const idx=state.rewards.findIndex(x=>String(x.id)===key);
+  const r=idx>=0?state.rewards[idx]:null;
+  if(!r)return toast('That reward is no longer available.');
+  const cost=Math.max(0,Number(r.cost)||0);
+  if(state.trainer.xp<cost)return toast('Not enough XP. The League accountant remains unmoved.');
+  state.trainer.xp-=cost;
+  if(!Array.isArray(state.rewardHistory))state.rewardHistory=[];
+  if(!Array.isArray(state.claimedRewardIds))state.claimedRewardIds=[];
+  state.rewardHistory.unshift({id:uid(),rewardId:r.id,name:r.name,cost,desc:r.desc||'',redeemedAt:new Date().toISOString()});
+  if(!state.claimedRewardIds.some(x=>String(x)===key))state.claimedRewardIds.push(r.id);
+  state.rewards.splice(idx,1);
+  recalc();
+  saveLocal();
+  renderRewards();
+  renderDashboard();
+  toast(`Reward redeemed: ${r.name} • −${cost} XP`);
+}
+function deleteReward(id){state.rewards=state.rewards.filter(r=>r.id!==id);saveLocal()}
 function autoTeam(words){let w=words.toLowerCase().split(/[, ]+/).filter(Boolean).slice(0,3).join(' ');let maps=[[/dark|night|myster|quiet|cool/,[['Eevee','Umbreon'],['Froakie','Greninja'],['Riolu','Lucario'],['Mew'],['Gible','Garchomp'],['Snivy','Serperior']]],[/fire|bold|loud|brave/,[['Charmander','Charizard'],['Gible','Garchomp'],['Riolu','Lucario'],['Froakie','Greninja'],['Mew'],['Eevee','Umbreon']]],[/water|calm|chill|blue/,[['Froakie','Greninja'],['Eevee','Vaporeon'],['Mew'],['Gible','Garchomp'],['Snivy','Serperior'],['Riolu','Lucario']]]];for(let [re,team] of maps)if(re.test(w))return team;return [['Gible','Gabite','Garchomp'],['Eevee','Umbreon'],['Riolu','Lucario'],['Mew'],['Snivy','Serperior'],['Froakie','Greninja']]}
 function addFriend(){let name=fName.value.trim(),gender=fGender.value,words=fWords.value.trim();if(!name||!words)return toast('Give your friend a name and three descriptive words.');let team=autoTeam(words),file=fSprite.files[0],baseLevel=state.trainer.level;let f={id:uid(),name,gender,words,team,rivalTeam:null,rivalTeamLocked:false,offset:0,sprite:null,xp:friendXpForLevel(baseLevel),_journeyV:1};const finish=()=>{state.friends.unshift(f);getLockedRivalTeam(f);saveLocal();clearFriendForm();showPage('friends');toast(`${f.name} has started their League journey.`)};if(file){let reader=new FileReader();reader.onload=()=>{f.sprite=reader.result;finish()};reader.readAsDataURL(file)}else finish()}
 function clearFriendForm(){fName.value='';fWords.value='';fSprite.value=''}function friendSprite(f){return f.sprite||(f.gender==='girl'?LOCAL_ASSETS.friendGirl:LOCAL_ASSETS.friendGuy)}
