@@ -911,6 +911,67 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 }
 @media(max-width:560px){.v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
+
+<style id="v46-dashboard-layout-final">
+/* V46: final dashboard width reset. Explicitly size the lower HUD from the viewport, avoiding all legacy intrinsic-grid constraints. */
+@media(min-width:1251px){
+  html,body{overflow-x:hidden!important}
+  .app{display:block!important;width:calc(100vw - 250px)!important;max-width:none!important;margin-left:224px!important;margin-right:26px!important}
+  main,#dashboard,.dashboard-v18{display:block!important;width:100%!important;max-width:none!important;min-width:0!important}
+  .dashboard-v18{padding:0!important}
+  .dashboard-v18>.v18-hero{display:grid!important;width:100%!important;max-width:none!important}
+  .dashboard-v18>.v18-team{display:block!important;width:100%!important;max-width:none!important}
+  .dashboard-v18>.v18-main-grid{
+    display:grid!important;
+    position:relative!important;
+    width:calc(100vw - 250px)!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-template-rows:auto auto auto!important;
+    grid-template-areas:"objectives recent badges" "calendar rival friends" "actions actions actions"!important;
+    gap:12px!important;
+    align-items:stretch!important;
+  }
+  .dashboard-v18>.v18-main-grid>.v18-card,
+  .dashboard-v18>.v18-main-grid>.v18-actions{
+    display:block!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    grid-column:auto!important;
+  }
+  .dashboard-v18>.v18-main-grid>.v18-objectives{grid-area:objectives!important}
+  .dashboard-v18>.v18-main-grid>.v18-card:nth-child(2){grid-area:recent!important}
+  .dashboard-v18>.v18-main-grid>.v18-badges{grid-area:badges!important}
+  .dashboard-v18>.v18-main-grid>.v18-card:nth-child(4){grid-area:calendar!important}
+  .dashboard-v18>.v18-main-grid>.v18-rival-card{grid-area:rival!important}
+  .dashboard-v18>.v18-main-grid>.v18-card:nth-child(6){grid-area:friends!important}
+  .dashboard-v18>.v18-main-grid>.v18-actions{grid-area:actions!important}
+  .dashboard-v18>.v18-main-grid>.v18-card:not(.v18-actions){min-height:260px!important}
+  .dashboard-v18>.v18-main-grid>.v18-actions{min-height:95px!important}
+  .v18-panel-head{min-width:0!important}
+  .v18-panel-head span:first-child{white-space:normal!important;overflow:visible!important}
+  .v18-list{width:100%!important;max-width:none!important}
+  .v18-badge-grid{width:100%!important}
+  .v18-calendar-wrap{width:100%!important}
+  .v18-rival-main{width:100%!important}
+  .v18-rival-team{width:100%!important}
+  .v18-friends-grid{width:100%!important}
+  .v18-actions .v18-action-grid{width:100%!important}
+}
+@media(max-width:1250px) and (min-width:901px){
+  .app{width:calc(100vw - 90px)!important;margin-left:72px!important;margin-right:18px!important}
+  .dashboard-v18{display:block!important;width:100%!important}
+  .dashboard-v18>.v18-main-grid{display:grid!important;width:100%!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-areas:"objectives recent" "badges calendar" "rival friends" "actions actions"!important}
+}
+@media(max-width:900px){
+  .dashboard-v18>.v18-main-grid{display:grid!important;width:100%!important;grid-template-columns:1fr!important;grid-template-areas:"objectives" "recent" "badges" "calendar" "rival" "friends" "actions"!important}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -930,7 +991,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V44</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V46</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
