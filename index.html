@@ -745,6 +745,123 @@ body{background:#050a0f!important;overflow-x:hidden}.app{width:calc(100vw - 250p
   .v18-kpi-row{grid-template-columns:repeat(2,1fr)!important}
 }
 </style>
+
+<style id="v44-dashboard-final">
+/* V44: definitive dashboard geometry. The lower dashboard is a full-width 3-column HUD. */
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+.app{width:calc(100vw - 244px)!important;max-width:none!important;margin-left:224px!important;margin-right:20px!important;padding:10px 0 24px!important}
+main{width:100%!important;min-width:0!important}
+#dashboard{width:100%!important}
+.dashboard-v18{display:flex!important;flex-direction:column!important;align-items:stretch!important;width:100%!important;max-width:none!important;gap:12px!important}
+.v18-hero{width:100%!important;display:grid!important;grid-template-columns:minmax(280px,1fr) minmax(420px,1.35fr) minmax(230px,.75fr)!important;height:300px!important;min-height:300px!important;gap:10px!important}
+.v18-hero>.v18-trainer,.v18-hero>.v18-progress,.v18-hero>.v18-emblem{width:auto!important;min-width:0!important;height:300px!important}
+.v18-team{width:100%!important;height:auto!important;min-width:0!important}
+.v18-team-grid{width:100%!important;height:auto!important;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important;padding:8px!important}
+.v18-team-grid .dash-mon{width:auto!important;min-width:0!important;height:145px!important;min-height:145px!important}
+.v18-main-grid{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-template-areas:
+    "objectives recent badges"
+    "calendar rival friends"
+    "actions actions actions"!important;
+  gap:12px!important;
+  align-items:stretch!important;
+  align-self:stretch!important;
+}
+.v18-main-grid>.v18-card,
+.v18-main-grid>.v18-actions{
+  min-width:0!important;
+  width:auto!important;
+  max-width:none!important;
+  margin:0!important;
+  align-self:stretch!important;
+}
+.v18-main-grid>.v18-objectives{grid-area:objectives!important}
+.v18-main-grid>.v18-card:nth-child(2){grid-area:recent!important}
+.v18-main-grid>.v18-badges{grid-area:badges!important}
+.v18-main-grid>.v18-card:nth-child(4){grid-area:calendar!important}
+.v18-main-grid>.v18-rival-card{grid-area:rival!important}
+.v18-main-grid>.v18-card:nth-child(6){grid-area:friends!important}
+.v18-main-grid>.v18-actions{grid-area:actions!important}
+.v18-main-grid>.v18-card:not(.v18-actions){min-height:255px!important}
+.v18-list{max-height:195px!important;min-height:185px!important;overflow-y:auto!important;overflow-x:hidden!important}
+.v18-list .row{min-width:0!important;overflow:hidden!important}
+.v18-list .row strong,.v18-list .row .tiny{overflow-wrap:anywhere!important}
+.v18-badge-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.v18-badge-grid img{height:70px!important}
+.v18-calendar-wrap{min-height:188px!important}
+.v18-rival-main{grid-template-columns:100px minmax(0,1fr)!important}
+.v18-rival-main img{width:100px!important;height:118px!important}
+.v18-friends-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.v18-friends-grid .dash-friend-mini{min-width:0!important}
+.v18-friends-grid .dash-friend-mini img{height:68px!important}
+.v18-actions .v18-action-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+
+/* Make the lower cards feel like game HUD modules instead of plain web panels. */
+.v18-main-grid>.v18-card,
+.v18-main-grid>.v18-actions{position:relative!important;background:
+  linear-gradient(180deg,rgba(25,53,59,.34),rgba(5,12,16,.12)),
+  repeating-linear-gradient(0deg,transparent 0 7px,rgba(98,234,255,.018) 8px)!important;
+  border-color:#477c83!important;
+  box-shadow:4px 4px 0 #020506, inset 0 0 18px rgba(53,213,226,.035)!important;
+}
+.v18-main-grid>.v18-card::before,
+.v18-main-grid>.v18-actions::before{content:"";position:absolute;left:8px;top:7px;width:4px;height:4px;background:#65e8f4;box-shadow:7px 0 #ffd34d,14px 0 #65f39a;opacity:.9;z-index:2;pointer-events:none}
+.v18-panel-head{position:relative!important;min-height:48px!important;padding:10px 12px 9px 18px!important;letter-spacing:.5px!important}
+.v18-panel-head::after{content:"// MODULE ONLINE";margin-left:auto;color:#4f8e96;font-family:VT323;font-size:13px;letter-spacing:0;white-space:nowrap}
+.v18-panel-head .btn{position:relative;z-index:3}
+.v18-objectives .v18-panel-head::after{content:"QUEST DATA"}
+.v18-badges .v18-panel-head::after{content:"8 SIGNS"}
+.v18-rival-card .v18-panel-head::after{content:"RIVAL LINK"}
+.v18-main-grid>.v18-card:nth-child(6) .v18-panel-head::after{content:"ROSTER"}
+.v18-actions .v18-panel-head::after{content:"READY"}
+.v18-main-grid>.v18-card:hover,.v18-main-grid>.v18-actions:hover{border-color:#72eaf4!important;box-shadow:0 0 0 1px rgba(114,234,244,.35),5px 5px 0 #020506, inset 0 0 22px rgba(53,213,226,.07)!important}
+.v18-main-grid .row{background:linear-gradient(90deg,#09171c,#081116)!important;border-color:#294b50!important}
+.v18-main-grid .row:hover{border-color:#58dce7!important;background:#0c2026!important}
+.v18-badge-grid img{transition:transform .12s ease,filter .12s ease}
+.v18-badge-grid img:hover{transform:translateY(-3px) scale(1.04);filter:drop-shadow(0 0 6px rgba(255,211,77,.35))}
+.v18-calendar-wrap .dash-cal div{transition:background .12s ease,border-color .12s ease,transform .12s ease}
+.v18-calendar-wrap .dash-cal div:hover{border-color:#5de7f1!important;transform:translateY(-1px)}
+.v18-rival-team img,.v18-friends-grid .dash-friend-mini img{transition:transform .12s ease}
+.v18-rival-team img:hover,.v18-friends-grid .dash-friend-mini img:hover{transform:translateY(-2px)}
+
+@media(min-width:1400px){
+  .app{width:calc(100vw - 244px)!important}
+  .v18-hero{grid-template-columns:minmax(310px,1fr) minmax(500px,1.35fr) minmax(250px,.75fr)!important}
+}
+@media(max-width:1250px) and (min-width:901px){
+  .app{width:calc(100vw - 92px)!important;margin-left:72px!important;margin-right:20px!important}
+  .v18-hero{grid-template-columns:minmax(250px,1fr) minmax(360px,1.2fr)!important;height:auto!important;min-height:0!important}
+  .v18-hero>.v18-trainer,.v18-hero>.v18-progress{height:285px!important}
+  .v18-emblem{display:none!important}
+  .v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .v18-main-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-areas:"objectives recent" "badges calendar" "rival friends" "actions actions"!important}
+  .v18-main-grid>.v18-card:not(.v18-actions){min-height:235px!important}
+  .v18-actions .v18-action-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:900px){
+  .app{width:100%!important;margin:0!important;padding:8px 8px 82px!important}
+  .dashboard-v18{display:flex!important;gap:9px!important}
+  .v18-hero{display:grid!important;grid-template-columns:1fr!important;height:auto!important;min-height:0!important}
+  .v18-hero>.v18-trainer,.v18-hero>.v18-progress{height:auto!important;min-height:235px!important}
+  .v18-emblem{display:none!important}
+  .v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .v18-main-grid{display:grid!important;grid-template-columns:1fr!important;grid-template-areas:"objectives" "recent" "badges" "calendar" "rival" "friends" "actions"!important}
+  .v18-main-grid>.v18-card,.v18-main-grid>.v18-actions{grid-column:auto!important;min-height:0!important}
+  .v18-main-grid>.v18-card:not(.v18-actions){min-height:220px!important}
+  .v18-panel-head::after{display:none}
+  .v18-actions .v18-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:560px){
+  .v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .v18-team-grid .dash-mon{height:135px!important;min-height:135px!important}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -764,7 +881,7 @@ body{background:#050a0f!important;overflow-x:hidden}.app{width:calc(100vw - 250p
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V43</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V44</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
