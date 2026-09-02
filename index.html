@@ -1224,6 +1224,14 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 .quest-completed-block .title{color:#67ef95}
 </style>
 <style>.quest-summary{border-color:#2d8d9c;background:linear-gradient(90deg,#0c1b24,#0a111b);margin-bottom:8px}.quest-row{transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}.quest-row:hover{transform:translateX(2px);border-color:#6fe8ff;box-shadow:0 0 12px rgba(80,220,255,.12)}</style>
+<style id="v60-command-center">
+.v60-command-center{grid-column:1/-1!important;width:100%;min-width:0;position:relative;z-index:3;margin:0!important}
+.v60-command-center .v59-command-grid{width:100%;margin:0!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.v60-command-center .v59-panel{min-height:128px}
+.v60-command-center .v59-head{min-height:38px}
+@media(max-width:1180px){.v60-command-center .v59-command-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.v60-command-center{grid-column:auto!important}.v60-command-center .v59-command-grid{grid-template-columns:1fr}}
+</style>
 <style id="v59-league-features">
 .v59-command-grid{display:grid;position:relative;z-index:2;grid-template-columns:1.15fr .85fr .9fr;gap:8px;margin-top:8px}
 .v59-panel{border:3px ridge #667a95;min-height:120px;background:linear-gradient(180deg,#151936,#0b0f20);box-shadow:4px 4px 0 #03040a;min-width:0;overflow:hidden}
@@ -1242,7 +1250,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 <body>
 <div id="bootScreen" class="boot-screen" aria-live="polite"><div class="boot-terminal"><div class="boot-pokeball">◉</div><div class="boot-title">LEAGUE OS</div><div class="boot-sub">INITIALIZING TRAINER TERMINAL</div><div class="boot-bar"><i></i></div><div class="boot-status" id="bootStatus">LOADING PROFILE DATA...</div></div></div><div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
 <div class="app">
-<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
+<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V60</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
 <aside class="taskbar crt" id="taskbar">
   <button class="task-toggle" id="taskToggle" aria-label="Collapse League taskbar" title="Collapse / expand taskbar" onclick="toggleTaskbar()">◀</button>
   <div class="task-brand"><span class="task-pokeball">◉</span><span class="task-brand-text">LEAGUE OS</span></div>
@@ -1258,7 +1266,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V57</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V60</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1317,6 +1325,17 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <section class="v18-team dash-box">
     <div class="v18-panel-head"><span>YOUR PARTY</span><small>EVOLUTION TRACK // LEVEL SCALED</small></div>
     <div id="dashTeam" class="v18-team-grid"></div>
+  </section>
+
+  <section id="v59CommandCenter" class="v60-command-center">
+    <div class="v59-command-grid">
+      <div class="v59-panel"><div class="v59-head"><span>TRAINER BRIEFING</span><small id="v59BriefTag">TODAY</small></div><div class="v59-body"><div class="v59-brief" id="v59Brief">Initializing League briefing...</div></div></div>
+      <div class="v59-panel"><div class="v59-head"><span>SKILL MATRIX</span><small>UPSKILL</small></div><div class="v59-body" id="v59Skills"></div></div>
+      <div class="v59-panel"><div class="v59-head"><span>LEAGUE DIAGNOSTICS</span><small>SYS</small></div><div class="v59-body"><div class="v59-diagnostics"><div class="v59-diag"><span>LOCAL SAVE</span><b id="v59Local">READY</b></div><div class="v59-diag"><span>NETWORK</span><b id="v59Network">CHECKING</b></div><div class="v59-diag"><span>CLOUD</span><b id="v59Cloud">NOT CONFIGURED</b></div><div class="v59-diag"><span>TRAINER LEVEL</span><b id="v59DiagLevel">LV 1</b></div><button class="btn green v59-sync-test" type="button" onclick="v59SyncTest()">RUN SYNC TEST</button></div></div></div>
+      <div class="v59-panel"><div class="v59-head"><span>FOCUS PROTOCOL</span><small>25 MIN</small></div><div class="v59-body"><div class="v59-focus"><div><div class="v59-focus-title">NEXT TRAINING TARGET</div><div class="v59-focus-task" id="v59FocusTask">No active quest.</div><div class="v59-focus-xp" id="v59FocusXp">+0 XP</div></div><button class="btn" type="button" onclick="v59StartFocus()">START FOCUS</button></div></div></div>
+      <div class="v59-panel"><div class="v59-head"><span>LEAGUE SIGNAL</span><small id="v59Signal">READY</small></div><div class="v59-body"><div class="v59-brief" id="v59SignalText">Your League is waiting.</div></div></div>
+      <div class="v59-panel"><div class="v59-head"><span>ACHIEVEMENT FEED</span><small>LOG</small></div><div class="v59-body"><div class="v59-brief" id="v59Achievement">No milestones recorded yet.</div></div></div>
+    </div>
   </section>
 
   <div class="v18-main-grid">
@@ -2019,22 +2038,16 @@ document.addEventListener('DOMContentLoaded',()=>{renderNav();applyTaskbar();set
 monthPicker.value=new Date().toISOString().slice(0,7);renderBadgeChecks();try{ensureAllRivalTeams();ensureRivalTeam(getActiveRival());updateAll();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('TRAINER PROFILE READY.'))}catch(e){console.error('League OS bootstrap:',e);renderNav();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('RECOVERY MODE ENABLED.'))}applyTaskbar();setOnline(navigator.onLine,'ONLINE');setTimeout(()=>{if(navigator.onLine)setOnline(true,'ONLINE');hideBootScreen()},650);
 document.addEventListener('DOMContentLoaded',()=>{const jt=document.getElementById('jTitle'),jx=document.getElementById('jText');[jt,jx].forEach(el=>el?.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();addJournal()}}));});window.addEventListener('online',()=>{setOnline(true,'ONLINE');testCloud()});window.addEventListener('offline',()=>setOnline(false,'OFFLINE'));
 setInterval(()=>{if(document.visibilityState==='visible'&&getCfg().url&&getCfg().key)pullCloud(false)},6000);
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=60').catch(()=>{}));
 
 /* V59 additive Trainer Command Center. Existing systems remain untouched. */
 function v59EnsurePanel(){
-  const dash=document.getElementById('dashboard'); if(!dash||document.getElementById('v59CommandCenter'))return;
-  const wrap=document.createElement('section');wrap.id='v59CommandCenter';wrap.className='v59-command-grid';
-  wrap.innerHTML=`
-    <div class="v59-panel"><div class="v59-head"><span>TRAINER BRIEFING</span><small id="v59BriefTag">TODAY</small></div><div class="v59-body"><div class="v59-brief" id="v59Brief">Initializing League briefing...</div></div></div>
-    <div class="v59-panel"><div class="v59-head"><span>SKILL MATRIX</span><small>UPSKILL</small></div><div class="v59-body" id="v59Skills"></div></div>
-    <div class="v59-panel"><div class="v59-head"><span>LEAGUE DIAGNOSTICS</span><small>SYS</small></div><div class="v59-body"><div class="v59-diagnostics"><div class="v59-diag"><span>LOCAL SAVE</span><b id="v59Local">READY</b></div><div class="v59-diag"><span>NETWORK</span><b id="v59Network">CHECKING</b></div><div class="v59-diag"><span>CLOUD</span><b id="v59Cloud">NOT CONFIGURED</b></div><div class="v59-diag"><span>TRAINER LEVEL</span><b id="v59DiagLevel">LV 1</b></div><button class="btn green v59-sync-test" type="button" onclick="v59SyncTest()">RUN SYNC TEST</button></div></div></div>
-    <div class="v59-panel"><div class="v59-head"><span>FOCUS PROTOCOL</span><small>25 MIN</small></div><div class="v59-body"><div class="v59-focus"><div><div class="v59-focus-title">NEXT TRAINING TARGET</div><div class="v59-focus-task" id="v59FocusTask">No active quest.</div><div class="v59-focus-xp" id="v59FocusXp">+0 XP</div></div><button class="btn" type="button" onclick="v59StartFocus()">START FOCUS</button></div></div></div>
-    <div class="v59-panel"><div class="v59-head"><span>LEAGUE SIGNAL</span><small id="v59Signal">READY</small></div><div class="v59-body"><div class="v59-brief" id="v59SignalText">Your League is waiting.</div></div></div>
-    <div class="v59-panel"><div class="v59-head"><span>ACHIEVEMENT FEED</span><small>LOG</small></div><div class="v59-body"><div class="v59-brief" id="v59Achievement">No milestones recorded yet.</div></div></div>`;
-  const anchor=dash.querySelector('.v18-team')||dash.querySelector('.dashboard-v18')||dash.firstElementChild; if(anchor)anchor.insertAdjacentElement('afterend',wrap);else dash.appendChild(wrap);
+  const dash=document.getElementById('dashboard');
+  if(!dash)return;
+  if(document.getElementById('v59FocusMode'))return;
   const modal=document.createElement('div');modal.id='v59FocusMode';modal.className='v59-focus-mode';modal.innerHTML=`<div class="v59-focus-card"><div class="kicker">LEAGUE OS // FOCUS PROTOCOL</div><h2 id="v59FocusModalTitle">TRAINING SESSION</h2><p id="v59FocusModalTask">Complete your selected training objective.</p><div class="v59-focus-timer" id="v59FocusTimer">25:00</div><div class="v59-focus-actions"><button class="btn green" onclick="v59FinishFocus()">COMPLETE SESSION</button><button class="btn danger" onclick="v59CloseFocus()">ABORT</button></div></div></div>`;document.body.appendChild(modal);
 }
+
 let v59FocusInterval=null,v59FocusSeconds=1500;
 function v59Render(){
   v59EnsurePanel();
