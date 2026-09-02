@@ -1251,14 +1251,68 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 @media(max-width:520px){.v61-focus-controls{grid-template-columns:1fr}.v61-duration-row{justify-content:flex-start}.v61-presets{width:100%}.v61-focus-preset{min-width:0}.v61-focus-minutes{width:86px}}
 </style>
 
-<style id="v67-daily-quests">
+<style id="v66-daily-quests">
 .quest-history-row{opacity:.82}.quest-history-row.quest-completed{opacity:.72}.quest-summary{border-color:#2e8a8a!important}.quest-summary strong{color:#75f0d5}
+</style>
+
+<style id="v69-phone-fit">
+/* V69: phone canvas fit only. No feature or sprite changes. */
+html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+*,*::before,*::after{box-sizing:border-box}
+@media(max-width:900px){
+  .app{width:100%!important;max-width:100vw!important;min-width:0!important;margin:0!important;padding-left:6px!important;padding-right:6px!important;overflow-x:hidden!important}
+  main,.page,.dashboard-v18,.dashboard-v18>*{max-width:100%!important;min-width:0!important}
+  .topbar{width:100%!important;max-width:100%!important;min-width:0!important;display:flex!important;align-items:center!important;gap:6px!important;overflow:hidden!important}
+  .topbar .brand{min-width:0!important;flex:1 1 auto!important;overflow:hidden!important}
+  .topbar .brand small{display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  .topbar .header-actions{min-width:0!important;flex:0 0 auto!important}
+  .topbar .header-actions .btn{max-width:42px!important;overflow:hidden!important;white-space:nowrap!important;padding:7px 8px!important;font-size:0!important}
+  .topbar .header-actions .btn:first-letter{font-size:14px!important}
+  .dashboard-v18{overflow:hidden!important}
+  .v18-hero,.v18-team,.v18-main-grid,.v18-main-grid>*{width:100%!important;min-width:0!important;max-width:100%!important}
+  .v18-team-grid{width:100%!important;min-width:0!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .v18-team-grid .dash-mon{min-width:0!important;max-width:100%!important;overflow:hidden!important}
+  .dash-mon img{max-width:100%!important}
+  .v60-command-center{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+  .v60-command-center .v59-command-grid{width:100%!important;max-width:100%!important;min-width:0!important;grid-template-columns:1fr!important}
+  .v60-command-center .v59-panel{min-width:0!important;max-width:100%!important}
+  .v59-head,.v59-body,.v59-brief,.v59-focus,.v59-diagnostics{min-width:0!important;max-width:100%!important}
+  .v59-head span,.v59-head small{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .v59-focus{grid-template-columns:minmax(0,1fr)!important}
+  .v61-focus-controls{grid-template-columns:1fr!important;min-width:0!important}
+  .v61-presets{width:100%!important;min-width:0!important}
+  .v61-focus-preset{min-width:0!important}
+  .v61-focus-launch{width:100%!important}
+  .v59-diagnostics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .v59-diag{min-width:0!important;overflow:hidden!important}
+  .v59-diag b,.v59-diag span{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  .v18-panel-head{min-width:0!important;max-width:100%!important}
+  .v18-panel-head .btn{flex:0 0 auto!important;white-space:nowrap!important}
+  .v18-list,.v18-calendar-wrap,.v18-rival-main,.v18-rival-team{min-width:0!important;max-width:100%!important}
+  .v18-rival-main{grid-template-columns:88px minmax(0,1fr)!important}
+  .v18-rival-copy,.v18-rival-copy *{min-width:0!important;max-width:100%!important}
+  .v18-rival-main h2,.v18-rival-main p{overflow-wrap:anywhere!important}
+  .quick-actions,.v18-action-grid,.friend-grid,.poke-grid,.badge-grid{min-width:0!important;max-width:100%!important}
+  button,input,select,textarea{max-width:100%!important}
+  .pokemon-detail-hero,.pokemon-detail-grid{width:100%!important;max-width:100%!important;min-width:0!important}
+}
+@media(max-width:560px){
+  .app{padding-left:4px!important;padding-right:4px!important}
+  .topbar{padding:6px!important}
+  .mobile-menu-btn{flex:0 0 auto!important}
+  .brand{font-size:10px!important}
+  .brand small{font-size:13px!important}
+  .v18-trainer-body{min-width:0!important}
+  .v18-trainer-copy{min-width:0!important;overflow:hidden!important}
+  .v18-kicker,.v18-trainer-copy h1,.v18-rank{overflow-wrap:anywhere!important}
+  .v59-diagnostics{grid-template-columns:1fr!important}
+}
 </style>
 </head>
 <body>
 <div id="bootScreen" class="boot-screen" aria-live="polite"><div class="boot-terminal"><div class="boot-pokeball">◉</div><div class="boot-title">LEAGUE OS</div><div class="boot-sub">INITIALIZING TRAINER TERMINAL</div><div class="boot-bar"><i></i></div><div class="boot-status" id="bootStatus">LOADING PROFILE DATA...</div></div></div><div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
 <div class="app">
-<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V65</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
+<header class="topbar crt"><button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open League OS menu" onclick="toggleMobileSidebar()">☰<span>MENU</span></button><span id="v60BuildTag" style="font:8px 'Press Start 2P';color:#ffd34d;border:1px solid #5f6250;padding:4px 6px;white-space:nowrap">BUILD V69</span><div class="brand">RUSS'S POKÉMON LEAGUE OS<small>PERSONAL RPG • UNOVA TERMINAL • 199X DESKTOP</small></div><div class="header-actions"><button class="btn" onclick="refreshApp()" title="Refresh the entire League OS">↻ REFRESH APP</button><div class="status"><span class="dot" id="onlineDot"></span><span id="onlineText">OFFLINE</span></div></div></header>
 <aside class="taskbar crt" id="taskbar">
   <button class="task-toggle" id="taskToggle" aria-label="Collapse League taskbar" title="Collapse / expand taskbar" onclick="toggleTaskbar()">◀</button>
   <div class="task-brand"><span class="task-pokeball">◉</span><span class="task-brand-text">LEAGUE OS</span></div>
@@ -1274,7 +1328,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V65</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V69</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1462,7 +1516,7 @@ alter table public.trainer_saves enable row level security;
 create policy "league_select" on public.trainer_saves for select to anon using (true);
 create policy "league_insert" on public.trainer_saves for insert to anon with check (true);
 create policy "league_update" on public.trainer_saves for update to anon using (true) with check (true);</pre></details></div></section>
-</main><div class="footer">LEAGUE OS // V67 • DAILY OBJECTIVES ONLINE • CLOUD SYNC WHEN CONFIGURED</div></div><div id="toast" class="toast"></div>
+</main><div class="footer">LEAGUE OS // V66 • DAILY OBJECTIVES ONLINE • CLOUD SYNC WHEN CONFIGURED</div></div><div id="toast" class="toast"></div>
 <script>
 const POKE_BASE='https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/';
 const LOCAL_ASSETS={
@@ -1558,9 +1612,9 @@ const badges=[['Mind','Planning, study and deliberate learning'],['Body','Traini
 const playerLines=[['Gible','Gabite','Garchomp'],['Eevee','Umbreon'],['Riolu','Lucario'],['Mew'],['Snivy','Servine','Serperior'],['Froakie','Frogadier','Greninja','Ash-Greninja']];
 const djLines=[['Pikachu','Raichu'],['Charmander','Charmeleon','Charizard','Mega Charizard X'],['Ditto'],['Abra','Kadabra','Alakazam'],['Lapras'],['Eevee','Vaporeon']];
 const ids={'Gible':443,'Gabite':444,'Garchomp':445,'Eevee':133,'Umbreon':197,'Riolu':447,'Lucario':448,'Mew':151,'Snivy':495,'Servine':496,'Serperior':497,'Froakie':656,'Frogadier':657,'Greninja':658,'Ash-Greninja':10117,'Pikachu':25,'Raichu':26,'Charmander':4,'Charmeleon':5,'Charizard':6,'Mega Charizard X':10034,'Ditto':132,'Abra':63,'Kadabra':64,'Alakazam':65,'Lapras':131,'Vaporeon':134};
-function imgCandidates(name){const numeric=String(name).match(/^Pokémon #0*(\d+)$/);const id=ids[name]||rivalNameIds[name]||(numeric?+numeric[1]:1);const slug=String(name).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');const cdn='https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/';const raw='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';const pdb='https://img.pokemondb.net/sprites/black-white/normal/';const staticBW=cdn+'versions/generation-v/black-white/'+id+'.png',staticBWRaw=raw+'versions/generation-v/black-white/'+id+'.png',bw=cdn+'versions/generation-v/black-white/animated/'+id+'.gif',bwRaw=raw+'versions/generation-v/black-white/animated/'+id+'.gif',home=cdn+'other/home/'+id+'.png',art=cdn+'other/official-artwork/'+id+'.png';if(name==='Mega Charizard X')return [staticBW,staticBWRaw,bw,bwRaw,cdn+'other/home/10034.png',art,LOCAL_ASSETS.placeholder];if(name==='Ash-Greninja')return [staticBW,staticBWRaw,bw,bwRaw,cdn+'other/home/10117.png',art,LOCAL_ASSETS.placeholder];return [staticBW,staticBWRaw,bw,bwRaw,pdb+slug+'.png',home,art,LOCAL_ASSETS.placeholder]}
+function imgCandidates(name){const numeric=String(name).match(/^Pokémon #0*(\d+)$/);const id=ids[name]||rivalNameIds[name]||(numeric?+numeric[1]:1);const cdn='https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/';const raw='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';const staticBW=cdn+'versions/generation-v/black-white/'+id+'.png',staticBWRaw=raw+'versions/generation-v/black-white/'+id+'.png',bw=cdn+'versions/generation-v/black-white/animated/'+id+'.gif',bwRaw=raw+'versions/generation-v/black-white/animated/'+id+'.gif',home=cdn+'other/home/'+id+'.png',art=cdn+'other/official-artwork/'+id+'.png';if(name==='Mega Charizard X')return [staticBW,staticBWRaw,bw,bwRaw,cdn+'other/home/10034.png',art,LOCAL_ASSETS.placeholder];if(name==='Ash-Greninja')return [staticBW,staticBWRaw,bw,bwRaw,cdn+'other/home/10117.png',art,LOCAL_ASSETS.placeholder];return [staticBW,staticBWRaw,bw,bwRaw,home,art,LOCAL_ASSETS.placeholder]}
 function imgTag(name,cls=''){const c=imgCandidates(name);return `<img class="pokemon-sprite ${cls}" src="${c[0]}" alt="${esc(name)}" data-fallback="1" onerror='fallbackImg(this,${JSON.stringify(c)})'>`}
-function rivalImgTag(dexId,name,cls=''){const id=Number(dexId)||1;const slug=String(name||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');const c=[`https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/versions/generation-v/black-white/${id}.png`,`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/${id}.png`,`https://img.pokemondb.net/sprites/black-white/normal/${slug}.png`,`https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/versions/generation-v/black-white/animated/${id}.gif`,`https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/home/${id}.png`,LOCAL_ASSETS.placeholder];return `<img class="pokemon-sprite ${cls}" src="${c[0]}" alt="${esc(name)}" data-fallback="1" onerror='fallbackImg(this,${JSON.stringify(c)})'>`}
+function rivalImgTag(dexId,name,cls=''){const id=Number(dexId)||1;const c=[`https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/versions/generation-v/black-white/${id}.png`,`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/${id}.png`,`https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/versions/generation-v/black-white/animated/${id}.gif`,`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${id}.gif`,POKE_BASE+'other/home/'+id+'.png',LOCAL_ASSETS.placeholder];return `<img class="pokemon-sprite ${cls}" src="${c[0]}" alt="${esc(name)}" data-fallback="1" onerror='fallbackImg(this,${JSON.stringify(c)})'>`}
 function fallbackImg(el,c){let i=+(el.dataset.fallback||1);if(i<c.length){el.dataset.fallback=i+1;el.src=c[i]}else{el.onerror=null;el.src=LOCAL_ASSETS.placeholder}}
 function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
