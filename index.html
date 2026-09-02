@@ -1097,7 +1097,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 </style>
 
 <style id="v50-mobile-polish">
-/* V51: mobile-first navigation, boot screen, and stability polish. */
+/* V52: mobile-first navigation, boot screen, and stability polish. */
 .mobile-menu-btn{display:none;border:3px outset #6f829c;background:#17263a;color:#fff;padding:8px 9px;font-family:'Press Start 2P';font-size:11px;min-width:48px;box-shadow:2px 2px 0 #030507}.mobile-menu-btn span{display:block;font:10px VT323;margin-top:2px;color:#8fd0ff}.boot-screen{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:#05080d;color:#dff7ff;transition:opacity .35s ease,visibility .35s ease}.boot-screen.hide{opacity:0;visibility:hidden;pointer-events:none}.boot-terminal{width:min(520px,88vw);padding:24px;border:4px ridge #6d829d;background:linear-gradient(180deg,#172338,#090f19);box-shadow:8px 8px 0 #020305;text-align:center;position:relative;overflow:hidden}.boot-terminal:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.025) 4px)}.boot-pokeball{font-size:46px;color:#ff5656;text-shadow:2px 2px #fff;margin-bottom:10px}.boot-title{font:18px 'Press Start 2P';letter-spacing:1px;color:#f7fbff}.boot-sub{font:17px VT323;color:#73caff;margin-top:9px}.boot-bar{height:16px;margin:18px 0 10px;border:2px inset #596c85;background:#070c14;overflow:hidden}.boot-bar i{display:block;height:100%;width:0;background:#59d8ff;animation:bootLoad 1.35s steps(12,end) forwards;box-shadow:0 0 12px rgba(89,216,255,.5)}.boot-status{font:14px 'Press Start 2P';color:#9fb0c8;min-height:18px}@keyframes bootLoad{to{width:100%}}.mobile-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.68);z-index:98}.taskbar{transition:width .18s ease,transform .2s ease}.app{transition:margin-left .18s ease}.taskbar.collapsed .task-brand-text,.taskbar.collapsed .nav-label,.taskbar.collapsed .task-build{display:none}.taskbar.collapsed .nav button{font-size:0;text-align:center;padding-left:4px;padding-right:4px}.taskbar.collapsed .nav button:before{content:'◆';font-size:14px;color:#9ecfff}.taskbar.collapsed .task-toggle{transform:none}.taskbar .nav button{min-height:39px}.taskbar .nav-ico{display:inline-block;width:22px;text-align:center;margin-right:5px}.taskbar.collapsed .nav-ico{margin:0;width:auto}.mobile-more{z-index:120}
 @media(max-width:900px){
   .mobile-menu-btn{display:block;flex:0 0 auto}.topbar{gap:8px;position:relative}.topbar .brand{font-size:11px;line-height:1.2}.topbar .brand small{font-size:15px}.topbar .header-actions .btn{display:none}.taskbar{display:flex!important;left:0;top:0;bottom:0;width:270px!important;max-width:86vw;z-index:101;border-left:0;box-shadow:8px 0 0 rgba(0,0,0,.35);transform:translateX(-105%);transition:transform .2s ease;width:270px!important}.taskbar.mobile-open{transform:translateX(0)}.taskbar .task-brand-text,.taskbar .nav-label,.taskbar .task-build{display:inline!important;font-size:inherit!important}.taskbar .nav button{font-size:18px!important;text-align:left!important;padding:9px!important}.taskbar .nav button:before{display:none}.taskbar .nav-ico{width:24px;margin-right:6px}.taskbar .task-toggle{align-self:flex-end}.taskbar .task-bottom span:last-child{display:inline!important}.mobile-backdrop.show{display:block}.app{width:100%!important;margin:0!important;padding:7px 7px 82px!important}.dashboard-v18{width:100%!important}.v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v18-main-grid{grid-template-columns:1fr!important}.v18-main-grid>.v18-card,.v18-main-grid>.v18-actions{grid-column:1!important}.v18-main-grid{grid-template-areas:"objectives" "recent" "badges" "calendar" "rival" "friends" "actions"!important}.v18-main-grid>.v18-objectives{grid-area:objectives!important}.v18-main-grid>.v18-card:nth-child(2){grid-area:recent!important}.v18-main-grid>.v18-badges{grid-area:badges!important}.v18-main-grid>.v18-card:nth-child(4){grid-area:calendar!important}.v18-main-grid>.v18-rival-card{grid-area:rival!important}.v18-main-grid>.v18-card:nth-child(6){grid-area:friends!important}.v18-main-grid>.v18-actions{grid-area:actions!important}.quick-actions,.v18-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.friend-grid{grid-template-columns:1fr!important}.poke-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.monthly-v38-grid{grid-template-columns:1fr!important}.monthly-calendar{overflow-x:auto}.mc-day,.mc-empty{min-width:42px}.topbar{padding:8px}.status{font-size:14px}.mobile-nav{display:grid!important}
@@ -1108,7 +1108,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 </style>
 
 <style id="v51-sidebar-layout-fix">
-/* V51: the taskbar lives INSIDE .app, so sibling selectors cannot move the app when it collapses. */
+/* V52: the taskbar lives INSIDE .app, so sibling selectors cannot move the app when it collapses. */
 @media(min-width:901px){
   .app.taskbar-is-collapsed{
     width:calc(100vw - 98px)!important;
@@ -1125,6 +1125,95 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   .app,.app.taskbar-is-collapsed,.app:not(.taskbar-is-collapsed){
     width:100%!important;margin:0!important;padding:8px 8px 82px!important;
   }
+}
+</style>
+
+<style id="v52-mobile-sidebar-pokemon">
+/* V52: clean collapsible rail, responsive main canvas, and Pokémon training files */
+.app.taskbar-is-collapsed{margin-left:76px!important}
+@media(min-width:901px){
+  .app{width:calc(100vw - 246px)!important;max-width:none!important}
+  .app.taskbar-is-collapsed{width:calc(100vw - 88px)!important;margin-left:76px!important;margin-right:12px!important}
+  .taskbar.collapsed{width:58px!important;padding:6px 5px!important}
+  .taskbar.collapsed .task-toggle{width:42px!important;height:32px!important;border:2px outset #7d73ac!important;background:linear-gradient(180deg,#302b5d,#17152f)!important;font-size:12px!important}
+  .taskbar.collapsed .nav{gap:6px!important}
+  .taskbar.collapsed .nav button{height:42px!important;min-height:42px!important;width:44px!important;padding:4px!important;margin:0 auto!important;justify-content:center!important;border:2px outset #686aa4!important;background:linear-gradient(180deg,#171b3b,#0e1226)!important;font-size:0!important}
+  .taskbar.collapsed .nav button:before{content:none!important}
+  .taskbar.collapsed .nav-ico{width:28px!important;height:28px!important;flex-basis:28px!important;font-size:13px!important}
+  .taskbar.collapsed .task-brand{padding:7px 0!important;justify-content:center!important}
+  .taskbar.collapsed .task-pokeball{font-size:18px!important}
+  .taskbar.collapsed .task-bottom{padding:7px 0!important;justify-content:center!important}
+}
+@media(max-width:900px){
+  .app{width:100%!important;margin:0!important;padding:8px 8px 82px!important}
+  .taskbar{display:flex!important;left:0;top:0;bottom:0;width:min(290px,86vw)!important;transform:translateX(-105%);transition:transform .2s ease;z-index:1100;border-width:3px!important;border-left:0!important;box-shadow:8px 0 0 rgba(0,0,0,.45)!important}
+  .taskbar.mobile-open{transform:translateX(0)!important}
+  .taskbar .task-brand-text,.taskbar .nav button{font-size:inherit!important}
+  .taskbar .nav button:before{content:none!important}
+  .taskbar .nav button{justify-content:flex-start!important;min-height:44px!important}
+  .taskbar .nav-label{display:inline!important}
+  .mobile-nav{z-index:1000!important}
+}
+@media(max-width:560px){
+  .app{padding-left:6px!important;padding-right:6px!important}
+  .topbar{padding:8px!important}
+  .brand{font-size:11px!important}
+  .brand small{font-size:15px!important}
+  .status{font-size:8px!important}
+  .pokemon-detail-hero{grid-template-columns:120px 1fr!important}
+  .pokemon-quirk{grid-column:1/-1}
+}
+.pokemon-clickable{position:relative;cursor:pointer;transition:transform .12s ease,filter .12s ease,border-color .12s ease;outline:none}
+.pokemon-clickable:hover,.pokemon-clickable:focus{transform:translateY(-3px);filter:brightness(1.12);border-color:#8fdcff!important}
+.poke-open-hint{display:block;font-size:9px;color:#63dfff;margin-top:4px;opacity:.72;letter-spacing:.3px}
+.pokemon-detail-shell{min-height:500px}
+.pokemon-detail-top{display:flex;align-items:center;gap:12px;border-bottom:2px ridge #6d679b;padding-bottom:10px;margin-bottom:12px}
+.pokemon-detail-kicker{font-family:'Press Start 2P';font-size:9px;color:#67dfff;letter-spacing:.5px}
+.pokemon-detail-hero{display:grid;grid-template-columns:190px minmax(0,1fr) minmax(220px,.7fr);gap:14px;align-items:center;padding:14px;border:3px ridge #6d679b;background:radial-gradient(circle at 18% 50%,#283a5c,#101529 62%,#0a0d18)}
+.pokemon-detail-sprite{height:210px;display:grid;place-items:center;border:2px inset #59698a;background:radial-gradient(circle,#213652,#080d17)}
+.pokemon-detail-sprite img{width:170px;height:170px;object-fit:contain;image-rendering:pixelated}
+.pokemon-detail-identity h1{font-family:'Press Start 2P';font-size:28px;color:#8fd4ff;margin:6px 0}
+.pokemon-detail-level{font-family:'Press Start 2P';font-size:14px;color:#ffd34d}
+.pokemon-evo-line{margin-top:10px;color:#a9b8d6}
+.pokemon-training-note{margin-top:12px;color:#67ef9a;font-size:16px}
+.pokemon-quirk{padding:14px;border:2px inset #5d5685;background:#0a0d18}
+.pokemon-quirk>span{font-family:'Press Start 2P';font-size:9px;color:#ff72bd}
+.pokemon-quirk p{font-size:19px;color:#e2e5f4;line-height:1.35;margin:8px 0 0}
+.pokemon-detail-grid{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(360px,1.15fr);gap:12px;margin-top:12px}
+.pokemon-detail-card{border:3px ridge #6d679b;background:linear-gradient(180deg,#151936,#0b0f20);padding:12px}
+.pokemon-detail-head{display:flex;justify-content:space-between;gap:8px;align-items:center;font-family:'Press Start 2P';font-size:10px;color:#fff;border-bottom:2px ridge #5e5990;padding-bottom:8px;margin-bottom:10px}
+.pokemon-detail-head span{font-family:VT323;color:#66dfff;font-size:17px}
+.pk-stat{margin:10px 0}
+.pk-stat-label{display:flex;justify-content:space-between;font-family:'Press Start 2P';font-size:9px;color:#cbd5ec}
+.pk-stat-label b{color:#ffd34d}
+.pk-stat-bar{height:13px;background:#05070d;border:2px inset #56617d;margin-top:4px}
+.pk-stat-bar i{display:block;height:100%;background:linear-gradient(90deg,#4e45a0,#68dcff)}
+.level-protocol{display:grid;gap:7px;margin:10px 0}
+.level-protocol>div{padding:8px;border:1px inset #4f5b78;background:#090d17}
+.level-protocol b{display:block;font-family:'Press Start 2P';font-size:8px;color:#ffd34d;margin-bottom:4px}
+.level-protocol span{font-size:17px;color:#b9c6df}
+.pokemon-advice{padding:10px;border-left:4px solid #55ef8a;background:#0b1815;color:#d8f4e3;font-size:18px}
+.pokemon-growth-card{margin-top:12px}
+.pokemon-evolution-track{display:flex;align-items:stretch;justify-content:center;gap:8px;flex-wrap:wrap}
+.pokemon-evolution-track>div{min-width:135px;padding:10px;border:2px inset #59647e;background:#090d17;text-align:center}
+.pokemon-evolution-track>div.current{border-color:#68dcff;background:#10223a;box-shadow:0 0 10px rgba(104,220,255,.2)}
+.pokemon-evolution-track span{display:block;font-family:'Press Start 2P';font-size:8px;color:#8498b7}
+.pokemon-evolution-track b{display:block;margin-top:5px;color:#e9efff}
+.pokemon-evolution-track small{display:block;margin-top:4px;color:#62ef9a;font-size:12px}
+.pokemon-evolution-track>i{align-self:center;color:#ffd34d;font-size:25px;font-style:normal}
+@media(max-width:900px){
+  .pokemon-detail-hero{grid-template-columns:150px 1fr}
+  .pokemon-quirk{grid-column:1/-1}
+  .pokemon-detail-grid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .pokemon-detail-hero{grid-template-columns:1fr;text-align:center}
+  .pokemon-detail-sprite{height:180px}
+  .pokemon-detail-sprite img{width:145px;height:145px}
+  .pokemon-detail-identity h1{font-size:20px}
+  .pokemon-detail-grid{gap:8px}
+  .pokemon-evolution-track{display:grid;grid-template-columns:1fr}
+  .pokemon-evolution-track>i{transform:rotate(90deg);justify-self:center}
 }
 </style>
 </head>
@@ -1147,7 +1236,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V51</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V52</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1284,6 +1373,16 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
     <div id="allRivalTeams" class="rival-roster-list"></div>
   </div>
 </section>
+
+<section id="pokemon-detail" class="page">
+  <div class="panel pokemon-detail-shell">
+    <div class="pokemon-detail-top">
+      <button class="btn" onclick="showPage('pokemon')">‹ BACK TO PARTY</button>
+      <div class="pokemon-detail-kicker">LEAGUE TRAINING FILE // ACTIVE POKÉMON</div>
+    </div>
+    <div id="pokemonDetail"></div>
+  </div>
+</section>
 <section id="pokedex" class="page"><div class="panel"><div class="title">UNOVA TERMINAL // NATIONAL POKÉDEX</div><p class="tiny">Browse the full National Pokédex. Search by species name or Dex number. Sprites are loaded from the Pokémon sprite archive and cached by the browser.</p><div class="formgrid"><input id="dexSearch" class="input full" placeholder="Search Pokémon or Dex #..." oninput="renderPokedex()"></div></div><div class="panel"><div id="pokedexGrid" class="pokedex-grid"></div></div></section>
 <section id="badges" class="page">
   <div class="panel">
@@ -1334,7 +1433,7 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:50,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
+const data={version:52,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
 let state=loadLocal();
 if(!Array.isArray(state.quests)||state.quests.length===0) state.quests=structuredClone(defaultQuests);
 function rivalTeamIds(team){return (normaliseRivalTeam(team)||[]).map(x=>+x.__dexId)}
@@ -1395,7 +1494,7 @@ function applyTaskbar(){const el=document.getElementById('taskbar');if(!el)retur
 function toggleTaskbar(){taskbarCollapsed=!taskbarCollapsed;localStorage.setItem('leagueTaskbarCollapsed',taskbarCollapsed?'1':'0');applyTaskbar()}
 function renderNav(){const id=document.querySelector('.page.active')?.id;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.querySelectorAll('.mobile-nav .mnav').forEach(b=>b.classList.toggle('active',b.dataset.page===id));}
 function showPage(id){if(!document.getElementById(id))id='dashboard';document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));renderNav();closeMobileSidebar();try{renderPage(id)}catch(e){console.error('League OS page render:',id,e);toast('Page failed to render.')}}
-function renderPage(id){if(id==='dashboard')return renderDashboard();if(id==='quests'){renderBadgeChecks();return renderQuests()}if(id==='monthly')return renderGoals();if(id==='pokemon')return renderPokemon();if(id==='pokedex')return renderPokedex();if(id==='badges')return renderBadges();if(id==='journal')return renderJournal();if(id==='rewards')return renderRewards();if(id==='friends')return renderFriends();if(id==='calculator')return calcRender();if(id==='sync')return fillCfg()}
+function renderPage(id){if(id==='dashboard')return renderDashboard();if(id==='quests'){renderBadgeChecks();return renderQuests()}if(id==='monthly')return renderGoals();if(id==='pokemon')return renderPokemon();if(id==='pokemon-detail')return renderPokemonDetail();if(id==='pokedex')return renderPokedex();if(id==='badges')return renderBadges();if(id==='journal')return renderJournal();if(id==='rewards')return renderRewards();if(id==='friends')return renderFriends();if(id==='calculator')return calcRender();if(id==='sync')return fillCfg()}
 function statRows(){return badges.map((b,i)=>{let xp=state.trainer.badgeXp[i]||0,lv=Math.max(1,Math.floor(Math.sqrt(xp/100))+1),pct=xp%(lv*lv*100||100);return `<div class="stat"><div class="numbers"><strong>${b[0]}</strong><span>LV ${lv}</span></div><div class="bar"><i style="width:${Math.min(100,(xp%100))}%"></i></div><div class="tiny">${xp} XP</div></div>`}).join('')}
 let dashCalDate=new Date();
 function renderDashboard(){
@@ -1456,11 +1555,88 @@ function renderDailyPlanner(m){const el=document.getElementById('dailyList');if(
 function toggleDaily(id,v){const d=state.daily.find(x=>x.id===id);if(!d)return;if(v&&!d.done)state.trainer.xp+=Number(d.xp)||0;if(!v&&d.done)state.trainer.xp=Math.max(0,state.trainer.xp-(Number(d.xp)||0));d.done=v;saveLocal();toast(v?`Daily clear. +${d.xp} XP.`:'Daily objective reopened.')}
 function deleteDaily(id){state.daily=state.daily.filter(x=>x.id!==id);saveLocal()}
 function toggleGoal(id,v){let g=state.goals.find(x=>x.id===id);if(!g)return;const m=g.month||plannerMonth();ensureGoalDays(g);const days=monthDayCount(m);for(let d=1;d<=days;d++)g.days[goalDayKey(m,d)]=!!v;g.done=!!v;g._bonusAwarded=!!v;if(v){state.trainer.xp+=40;toast('Monthly quest cleared. +40 XP.')}else{state.trainer.xp=Math.max(0,state.trainer.xp-40);toast('Monthly quest reopened.')}saveLocal();renderGoals()}function deleteGoal(id){state.goals=state.goals.filter(g=>g.id!==id);saveLocal();renderGoals()}
+
+const pokemonTrainingProfiles={
+  Gible:{role:'POWER + COURAGE',quirk:'Starts small, thinks big. Gible rewards deliberate effort and stubborn follow-through.',stats:['Focus','Discipline','Courage','Consistency'],base:[62,48,70,58],growth:['Mind','Adventure','Resilience'],advice:'Use focused study blocks, uncomfortable-but-useful tasks, and a short daily reset when plans go sideways.'},
+  Eevee:{role:'ADAPTABILITY + BALANCE',quirk:'Flexible by nature. Eevee gets stronger when you experiment instead of waiting for the perfect plan.',stats:['Adaptability','Curiosity','Balance','Recovery'],base:[68,64,60,72],growth:['Mind','Health','Adventure'],advice:'Rotate skills, try unfamiliar approaches, and protect recovery so experimentation stays sustainable.'},
+  Riolu:{role:'DISCIPLINE + EXECUTION',quirk:'Responds to training consistency. Riolu prefers a completed rep over a heroic intention.',stats:['Discipline','Execution','Learning','Resilience'],base:[74,78,66,70],growth:['Body','Craft','Resilience'],advice:'Turn plans into concrete repetitions: finish the task, train the skill, then record what improved.'},
+  Mew:{role:'CURIOSITY + MASTERY',quirk:'Mew learns from almost anything, but can scatter its attention across too many interesting paths.',stats:['Curiosity','Learning','Creativity','Focus'],base:[82,64,88,60],growth:['Mind','Craft','Career'],advice:'Pick one high-value skill at a time and finish a small artifact before chasing the next interesting idea.'},
+  Snivy:{role:'COMPOSURE + PRECISION',quirk:'Looks calm even when the work is difficult. Snivy gains from controlled, repeatable routines.',stats:['Precision','Composure','Planning','Consistency'],base:[70,76,68,74],growth:['Mind','Health','Craft'],advice:'Use planned study windows, tidy routines, and measurable completion criteria instead of vague intentions.'},
+  Froakie:{role:'AGILITY + ADAPTATION',quirk:'Froakie thrives when the environment changes. It turns setbacks into movement rather than excuses.',stats:['Agility','Adaptability','Courage','Recovery'],base:[66,72,76,80],growth:['Adventure','Body','Resilience'],advice:'Do something slightly uncomfortable, recover quickly from misses, and keep your momentum alive.'}
+};
+function pokemonTrainingKey(name){
+  const root=Object.keys(pokemonTrainingProfiles).find(k=>name===k||name.startsWith(k));
+  return root||'Gible';
+}
+function pokemonLeagueStats(name){
+  const key=pokemonTrainingKey(name),p=pokemonTrainingProfiles[key],xp=Math.max(0,Number(state.trainer.xp)||0);
+  const badgeMap={Mind:0,Body:1,Craft:2,Social:3,Health:4,Career:5,Adventure:6,Resilience:7};
+  const growth=p.growth.map(g=>Math.min(20,Math.floor((Number(state.trainer.badgeXp?.[badgeMap[g]])||0)/50)));
+  const totalGrowth=growth.reduce((a,b)=>a+b,0);
+  const levelBonus=Math.min(20,Math.floor(xp/150));
+  return p.base.map((v,i)=>Math.min(99,v+levelBonus+growth[i%growth.length]+Math.floor(totalGrowth/2)));
+}
+function openPokemonDetail(name){
+  window.selectedPokemon=name;
+  showPage('pokemon-detail');
+}
+function renderPokemonDetail(){
+  const el=document.getElementById('pokemonDetail'); if(!el)return;
+  const name=window.selectedPokemon||evo(playerLines[0],state.trainer.level);
+  const key=pokemonTrainingKey(name),p=pokemonTrainingProfiles[key],line=playerLines.find(x=>x.includes(key))||[key];
+  const lvl=state.trainer.level,stats=pokemonLeagueStats(name);
+  const labels=p.stats, max=Math.max(...stats,1);
+  const statRows=labels.map((label,i)=>`<div class="pk-stat"><div class="pk-stat-label"><span>${esc(label)}</span><b>${stats[i]}</b></div><div class="pk-stat-bar"><i style="width:${stats[i]}%"></i></div></div>`).join('');
+  const nextXp=Math.max(0,lvl*lvl*100-(Number(state.trainer.xp)||0));
+  const evoText=line.map((x,i)=>i<line.length-1?esc(x)+' → ':esc(x)).join('');
+  const growthLabels=p.growth.map(x=>`<span class="tag">${esc(x)}</span>`).join('');
+  el.innerHTML=`
+    <div class="pokemon-detail-hero">
+      <div class="pokemon-detail-sprite">${imgTag(name)}</div>
+      <div class="pokemon-detail-identity">
+        <div class="pokemon-detail-kicker">${esc(p.role)}</div>
+        <h1>${esc(name)}</h1>
+        <div class="pokemon-detail-level">LEVEL ${lvl}</div>
+        <div class="pokemon-evo-line">${evoText}</div>
+        <div class="pokemon-training-note">TRAINER XP ${Number(state.trainer.xp)||0} • ${nextXp?nextXp+' XP TO NEXT LEVEL':'LEVEL READY'}</div>
+      </div>
+      <div class="pokemon-quirk">
+        <span>QUIRK</span>
+        <p>${esc(p.quirk)}</p>
+      </div>
+    </div>
+    <div class="pokemon-detail-grid">
+      <section class="pokemon-detail-card">
+        <div class="pokemon-detail-head">LEAGUE STATS <span>UPS KILL TRACK</span></div>
+        ${statRows}
+      </section>
+      <section class="pokemon-detail-card">
+        <div class="pokemon-detail-head">LEVEL-UP PROTOCOL <span>WHAT MAKES IT GROW</span></div>
+        <p class="tiny">Your Pokémon level is tied to your Trainer level. The way to raise it is to build real capability, not grind meaningless clicks.</p>
+        <div class="level-protocol">
+          <div><b>01 // COMPLETE OBJECTIVES</b><span>Finish quests and earn Trainer XP.</span></div>
+          <div><b>02 // BUILD THE RIGHT BADGES</b><span>Work on ${growthLabels}</span></div>
+          <div><b>03 // COMPLETE MONTHLY DAYS</b><span>Each cleared day builds consistency. Clear the whole monthly quest for the completion bonus.</span></div>
+          <div><b>04 // KEEP THE JOURNEY MOVING</b><span>Daily objectives, journals and deliberate routines keep the League progressing.</span></div>
+        </div>
+        <p class="pokemon-advice"><strong>TRAINING ADVICE:</strong> ${esc(p.advice)}</p>
+        <div class="actions">
+          <button class="btn primary" onclick="showPage('quests')">OPEN QUEST TERMINAL</button>
+          <button class="btn green" onclick="showPage('monthly')">OPEN MONTHLY TRAINING</button>
+        </div>
+      </section>
+    </div>
+    <section class="pokemon-detail-card pokemon-growth-card">
+      <div class="pokemon-detail-head">EVOLUTION & GROWTH <span>LEVEL SCALED</span></div>
+      <div class="pokemon-evolution-track">${line.map((x,i)=>`<div class="${x===name?'current':''}"><span>${i+1}</span><b>${esc(x)}</b>${x===name?'<small>CURRENT FORM</small>':''}</div>`).join('<i>→</i>')}</div>
+    </section>
+  `;
+}
 function renderPokemon(){recalc();const pt=document.getElementById('playerTeam'),rt=document.getElementById('rivalTeam');if(pt)pt.innerHTML=playerLines.map((line,i)=>pokeCard(evo(line,state.trainer.level),line,state.trainer.level,'player-'+i)).join('');let ar=getActiveRival(),lines=getRivalLines(ar),dl=ar?friendLevel(ar):rivalLevel();if(rt){const team=getLockedRivalTeam(ar);const names=loadDexNames();rt.innerHTML=team.map((x,i)=>{const n=names[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return `<article class="poke"><span class="lvl">LV ${dl}</span>${rivalImgTag(x.__dexId,n)}<h3>${esc(n)}</h3><div class="evo">RIVAL ROSTER // DEX #${String(x.__dexId).padStart(3,'0')}</div></article>`}).join('')}const title=document.getElementById('rivalPartyTitle');if(title)title.textContent=(ar?ar.name:'DJ')+' // RIVAL PARTY';renderAllRivalTeams()}
 let rivalNameHydrationRunning=false;async function hydrateAndRenderRivalNames(){if(rivalNameHydrationRunning)return;rivalNameHydrationRunning=true;try{const rivals=[{name:'DJ',id:null,team:getLockedRivalTeam(null),level:rivalLevel()},...state.friends.map(f=>({name:f.name,id:f.id,team:getLockedRivalTeam(f),level:friendLevel(f)}))];for(const r of rivals)await hydrateRivalNames(r.team);renderAllRivalTeams()}finally{rivalNameHydrationRunning=false}}
 function renderAllRivalTeams(){const el=document.getElementById('allRivalTeams');if(!el)return;const active=state.activeRivalId;const names=loadDexNames();const rivals=[{name:'DJ',id:null,team:getLockedRivalTeam(null),level:rivalLevel()},...state.friends.map(f=>({name:f.name,id:f.id,team:getLockedRivalTeam(f),level:friendLevel(f)}))];el.innerHTML=rivals.map(r=>{const isActive=r.id===null?active===null:active===r.id;return `<div class="rival-roster ${isActive?'active-rival':''}"><div class="rival-roster-head"><strong>${esc(r.name)}${isActive?' • ACTIVE RIVAL':''}</strong><span class="tag">LEVEL ${r.level} • TEAM LOCKED</span></div><div class="rival-roster-team">${r.team.map(x=>{const n=names[x.__dexId]||`Pokémon #${String(x.__dexId).padStart(4,'0')}`;return `<div class="rival-mini">${rivalImgTag(x.__dexId,n)}<span>${esc(n)}</span></div>`}).join('')}</div></div>`}).join('')||'<div class="tiny">No rival teams yet.</div>';if(rivals.some(r=>r.team.some(x=>!names[x.__dexId])))hydrateAndRenderRivalNames()}
 function imgUrl(name){const c=imgCandidates(name);return c[0]}
-function pokeCard(name,line,lvl,key){return `<article class="poke"><span class="lvl">LV ${lvl}</span>${imgTag(name)}<h3>${esc(name)}</h3><div class="evo">${line.map((x,j)=>j<line.length-1?esc(x)+' → ':esc(x)).join('')}</div></article>`}
+function pokeCard(name,line,lvl,key){return `<article class="poke pokemon-clickable" role="button" tabindex="0" onclick="openPokemonDetail('${esc(name)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openPokemonDetail('${esc(name)}')}" aria-label="Open ${esc(name)} training file"><span class="lvl">LV ${lvl}</span>${imgTag(name)}<h3>${esc(name)}</h3><div class="evo">${line.map((x,j)=>j<line.length-1?esc(x)+' → ':esc(x)).join('')}</div><span class="poke-open-hint">OPEN TRAINING FILE ›</span></article>`}
 function dexFlavor(id,name){const n=String(name||'Pokémon');const h=(id*9301+49297)%233280;const archetypes=[
 ['Watcher','It is said to notice tiny changes in its surroundings long before other Pokémon do. Trainers who earn its trust often find it waiting exactly where they need it.'],
 ['Wayfarer','This Pokémon rarely follows the obvious path. Old field notes describe it appearing in places thought impossible to reach.'],
