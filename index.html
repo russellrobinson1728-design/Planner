@@ -1250,6 +1250,10 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
 @media(max-width:700px){.v59-command-grid{grid-template-columns:1fr}.v59-command-grid .v59-panel:last-child{grid-column:auto}.v59-focus-task{font-size:17px}.v59-focus-mode{padding:8px}.v59-focus-card{padding:12px}.v59-focus-timer{font-size:30px}}
 @media(max-width:520px){.v61-focus-controls{grid-template-columns:1fr}.v61-duration-row{justify-content:flex-start}.v61-presets{width:100%}.v61-focus-preset{min-width:0}.v61-focus-minutes{width:86px}}
 </style>
+
+<style id="v66-daily-quests">
+.quest-history-row{opacity:.82}.quest-history-row.quest-completed{opacity:.72}.quest-summary{border-color:#2e8a8a!important}.quest-summary strong{color:#75f0d5}
+</style>
 </head>
 <body>
 <div id="bootScreen" class="boot-screen" aria-live="polite"><div class="boot-terminal"><div class="boot-pokeball">◉</div><div class="boot-title">LEAGUE OS</div><div class="boot-sub">INITIALIZING TRAINER TERMINAL</div><div class="boot-bar"><i></i></div><div class="boot-status" id="bootStatus">LOADING PROFILE DATA...</div></div></div><div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
@@ -1458,7 +1462,7 @@ alter table public.trainer_saves enable row level security;
 create policy "league_select" on public.trainer_saves for select to anon using (true);
 create policy "league_insert" on public.trainer_saves for insert to anon with check (true);
 create policy "league_update" on public.trainer_saves for update to anon using (true) with check (true);</pre></details></div></section>
-</main><div class="footer">LEAGUE OS // SAVE DATA LOCALLY • CLOUD SYNC WHEN CONFIGURED • NO CRINGEY MOTIVATIONAL SLOGANS</div></div><div id="toast" class="toast"></div>
+</main><div class="footer">LEAGUE OS // V66 • DAILY OBJECTIVES ONLINE • CLOUD SYNC WHEN CONFIGURED</div></div><div id="toast" class="toast"></div>
 <script>
 const POKE_BASE='https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/';
 const LOCAL_ASSETS={
@@ -1478,8 +1482,52 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:65,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null,focusSession:null,focusDurationMin:25,achievementLog:[],leagueStartDate:null,leagueResetAt:null,leagueEpochVersion:0};
+const dailyQuestTemplates=[
+ [
+  ['Focused study block','Complete 45 minutes of uninterrupted study with notifications off.',50],
+  ['Learn one hard thing','Spend 30 focused minutes understanding one concept you currently find difficult.',45],
+  ['Teach it back','Study one topic, then explain the key idea from memory in your own words.',45]
+ ],
+ [
+  ['Intentional movement','Complete at least 30 minutes of walking, training, sport, or mobility.',40],
+  ['Move on purpose','Get 30 minutes of deliberate physical activity instead of passive downtime.',40],
+  ['Train a weakness','Spend 25 minutes working on one physical capacity you want to improve.',45]
+ ],
+ [
+  ['Protect your sleep','Set up a deliberate sleep window and avoid sacrificing rest for low-value scrolling.',40],
+  ['Build a better night','Start your wind-down routine early enough to protect tomorrow’s energy.',40],
+  ['Recovery protocol','Remove one avoidable source of late-night stimulation and prioritize recovery.',35]
+ ],
+ [
+  ['Meaningful connection','Have one genuine conversation or make a useful contribution to someone else.',30],
+  ['Strengthen a connection','Check in with someone meaningfully or help them with something concrete.',35],
+  ['Contribute today','Do one small thing that makes another person’s day easier.',30]
+ ],
+ [
+  ['Finish something','Complete one concrete task that has been sitting unfinished.',40],
+  ['Ship a small result','Turn one half-finished idea into a tangible completed output.',45],
+  ['Clear the backlog','Finish one task you have been repeatedly postponing.',40]
+ ],
+ [
+  ['Build future-you','Spend focused time on a skill, academic task, portfolio item, or career milestone.',50],
+  ['Invest in your career','Complete one concrete action that increases your future competence or opportunities.',50],
+  ['Professional rep','Spend 45 minutes improving a skill that matters to your next stage of life.',50]
+ ],
+ [
+  ['Do one uncomfortable thing','Take one constructive action that is outside your normal comfort zone.',35],
+  ['Choose the harder useful option','Do one thing you would normally avoid because it feels awkward or difficult.',40],
+  ['Break the routine','Try one useful experience, approach, or conversation that is genuinely new to you.',35]
+ ],
+ [
+  ['Reset, then continue','When the day goes sideways, deliberately reset and complete one useful action anyway.',30],
+  ['Recover the day','After a setback or distraction, spend 20 minutes deliberately getting back on track.',30],
+  ['One more rep','When motivation drops, complete one small useful action before calling the day a loss.',30]
+ ]
+];
+
+const data={version:66,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],rewardHistory:[],claimedRewardIds:[],questDay:null,activeRivalId:null,djRivalTeam:null,lastSync:null,focusSession:null,focusDurationMin:25,achievementLog:[],leagueStartDate:null,leagueResetAt:null,leagueEpochVersion:0};
 let state=loadLocal();
+const dailySeededOnBoot=ensureDailyQuestSet(state,localDayKey());
 const hasSavedLeagueState=!!localStorage.getItem('leagueOS');
 if(!hasSavedLeagueState && (!Array.isArray(state.quests)||state.quests.length===0)) state.quests=structuredClone(defaultQuests);
 if(!state.questDay)state.questDay=localDayKey();
@@ -1537,15 +1585,36 @@ function leagueDayNumber(){
   const b=new Date(localDayKey()+'T00:00:00');
   return Math.max(1,Math.floor((b-a)/86400000)+1);
 }
+function makeDailyQuestForObjective(index,date,dayNumber){
+  const pool=dailyQuestTemplates[index]||dailyQuestTemplates[0];
+  const variant=pool[(Math.max(1,dayNumber)-1)%pool.length];
+  const stamp=new Date().toISOString();
+  return {id:`daily-${date}-${index}-${uid()}`,title:variant[0],desc:variant[1],xp:variant[2],badges:[index],done:false,completedAt:null,created:stamp,daily:true,dailyDate:date,objectiveIndex:index,templateIndex:(Math.max(1,dayNumber)-1)%pool.length};
+}
+function ensureDailyQuestSet(out,date=localDayKey()){
+  if(!Array.isArray(out.quests))out.quests=[];
+  const start=out.leagueStartDate||date;
+  const a=new Date(start+'T00:00:00'),b=new Date(date+'T00:00:00');
+  const dayNumber=Math.max(1,Math.floor((b-a)/86400000)+1);
+  // Migrate the original eight starter quests into Day 1 instead of duplicating them.
+  const legacyIds=new Map(defaultQuests.map((q,i)=>[q.id,i]));
+  out.quests.forEach(q=>{
+    if(legacyIds.has(q.id)&&!q.daily){
+      const i=legacyIds.get(q.id); q.daily=true; q.dailyDate=q.created?.slice(0,10)||start; q.objectiveIndex=i; q.templateIndex=0;
+    }
+  });
+  const existing=new Set(out.quests.filter(q=>q.daily&&q.dailyDate===date).map(q=>Number(q.objectiveIndex)));
+  let added=0;
+  for(let i=0;i<8;i++){
+    if(!existing.has(i)){out.quests.push(makeDailyQuestForObjective(i,date,dayNumber));added++;}
+  }
+  return added;
+}
 function resetDailyQuestsIfNeeded(out){
   const today=localDayKey();
-  const last=out.questDay||'';
-  if(!last){out.questDay=today;return out;}
-  if(last===today)return out;
-  // A new League day starts: reopen every quest without refunding or removing XP already earned.
-  // Completion history remains in the journal/activity system through completedAt timestamps.
-  out.quests=(Array.isArray(out.quests)?out.quests:[]).map(q=>Object.assign({},q,{done:false,completedAt:null,created:q.created||new Date().toISOString()}));
-  out.questDay=today;
+  // Quest generation is performed after loading so newly created daily quests can be persisted.
+  // Previous days are never reopened or refunded.
+  if(!out.questDay)out.questDay=today;
   return out;
 }
 function ensureRewardState(out){
@@ -1616,7 +1685,7 @@ function renderDashboard(){
   if($('dashHeroJournal'))$('dashHeroJournal').textContent=state.journal.length;
   if($('dashHeroItems'))$('dashHeroItems').textContent=state.rewards.length;
   const open=state.quests.filter(q=>!q.done);
-  if($('dashObjectives'))$('dashObjectives').innerHTML=state.quests.slice(0,8).map(q=>`<div class="row ${q.done?'dash-objective-completed':''}"><div><strong>${q.done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.done?'COMPLETED':'ACTIVE'} • +${q.xp} XP</span></div><button class="btn ${q.done?'':'green'}" onclick="toggleQuestCompletion('${q.id}')">${q.done?'UNSELECT':'+'+q.xp}</button></div>`).join('')||'<div class="empty-state">No objectives filed.</div>';
+  if($('dashObjectives'))$('dashObjectives').innerHTML=state.quests.filter(q=>q.dailyDate===localDayKey()).slice(0,8).map(q=>`<div class="row ${q.done?'dash-objective-completed':''}"><div><strong>${q.done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.done?'COMPLETED':'ACTIVE'} • +${q.xp} XP</span></div><button class="btn ${q.done?'':'green'}" onclick="toggleQuestCompletion('${q.id}')">${q.done?'UNSELECT':'+'+q.xp}</button></div>`).join('')||'<div class="empty-state">No objectives filed.</div>';
   if($('dashTeam'))$('dashTeam').innerHTML=playerLines.map(line=>{const n=evo(line,lvl),safe=esc(n);return `<div class="dash-mon dash-mon-clickable" role="button" tabindex="0" title="Open ${safe} training profile" data-pokemon="${safe}"><div class="dash-mon-sprite">${imgTag(n)}</div><span>${safe}</span><small>LV ${lvl} • VIEW PROFILE</small></div>`}).join('');
   bindDashboardPokemonClicks();
   if($('dashBadgeMini'))$('dashBadgeMini').innerHTML=badges.map((b,i)=>`<img src="${LOCAL_ASSETS.badges[i]}" alt="${esc(b[0])} badge" title="${esc(b[0])}" onerror="this.onerror=null;this.src='assets/badge-1.svg'">`).join('');
@@ -1677,11 +1746,16 @@ function completeQuest(id){toggleQuestCompletion(id)}
 function deleteQuest(id){state.quests=state.quests.filter(q=>String(q.id)!==String(id));saveLocal();renderQuests();renderDashboard()}
 function renderQuests(){
   const el=document.getElementById('questList');if(!el)return;
-  const open=state.quests.filter(q=>!q.done).length;
-  const completed=state.quests.filter(q=>q.done).length;
-  const head=`<div class="row quest-summary"><div><strong>QUEST LOG</strong><span class="tiny">${open} active • ${completed} completed • completed quests stay filed until you unselect them</span></div><strong>${state.trainer.xp} XP</strong></div>`;
-  const rows=state.quests.map(q=>{const done=!!q.done;return `<div class="row quest-row${done?' quest-completed':''}"><div><strong>${done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i]?.[0]||'BADGE').join(', ')}</span><span class="quest-state ${done?'':'pending'}">${done?'COMPLETED • XP EARNED':'ACTIVE • XP AVAILABLE'}</span></div><div class="quest-actions"><button class="btn ${done?'':'green'} quest-toggle" onclick="toggleQuestCompletion('${q.id}')">${done?'UNSELECT':'COMPLETE'}${done?'':' +'+q.xp+' XP'}</button><button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`}).join('');
-  el.innerHTML=head+(rows||'<div class="tiny">No quests filed. Add an objective above.</div>');
+  ensureDailyQuestSet(state,localDayKey());
+  const today=localDayKey();
+  const todays=state.quests.filter(q=>q.dailyDate===today);
+  const open=todays.filter(q=>!q.done).length;
+  const completed=todays.filter(q=>q.done).length;
+  const head=`<div class="row quest-summary"><div><strong>DAY ${leagueDayNumber()} • DAILY QUESTS</strong><span class="tiny">${completed} / 8 today completed • one quest for each League objective • previous days remain filed below</span></div><strong>${state.trainer.xp} XP</strong></div>`;
+  const dayRows=todays.map(q=>{const done=!!q.done;return `<div class="row quest-row${done?' quest-completed':''}"><div><strong>${done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i]?.[0]||'BADGE').join(', ')}</span><span class="quest-state ${done?'':'pending'}">${done?'COMPLETED • XP EARNED':'ACTIVE • XP AVAILABLE'}</span></div><div class="quest-actions"><button class="btn ${done?'':'green'} quest-toggle" onclick="toggleQuestCompletion('${q.id}')">${done?'UNSELECT':'COMPLETE'}${done?'':' +'+q.xp+' XP'}</button><button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`}).join('');
+  const history=state.quests.filter(q=>q.dailyDate&&q.dailyDate!==today).slice().sort((a,b)=>String(b.dailyDate).localeCompare(String(a.dailyDate)));
+  const histRows=history.slice(0,40).map(q=>`<div class="row quest-row quest-history-row${q.done?' quest-completed':''}"><div><strong>${q.done?'✓ ':''}${esc(q.title)}</strong><span class="tiny">DAY ${esc(q.dailyDate)} • ${esc(q.desc)} • ${q.xp} XP • ${q.badges.map(i=>badges[i]?.[0]||'BADGE').join(', ')}</span><span class="quest-state ${q.done?'':'pending'}">${q.done?'COMPLETED • XP EARNED':'NOT COMPLETED'}</span></div><div class="quest-actions"><button class="btn ${q.done?'':'green'} quest-toggle" onclick="toggleQuestCompletion('${q.id}')">${q.done?'UNSELECT':'COMPLETE'}${q.done?'':' +'+q.xp+' XP'}</button><button class="btn danger" onclick="deleteQuest('${q.id}')">DELETE</button></div></div>`).join('');
+  el.innerHTML=head+(dayRows||'<div class="tiny">Daily quest generation failed. Refreshing should restore the eight objective slots.</div>')+(histRows?`<div class="row" style="margin-top:10px"><div><strong>QUEST ARCHIVE</strong><span class="tiny">Previous daily quests stay here so your progress never disappears.</span></div></div>${histRows}`:'');
 }
 function addGoal(){let title=goalTitle.value.trim();if(!title)return toast('Give the monthly quest a title.');let month=monthPicker.value||new Date().toISOString().slice(0,7);state.goals.unshift({id:uid(),month,title,desc:goalDesc.value.trim(),done:false,days:{},_bonusAwarded:false});goalTitle.value='';goalDesc.value='';saveLocal();renderGoals();toast('Monthly quest added. Press each day to clear it.')} 
 function plannerKey(d=new Date()){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
@@ -2057,10 +2131,14 @@ async function pullCloud(manual){
           const remote=rows[0].data;
           state=Object.assign({},data,remote);
           if(Number(state.leagueEpochVersion||0)<1){resetLeagueDayOne(state)}
-          state.localMutationAt=rows[0].updated_at;
-          state.lastSyncedMutationAt=rows[0].updated_at;
+          const addedDaily=ensureDailyQuestSet(state,localDayKey());
+          state.questDay=localDayKey();
+          const dailyMutationAt=addedDaily>0?new Date().toISOString():rows[0].updated_at;
+          state.localMutationAt=dailyMutationAt;
+          state.lastSyncedMutationAt=addedDaily>0?rows[0].updated_at:rows[0].updated_at;
           state.lastSync=rows[0].updated_at;
           localStorage.setItem('leagueOS',JSON.stringify(state));
+          if(addedDaily>0)await pushCloudCore(false,'daily-quest-generation');
           updateAll();
           toast('Cloud save pulled.');
         }
@@ -2094,14 +2172,37 @@ function toggleMobileSidebar(){const t=document.getElementById('taskbar'),b=docu
 function closeMobileSidebar(){document.getElementById('taskbar')?.classList.remove('mobile-open');document.getElementById('mobileBackdrop')?.classList.remove('show')}
 function hideBootScreen(){const el=document.getElementById('bootScreen');if(!el)return;el.classList.add('hide');setTimeout(()=>el.remove(),500)}
 function toggleMobileMore(){document.getElementById('mobileMore')?.classList.toggle('show')}
+function ensureCurrentDailyQuests(){
+  const today=localDayKey();
+  if(state.questDay!==today){
+    const added=ensureDailyQuestSet(state,today);
+    state.questDay=today;
+    if(added>0){
+      state.localMutationAt=new Date().toISOString();
+      try{localStorage.setItem('leagueOS',JSON.stringify(state));}catch(e){}
+      queuePush();
+      toast(`DAY ${leagueDayNumber()} READY • 8 new objective quests filed.`);
+    }
+    updateAll();
+    return;
+  }
+  // Repair a missing slot without disturbing existing quest state.
+  if(ensureDailyQuestSet(state,today)>0){
+    state.localMutationAt=new Date().toISOString();
+    try{localStorage.setItem('leagueOS',JSON.stringify(state));}catch(e){}
+    queuePush();
+    updateAll();
+  }
+}
 function updateAll(){recalc();renderDashboard();renderQuests();renderGoals();renderPokemon();renderBadges();renderJournal();renderRewards();renderFriends();renderNav();fillCfg()}
 function fillCfg(){let c=getCfg();if(document.activeElement!==sbUrl)sbUrl.value=c.url;if(document.activeElement!==sbKey)sbKey.value=c.key;if(document.activeElement!==trainerId)trainerId.value=c.id}
 function toast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
 document.addEventListener('DOMContentLoaded',()=>{renderNav();applyTaskbar();setOnline(navigator.onLine,'ONLINE');});
-monthPicker.value=new Date().toISOString().slice(0,7);renderBadgeChecks();try{ensureAllRivalTeams();ensureRivalTeam(getActiveRival());updateAll();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('TRAINER PROFILE READY.'))}catch(e){console.error('League OS bootstrap:',e);renderNav();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('RECOVERY MODE ENABLED.'))}applyTaskbar();setOnline(navigator.onLine,'ONLINE');setTimeout(()=>{if(navigator.onLine)setOnline(true,'ONLINE');hideBootScreen()},650);
+monthPicker.value=new Date().toISOString().slice(0,7);renderBadgeChecks();try{ensureAllRivalTeams();ensureRivalTeam(getActiveRival());if(dailySeededOnBoot>0){state.localMutationAt=new Date().toISOString();localStorage.setItem('leagueOS',JSON.stringify(state));}updateAll();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('TRAINER PROFILE READY.'))}catch(e){console.error('League OS bootstrap:',e);renderNav();document.getElementById('bootStatus')?.replaceChildren(document.createTextNode('RECOVERY MODE ENABLED.'))}applyTaskbar();setOnline(navigator.onLine,'ONLINE');setTimeout(()=>{if(navigator.onLine)setOnline(true,'ONLINE');hideBootScreen()},650);
 document.addEventListener('DOMContentLoaded',()=>{const jt=document.getElementById('jTitle'),jx=document.getElementById('jText');[jt,jx].forEach(el=>el?.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();addJournal()}}));});window.addEventListener('online',()=>{setOnline(true,'ONLINE');testCloud()});window.addEventListener('offline',()=>setOnline(false,'OFFLINE'));
+setInterval(()=>{if(document.visibilityState==='visible')ensureCurrentDailyQuests()},30000);
 setInterval(()=>{if(document.visibilityState==='visible'&&getCfg().url&&getCfg().key)pullCloud(false)},6000);
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=65').catch(()=>{}));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=66').catch(()=>{}));
 
 /* V64 Trainer Command Center: dynamic briefing, skill matrix, focus timer, league signal, and achievement feed. */
 const v61SkillMap=[
