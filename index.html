@@ -862,6 +862,55 @@ main{width:100%!important;min-width:0!important}
   .v18-team-grid .dash-mon{height:135px!important;min-height:135px!important}
 }
 </style>
+
+<style id="v45-dashboard-geometry">
+/* V45: hard reset of legacy dashboard grids. Keep every dashboard row aligned to the actual main viewport. */
+html,body{width:100%;max-width:none;overflow-x:hidden!important}
+.app{display:block!important;width:calc(100vw - 250px)!important;max-width:none!important;margin-left:224px!important;margin-right:26px!important;padding:10px 0 28px!important}
+main{display:block!important;width:100%!important;max-width:none!important;min-width:0!important}
+#dashboard{display:block!important;width:100%!important;max-width:none!important;min-width:0!important}
+.dashboard-v18{display:flex!important;flex-direction:column!important;width:100%!important;max-width:none!important;min-width:0!important;gap:12px!important}
+.v18-hero{display:grid!important;width:100%!important;grid-template-columns:minmax(280px,1fr) minmax(420px,1.35fr) minmax(240px,.75fr)!important;gap:10px!important;height:300px!important;min-height:300px!important}
+.v18-team{display:block!important;width:100%!important;min-width:0!important}
+.v18-team-grid{display:grid!important;width:100%!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+.v18-main-grid{display:grid!important;width:100%!important;max-width:none!important;min-width:0!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-areas:"objectives recent badges" "calendar rival friends" "actions actions actions"!important;gap:12px!important;align-items:stretch!important}
+.v18-main-grid>.v18-card,.v18-main-grid>.v18-actions{width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;grid-column:auto!important;align-self:stretch!important;min-height:255px!important}
+.v18-main-grid>.v18-objectives{grid-area:objectives!important}
+.v18-main-grid>.v18-card:nth-child(2){grid-area:recent!important}
+.v18-main-grid>.v18-badges{grid-area:badges!important}
+.v18-main-grid>.v18-card:nth-child(4){grid-area:calendar!important}
+.v18-main-grid>.v18-rival-card{grid-area:rival!important}
+.v18-main-grid>.v18-card:nth-child(6){grid-area:friends!important}
+.v18-main-grid>.v18-actions{grid-area:actions!important}
+.v18-panel-head{width:100%!important;display:flex!important;align-items:center!important;min-width:0!important;gap:8px!important}
+.v18-panel-head span:first-child{min-width:0!important;overflow-wrap:normal!important}
+.v18-list{width:100%!important;min-width:0!important;max-width:none!important;overflow-y:auto!important;overflow-x:hidden!important}
+.v18-badge-grid{width:100%!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.v18-calendar-wrap{width:100%!important;min-width:0!important}
+.v18-rival-main{width:100%!important;min-width:0!important}
+.v18-rival-team{width:100%!important;min-width:0!important}
+.v18-friends-grid{width:100%!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.v18-actions .v18-action-grid{width:100%!important;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important}
+@media(max-width:1250px) and (min-width:901px){
+ .app{width:calc(100vw - 90px)!important;margin-left:72px!important;margin-right:18px!important}
+ .v18-hero{grid-template-columns:repeat(2,minmax(0,1fr))!important;height:auto!important;min-height:0!important}
+ .v18-emblem{display:none!important}
+ .v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ .v18-main-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-areas:"objectives recent" "badges calendar" "rival friends" "actions actions"!important}
+ .v18-main-grid>.v18-card,.v18-main-grid>.v18-actions{min-height:235px!important}
+ .v18-actions .v18-action-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:900px){
+ .app{width:100%!important;margin:0!important;padding:8px 8px 84px!important}
+ .v18-hero{grid-template-columns:1fr!important;height:auto!important;min-height:0!important}
+ .v18-emblem{display:none!important}
+ .v18-team-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ .v18-main-grid{grid-template-columns:1fr!important;grid-template-areas:"objectives" "recent" "badges" "calendar" "rival" "friends" "actions"!important}
+ .v18-main-grid>.v18-card,.v18-main-grid>.v18-actions{min-height:220px!important}
+ .v18-actions .v18-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:560px){.v18-team-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -1068,7 +1117,7 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:42,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
+const data={version:45,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
 let state=loadLocal();
 if(!Array.isArray(state.quests)||state.quests.length===0) state.quests=structuredClone(defaultQuests);
 function rivalTeamIds(team){return (normaliseRivalTeam(team)||[]).map(x=>+x.__dexId)}
