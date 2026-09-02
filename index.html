@@ -1114,7 +1114,7 @@ main{display:block!important;width:100%!important;max-width:none!important;min-w
   <button data-page="calculator" onclick="showPage('calculator')"><span class="nav-ico">±</span><span class="nav-label">CALCULATOR</span></button>
   <button data-page="sync" onclick="showPage('sync')"><span class="nav-ico">↕</span><span class="nav-label">SYNC CENTER</span></button>
 </nav>
-  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V48</span></div>
+  <div class="task-bottom"><span class="dot online" id="taskOnlineDot"></span><span id="taskOnlineText">ONLINE</span><span class="task-build">UNOVA // V49</span></div>
 </aside>
 <div class="mobile-nav">
   <button class="mnav active" data-page="dashboard" onclick="showPage('dashboard')"><span>⌂</span><small>HOME</small></button>
@@ -1301,7 +1301,7 @@ const defaultQuests=[
 {id:'q-adventure',title:'Do one uncomfortable thing',desc:'Take one constructive action that is outside your normal comfort zone.',xp:35,badges:[6],done:false},
 {id:'q-resilience',title:'Reset, then continue',desc:'When the day goes sideways, deliberately reset and complete one useful action anyway.',xp:30,badges:[7],done:false}
 ];
-const data={version:45,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
+const data={version:49,daily:[],trainer:{name:'Russ',gender:'guy',xp:0,level:1,badgeXp:Array(8).fill(0)},quests:[],goals:[],journal:[],inventory:[],rewards:[{id:'r1',name:'Small Treat',cost:100,desc:'A guilt-free small reward for clearing a meaningful milestone.'},{id:'r2',name:'Big Reward',cost:300,desc:'A larger reward reserved for a serious League milestone.'}],friends:[],activeRivalId:null,djRivalTeam:null,lastSync:null};
 let state=loadLocal();
 if(!Array.isArray(state.quests)||state.quests.length===0) state.quests=structuredClone(defaultQuests);
 function rivalTeamIds(team){return (normaliseRivalTeam(team)||[]).map(x=>+x.__dexId)}
@@ -1336,7 +1336,7 @@ function rivalImgTag(dexId,name,cls=''){const id=Number(dexId)||1;const c=[`http
 function fallbackImg(el,c){let i=+(el.dataset.fallback||1);if(i<c.length){el.dataset.fallback=i+1;el.src=c[i]}else{el.onerror=null;el.src=LOCAL_ASSETS.placeholder}}
 function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.goals=out.goals.map(g=>{const days=(g.days&&typeof g.days==='object'&&!Array.isArray(g.days))?g.days:{};if(g.done&&Object.keys(days).length===0&&g.month){const [yy,mm]=g.month.split('-').map(Number),count=new Date(yy,mm,0).getDate();for(let d=1;d<=count;d++)days[`${g.month}-${String(d).padStart(2,'0')}`]=true;}return Object.assign({},g,{days,_bonusAwarded:typeof g._bonusAwarded==='boolean'?g._bonusAwarded:!!g.done})});out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;out.localMutationAt=out.localMutationAt||out.lastSync||null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
+function loadLocal(){try{const saved=JSON.parse(localStorage.getItem('leagueOS')||'null');const out=Object.assign({},data,saved||{});out.trainer=Object.assign({},data.trainer,saved?.trainer||{});out.trainer.badgeXp=Array.isArray(out.trainer.badgeXp)?out.trainer.badgeXp:Array(8).fill(0);out.quests=Array.isArray(out.quests)?out.quests:[];out.goals=Array.isArray(out.goals)?out.goals:[];out.goals=out.goals.map(g=>{const days=(g.days&&typeof g.days==='object'&&!Array.isArray(g.days))?g.days:{};if(g.done&&Object.keys(days).length===0&&g.month){const [yy,mm]=g.month.split('-').map(Number),count=new Date(yy,mm,0).getDate();for(let d=1;d<=count;d++)days[`${g.month}-${String(d).padStart(2,'0')}`]=true;}return Object.assign({},g,{days,_bonusAwarded:typeof g._bonusAwarded==='boolean'?g._bonusAwarded:!!g.done})});out.daily=Array.isArray(out.daily)?out.daily:[];out.journal=Array.isArray(out.journal)?out.journal:[];out.rewards=Array.isArray(out.rewards)?out.rewards:data.rewards;out.friends=Array.isArray(out.friends)?out.friends:[];out.activeRivalId=out.activeRivalId||null;out.djRivalTeam=Array.isArray(out.djRivalTeam)?out.djRivalTeam:null;out.localMutationAt=out.localMutationAt||out.lastSync||null;out.lastSyncedMutationAt=out.lastSyncedMutationAt||out.lastSync||null;const base=levelFromXp(out.trainer.xp||0);out.friends=out.friends.map(f=>{if(typeof f.xp!=='number' || f._journeyV!==1){return Object.assign({},f,{xp:friendXpForLevel(Math.max(1,base+(f.offset||0))),_journeyV:1})}return f});return out}catch{return structuredClone(data)}}
 function renderCurrentView(){
   const active=document.querySelector('.page.active')?.id||'dashboard';
   try{ renderPage(active); renderNav(); }catch(e){ console.error('League OS live render:',e); toast('Display update failed. Your save is still intact.'); }
@@ -1596,14 +1596,87 @@ function deleteFriend(id){
   queuePush();
   toast(wasActive?`${f.name} removed. DJ is now your active rival.`:`${f.name} removed from the League.`);
 } 
-let pushTimer=null;function queuePush(){clearTimeout(pushTimer);if(getCfg().url&&getCfg().key)pushTimer=setTimeout(()=>pushCloud(false),1200)}
+let pushTimer=null;
+let syncChain=Promise.resolve();
+let syncBusy=false;
+function queuePush(){
+  clearTimeout(pushTimer);
+  if(getCfg().url&&getCfg().key) pushTimer=setTimeout(()=>{ pushCloud(false,'auto'); },700);
+}
 function getCfg(){return {url:localStorage.getItem('sbUrl')||'',key:localStorage.getItem('sbKey')||'',id:localStorage.getItem('trainerId')||'russ'}}
 function cloudHeaders(extra={}){const c=getCfg();const h=Object.assign({apikey:c.key},extra);if(c.key&&!c.key.startsWith('sb_publishable_'))h.Authorization='Bearer '+c.key;return h}
-let syncPollTimer=null;function startSyncPolling(){clearInterval(syncPollTimer);if(!getCfg().url||!getCfg().key)return;syncPollTimer=setInterval(()=>{if(document.visibilityState!=='hidden')pullCloud(false)},15000)}
+let syncPollTimer=null;
+function startSyncPolling(){clearInterval(syncPollTimer);if(!getCfg().url||!getCfg().key)return;syncPollTimer=setInterval(()=>{if(document.visibilityState!=='hidden')pullCloud(false)},15000)}
 async function saveConnection(){const url=sbUrl.value.trim().replace(/\/$/,'');const key=sbKey.value.trim();const id=trainerId.value.trim()||'russ';if(!/^https:\/\/[^\s]+\.supabase\.co$/.test(url)){syncStatus.textContent='Project URL should look like https://xxxxxxxx.supabase.co';return}if(!key){syncStatus.textContent='Paste your Supabase publishable key.';return}localStorage.setItem('sbUrl',url);localStorage.setItem('sbKey',key);localStorage.setItem('trainerId',id);await testCloud(true);startSyncPolling()}
 async function testCloud(initial=false){const c=getCfg(),status=document.getElementById('syncStatus');if(!c.url||!c.key){if(status)status.textContent='Enter your Supabase URL, publishable/anon key and Trainer ID.';setOnline(false,'LOCAL');return false}try{const r=await fetch(c.url+'/rest/v1/trainer_saves?id=eq.'+encodeURIComponent(c.id)+'&select=id,updated_at',{headers:cloudHeaders()});if(!r.ok)throw Error(await r.text());const rows=await r.json();setOnline(true,'ONLINE');if(status)status.textContent='Cloud link verified. Auto sync is active.';startSyncPolling();if(rows.length===0){await pushCloud(true,'initial')}else{await pullCloud(false)}return true}catch(e){setOnline(false,'OFFLINE');if(status)status.textContent='Cloud check failed: '+e.message;return false}}
-async function pushCloud(manual=false,reason='manual'){const c=getCfg();if(!c.url||!c.key){if(manual)toast('Configure Supabase first.');return false}try{const body={id:c.id,data:state,updated_at:new Date().toISOString()};const r=await fetch(c.url+'/rest/v1/trainer_saves?on_conflict=id',{method:'POST',headers:cloudHeaders({'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify(body)});if(!r.ok)throw Error(await r.text());state.lastSync=body.updated_at;state.localMutationAt=body.updated_at;localStorage.setItem('leagueOS',JSON.stringify(state));setOnline(true,'ONLINE');const st=document.getElementById('syncStatus');if(st)st.textContent='Cloud synced • '+new Date().toLocaleTimeString();if(manual)toast(reason==='initial'?'First local save uploaded to cloud.':'Local save pushed to cloud.');return true}catch(e){setOnline(false,'OFFLINE');const st=document.getElementById('syncStatus');if(st)st.textContent='Upload failed: '+e.message;if(manual)toast('Cloud upload failed. Check the Sync Center.');return false}}
-async function pullCloud(manual){const c=getCfg();if(!c.url||!c.key){if(manual)toast('Configure Supabase first.');return false}try{const r=await fetch(c.url+'/rest/v1/trainer_saves?id=eq.'+encodeURIComponent(c.id)+'&select=data,updated_at',{headers:cloudHeaders()});if(!r.ok)throw Error(await r.text());const rows=await r.json();if(rows[0]?.data){const remote=rows[0].data;const remoteAt=new Date(rows[0].updated_at).getTime();const localAt=Math.max(state.lastSync?new Date(state.lastSync).getTime():0,state.localMutationAt?new Date(state.localMutationAt).getTime():0);if(remoteAt>localAt){state=Object.assign({},data,remote);state.localMutationAt=rows[0].updated_at;localStorage.setItem('leagueOS',JSON.stringify(state));updateAll();toast('Cloud save pulled.')}}setOnline(true,'ONLINE');const st=document.getElementById('syncStatus');if(st)st.textContent='Cloud checked • '+new Date().toLocaleTimeString();if(manual)toast('Cloud save pulled.');return true}catch(e){setOnline(false,'OFFLINE');const st=document.getElementById('syncStatus');if(st)st.textContent='Download failed: '+e.message;if(manual)toast('Cloud download failed. Check the Sync Center.');return false}}
+function queueSerialized(fn){
+  const run=syncChain.then(fn,fn);
+  syncChain=run.catch(()=>{});
+  return run;
+}
+async function pushCloudCore(manual=false,reason='manual'){
+  const c=getCfg();
+  if(!c.url||!c.key){if(manual)toast('Configure Supabase first.');return false}
+  try{
+      syncBusy=true;
+      const mutationAt=state.localMutationAt||new Date().toISOString();
+      const body={id:c.id,data:state,updated_at:mutationAt};
+      const r=await fetch(c.url+'/rest/v1/trainer_saves?on_conflict=id',{method:'POST',headers:cloudHeaders({'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify(body)});
+      if(!r.ok)throw Error(await r.text());
+      state.lastSync=mutationAt;
+      state.lastSyncedMutationAt=mutationAt;
+      localStorage.setItem('leagueOS',JSON.stringify(state));
+      setOnline(true,'ONLINE');
+      const st=document.getElementById('syncStatus');if(st)st.textContent='Cloud synced • '+new Date().toLocaleTimeString();
+      if(manual)toast(reason==='initial'?'First local save uploaded to cloud.':'Local save pushed to cloud.');
+      return true;
+    }catch(e){
+      setOnline(false,'OFFLINE');
+      const st=document.getElementById('syncStatus');if(st)st.textContent='Upload failed: '+e.message;
+      if(manual)toast('Cloud upload failed. Check the Sync Center.');
+      return false;
+  }finally{syncBusy=false;}
+}
+async function pushCloud(manual=false,reason='manual'){ return queueSerialized(()=>pushCloudCore(manual,reason)); }
+async function pullCloud(manual){
+  const c=getCfg();
+  if(!c.url||!c.key){if(manual)toast('Configure Supabase first.');return false}
+  return queueSerialized(async()=>{
+    try{
+      syncBusy=true;
+      const r=await fetch(c.url+'/rest/v1/trainer_saves?id=eq.'+encodeURIComponent(c.id)+'&select=data,updated_at',{headers:cloudHeaders()});
+      if(!r.ok)throw Error(await r.text());
+      const rows=await r.json();
+      if(rows[0]?.data){
+        const remoteAt=Date.parse(rows[0].updated_at)||0;
+        const localMutationAt=Date.parse(state.localMutationAt||'')||0;
+        const lastSyncedAt=Date.parse(state.lastSyncedMutationAt||state.lastSync||'')||0;
+        if(localMutationAt>lastSyncedAt && localMutationAt>=remoteAt){
+          // Local changes, including deletions, have not been acknowledged yet. Never replace them with an older cloud snapshot.
+          await pushCloudCore(false,'conflict');
+        }else if(remoteAt>Math.max(localMutationAt,lastSyncedAt)){
+          const remote=rows[0].data;
+          state=Object.assign({},data,remote);
+          state.localMutationAt=rows[0].updated_at;
+          state.lastSyncedMutationAt=rows[0].updated_at;
+          state.lastSync=rows[0].updated_at;
+          localStorage.setItem('leagueOS',JSON.stringify(state));
+          updateAll();
+          toast('Cloud save pulled.');
+        }
+      }
+      setOnline(true,'ONLINE');
+      const st=document.getElementById('syncStatus');if(st)st.textContent='Cloud checked • '+new Date().toLocaleTimeString();
+      if(manual)toast('Cloud save checked.');
+      return true;
+    }catch(e){
+      setOnline(false,'OFFLINE');
+      const st=document.getElementById('syncStatus');if(st)st.textContent='Download failed: '+e.message;
+      if(manual)toast('Cloud download failed. Check the Sync Center.');
+      return false;
+    }finally{syncBusy=false;}
+  });
+}
 // Pocket calculator state and controls
 let calcState={display:'0',stored:null,operator:null,waiting:false};
 function calcRender(){const el=document.getElementById('calcScreen');if(el)el.value=calcState.display;}
