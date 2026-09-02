@@ -1,5 +1,5 @@
-const CACHE='league-v43';
-const CORE=['./','./index.html','./manifest.json','./sw.js','./assets/russ-trainer.png','./assets/dj-trainer.png','./assets/coat-of-arms.svg','./assets/friend-guy.png','./assets/friend-girl.png','./assets/friend-guy.svg','./assets/friend-girl.svg','./assets/placeholder-pokemon.svg','./assets/badge-1.svg','./assets/badge-2.svg','./assets/badge-3.svg','./assets/badge-4.svg','./assets/badge-5.svg','./assets/badge-6.svg','./assets/badge-7.svg','./assets/badge-8.svg'];
+const CACHE='league-os-v50';
+const CORE=['./','./index.html','./manifest.json','./icon-64.png','./icon-180.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(cached=>cached||fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>cached))) });
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{if(r.ok&&new URL(e.request.url).origin===location.origin){const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy)).catch(()=>{});}return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html'))));});
